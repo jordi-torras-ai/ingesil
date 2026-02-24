@@ -1,0 +1,9 @@
+{
+  "state": "PARSE_RESULTS_PAGE",
+  "note": "results_page_parsed",
+  "captured_at": "2026-02-24T21:15:09.722924",
+  "url": "https://www.boe.es/buscar/boe.php?accion=Mas&id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50",
+  "title": "BOE.es - Buscar en todo el BOE",
+  "png": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/boe/20260224_220429/steps/159_parse_results_page_results_page_parsed.png",
+  "html": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/boe/20260224_220429/steps/159_parse_results_page_results_page_parsed.html"
+}

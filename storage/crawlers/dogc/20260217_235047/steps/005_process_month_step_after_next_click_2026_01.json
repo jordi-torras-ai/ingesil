@@ -1,0 +1,9 @@
+{
+  "state": "PROCESS_MONTH",
+  "note": "step_after_next_click_2026_01",
+  "captured_at": "2026-02-17T22:50:55.773616",
+  "url": "https://dogc.gencat.cat/ca/inici/",
+  "title": "Inici. Diari Oficial de la Generalitat de Catalunya",
+  "png": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260217_235047/steps/005_process_month_step_after_next_click_2026_01.png",
+  "html": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260217_235047/steps/005_process_month_step_after_next_click_2026_01.html"
+}

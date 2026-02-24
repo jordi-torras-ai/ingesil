@@ -1,0 +1,1007 @@
+<html lang="es"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex">
+    <meta name="Description" content="Buscar en todo el BOE">
+    <title>BOE.es - Buscar en todo el BOE</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <base target="_top">
+    <link type="text/css" href="/estilos/boe.css" rel="stylesheet">
+    <link rel="stylesheet" href="/estilos/buscador.css" type="text/css">
+    <!--[if lt IE 10]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie9.css" />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie8.css" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="header">
+      <h1 class="fuera">Agencia Estatal Boletín Oficial del Estado</h1>
+      <ul class="fuera">
+        <li><a accesskey="c" href="#contenedor" tabindex="-1">Ir a contenido</a></li>
+        <li><a accesskey="5" href="/diario_boe/" tabindex="-1">Consultar el diario oficial BOE</a></li>
+      </ul>
+      <div id="logosInicio">
+        <span id="logoPresidenciaMovil"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPRmovil.png" srcset="/imagenes/logoMPRmovil.svg" alt="Ministerio de la Presidencia"></a></span>
+        <span id="logoPresidencia"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPR.png" srcset="/imagenes/logoMPR.svg" alt="Ministerio de la Presidencia"></a></span>
+
+        <span id="logoAgencia"><a accesskey="1" href="/" title="Ir a la página de inicio"><img src="/imagenes/logoBOE.gif" srcset="/imagenes/logoBOE.svg" alt="Agencia Estatal Boletín Oficial del Estado"></a></span>
+        
+      </div> <!-- #logosInicio -->
+    </div> <!-- #header -->
+    <div id="top" class="banda-menu">
+    <div class="menu-wrapper">
+      <div id="logo-movil-boe-container">
+        <a href="/" title="Ir a la página de inicio"><img alt="Agencia Estatal Boletín Oficial del Estado" src="/imagenes/logoBlanco128.png"></a>
+      </div>
+      <ul class="menu">
+        <li class="menu-item menu-idiomas">
+          <div id="selector-idioma">
+            <span class="fuera">Idioma actual:</span>
+            <input id="activar-idiomas" type="checkbox" class="fuera">
+            <label class="idioma-actual" for="activar-idiomas" title="Idiomas: Haga clic o utilice barra espaciadora para abrir o cerrar opciones"><span class="descripcion-idioma pc tablet">Castellano</span><span class="fuera"> / </span><span class="descripcion-idioma movil">es</span><span class="triangulo"><span></span></span></label>
+            <p class="fuera">Puede seleccionar otro idioma:</p>
+            <ul id="lista-idiomas">
+              <li><a href="boe.php?lang=es" lang="es" hreflang="es"><span aria-hidden="true" class="idioma"><abbr title="español/castellano">es</abbr><span class="fuera"> / </span><em>Castellano</em></span></a></li>
+              <li><a href="boe.php?lang=ca" lang="ca" hreflang="ca"><span aria-hidden="true" class="idioma"><abbr title="català">ca</abbr><span class="fuera"> / </span><em>Català</em></span></a></li>
+              <li><a href="boe.php?lang=gl" lang="gl" hreflang="gl"><span aria-hidden="true" class="idioma"><abbr title="galego">gl</abbr><span class="fuera"> / </span><em>Galego</em></span></a></li>
+              <li><a href="boe.php?lang=eu" lang="eu" hreflang="eu"><span aria-hidden="true" class="idioma"><abbr title="euskara">eu</abbr><span class="fuera"> / </span><em>Euskara</em></span></a></li>
+              <li><a href="boe.php?lang=va" lang="ca-valencia" hreflang="ca-valencia"><span aria-hidden="true" class="idioma"><abbr title="valencià">va</abbr><span class="fuera"> / </span><em>Valencià</em></span></a></li>
+              <li><a href="boe.php?lang=en" lang="en" hreflang="en"><span aria-hidden="true" class="idioma"><abbr title="english">en</abbr><span class="fuera"> / </span><em>English</em></span></a></li>
+              <li><a href="boe.php?lang=fr" lang="fr" hreflang="fr"><span aria-hidden="true" class="idioma"><abbr title="français">fr</abbr><span class="fuera"> / </span><em>Français</em></span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="menu-item resto">
+          <a accesskey="4" href="/buscar/"><span class="botonBuscar">Buscar</span></a>
+        </li>
+        <li class="menu-item resto">
+          <a href="/mi_boe/">
+            <span class="botonMiBOE">Mi BOE <span class="luz">Desconectado.<br>Pulse para acceder al servicio 'Mi BOE'</span></span>
+          </a>
+        </li>
+        <li class="menu-item movil buscar">
+          <a href="/buscar/">
+            <img alt="Buscar" src="/imagenes/logoBuscar.png" srcset="/imagenes/logoBuscar.svg">
+          </a>
+        </li>
+        <li class="menu-item movil">
+          <a href="/mi_boe/">
+            <img alt="Mi BOE" src="/imagenes/logoMiBOE.png" srcset="/imagenes/logoMiBOE.svg">
+          </a>
+        </li>
+        <li class="menu-item menu-menu"><!--  -->
+          <input id="activar-menu" name="activar" type="checkbox" title="Desplegar menú" class="fuera">
+          <label class="click-desplegar resto" for="activar-menu" title="Menú: Haga clic o utilice barra espaciadora para abrir o cerrar opciones">Menú
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <input id="activar-menu-movil" name="activar" type="checkbox" title="Desplegar menú">
+          <label class="click-desplegar movil" for="activar-menu-movil"><em>Menú</em>
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <div class="menu-container">
+            <ul class="menu-item-list">
+              <li class="menu-item first">
+                <p><a href="/index.php#diarios" class="inline">Diarios Oficiales</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/diario_boe">BOE</a></li>
+                  <li><a href="/diario_borme">BORME</a></li>
+                  <li><a href="/legislacion/otros_diarios_oficiales.php">Otros diarios oficiales</a></li>
+                </ul>
+              </li>
+              <li class="menu-item">
+                <p><a href="/index.php#juridico">Información Jurídica</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/legislacion/">Todo el Derecho</a></li>
+                  <li><a href="/biblioteca_juridica/">Biblioteca Jurídica Digital</a></li>
+                </ul>
+              </li>
+              <li class="menu-item last">
+                <p><a href="/index.php#servicios-adicionales">Otros servicios</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/notificaciones">Notificaciones</a></li>
+                  <li><a href="/edictos_judiciales">Edictos judiciales</a></li>
+                  <li><a href="https://subastas.boe.es">Portal de subastas</a></li>
+                  <li><a href="/anuncios">Anunciantes</a></li>
+                  <li><a href="/datosabiertos/api/api.php">Datos abiertos</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div> <!-- .menu-container -->
+        </li><!--  -->
+      </ul>
+    </div> <!-- .menu-wrapper -->
+    </div> <!-- .banda-menu -->
+    <div id="franjaMigas">
+      <div class="contMigas">
+        <span class="fraseMigas">Está <abbr title="usted">Vd.</abbr> en</span>
+        <ul class="migas">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/buscar/">Buscar</a></li>
+          <li class="destino">Buscar en todo el BOE</li>
+        </ul>
+        <div id="solapa">
+        </div><!-- solapa -->
+      </div><!-- contMigas -->
+    </div> <!-- #franjaMigas -->
+    <div id="contenedor">
+      <div id="contenido" class="poolBdatos"><h2>Buscar en todo el BOE</h2>
+<div class="pretexto">
+    <ul class="navlist">
+        <li><a href="./boe.php?accion=&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">Búsqueda</a></li>
+        <li><a href="./boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50" class="current">Resultados</a></li>
+        <li><a href="./boe.php?accion=Fav&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50" class="guardar">Guardar <span class="tablet pc">búsqueda</span><img src="/imagenes/logoMiBOE_azul.png" srcset="/imagenes/logoMiBOE_azul.svg" alt="Mi BOE inactivo"></a></li>
+    </ul>
+</div>
+
+<div class="paginar" role="status">
+  <p>Resultados 251 a 300 de 9.974</p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50">
+        <span class="pagAntxxx">4</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">6</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50">
+        <span class="pagAntxxx">7</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagAntxxx">8</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="listadoResult">
+  <ul>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Transportes y Movilidad Sostenible</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Subsecretaría, por la que se convoca proceso selectivo para ingreso, por el sistema general de acceso libre, en la Escala de Titulados de Escuelas Técnicas de Grado Medio de Organismos del Ministerio de Transportes, Movilidad y Agenda Urbana.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4111" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4111">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4111</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4111" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4111">Más... (Referencia BOE-A-2026-4111)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Trabajo y Economía Social</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Subsecretaría, por la que se corrigen errores en la de 28 de enero de 2026, por la que se convoca concurso general para la provisión de puestos en el Servicio Público de Empleo Estatal.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4112" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4112">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4112</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4112" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4112">Más... (Referencia BOE-A-2026-4112)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 11 de febrero de 2026, de la Subsecretaría, por la que se modifica la composición del Tribunal calificador del proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo de Diplomados en Meteorología del Estado, convocado por Resolución de 30 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4113" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4113">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4113</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4113" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4113">Más... (Referencia BOE-A-2026-4113)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 11 de febrero de 2026, de la Subsecretaría, por la que se publica la relación de personas aprobadas en las fases de oposición y concurso del proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo de Ingenieros de Montes del Estado, convocado por Resolución de 23 de diciembre de 2024.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4114" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4114">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4114</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4114" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4114">Más... (Referencia BOE-A-2026-4114)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 11 de febrero de 2026, de la Subsecretaría, por la que se modifica la composición del Tribunal calificador del proceso selectivo para ingreso, por el sistema general de acceso libre, en el Cuerpo de Observadores de Meteorología del Estado, convocado por Resolución de 30 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4115" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4115">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4115</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4115" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4115">Más... (Referencia BOE-A-2026-4115)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 11 de febrero de 2026, de la Subsecretaría, por la que se modifica la composición del Tribunal calificador del proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo Superior de Meteorólogos del Estado, convocado por Resolución de 30 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4116" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4116">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4116</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4116" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4116">Más... (Referencia BOE-A-2026-4116)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Vivienda y Agenda Urbana</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Subsecretaría, por la que se convoca la provisión de puesto de trabajo por el sistema de libre designación.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4117" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4117">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4117</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4117" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4117">Más... (Referencia BOE-A-2026-4117)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Vivienda y Agenda Urbana</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Subsecretaría, por la que se convoca la provisión de puesto de trabajo por el sistema de libre designación.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4118" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4118">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4118</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4118" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4118">Más... (Referencia BOE-A-2026-4118)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Cultura</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Subsecretaría, por la que se modifica la composición del órgano de selección del proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo de Ayudantes de Archivos, Bibliotecas y Museos, y cambio de régimen jurídico del personal laboral fijo incluido en el anexo II del IV Convenio Único para el personal laboral de la Administración General del Estado, convocado por Resolución de 18 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4119" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4119">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4119</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4119" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4119">Más... (Referencia BOE-A-2026-4119)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Economía, Comercio y Empresa</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Subsecretaría, por la que se aprueba la relación de personas admitidas y excluidas, y se anuncia fecha, hora y lugar de la celebración del primer ejercicio de los procesos selectivos para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo de Diplomados en Estadística del Estado, convocado por Resolución de 22 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4120" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4120">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4120</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4120" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4120">Más... (Referencia BOE-A-2026-4120)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Economía, Comercio y Empresa</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 18 de febrero de 2026, de la Subsecretaría, por la que se aprueba la relación de personas admitidas y excluidas, y se anuncia fecha, hora y lugar de la celebración del primer ejercicio de los procesos selectivos para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo Superior de Estadísticos del Estado, convocados por Resolución de 22 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4121" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4121">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4121</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4121" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4121">Más... (Referencia BOE-A-2026-4121)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Sanidad</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 14 de febrero de 2026, del Instituto Nacional de Gestión Sanitaria, por la que se modifica la de 6 de noviembre de 2025, por la que se nombran los miembros del Tribunal del proceso selectivo, por concurso-oposición, por el sistema general de acceso libre y promoción interna, para el acceso a la condición de personal estatutario fijo en plazas de la categoría de Grupo Auxiliar de la Función Administrativa, convocado por Resolución de 25 de marzo de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4122" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4122">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4122</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4122" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4122">Más... (Referencia BOE-A-2026-4122)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Sanidad</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 14 de febrero de 2026, del Instituto Nacional de Gestión Sanitaria, por la que se modifica la de 6 de noviembre de 2025, por la que se nombran los miembros del Tribunal del proceso selectivo, por concurso-oposición, por el sistema general de acceso libre y promoción interna, para el acceso a la condición de personal estatutario fijo en plazas de la categoría de Celador/a, convocado por Resolución de 25 de marzo de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4123" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4123">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4123</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4123" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4123">Más... (Referencia BOE-A-2026-4123)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Sanidad</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Organización Nacional de Trasplantes, O.A., por la que se convoca la provisión de puesto de trabajo por el sistema de libre designación.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4124" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4124">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4124</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4124" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4124">Más... (Referencia BOE-A-2026-4124)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Inclusión, Seguridad Social y Migraciones</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 10 de febrero de 2026, de la Subsecretaría, por la que se aprueba la relación provisional de personas admitidas y excluidas, y se anuncia fecha, hora y lugar de celebración del primer ejercicio del proceso selectivo para ingreso, por el sistema general de acceso libre y por promoción interna, en el Cuerpo Superior de Interventores y Auditores de la Administración de la Seguridad Social, convocado por Resolución de 22 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4125" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4125">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4125</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4125" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4125">Más... (Referencia BOE-A-2026-4125)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Inclusión, Seguridad Social y Migraciones</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 10 de febrero de 2026, de la Subsecretaría, por la que se corrigen errores en la de 2 de diciembre de 2025, por la que se convoca proceso selectivo para ingreso, por el sistema general de acceso libre, en el Cuerpo Superior de Actuarios, Estadísticos y Economistas de la Administración de la Seguridad Social.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4126" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4126">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4126</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4126" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4126">Más... (Referencia BOE-A-2026-4126)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Inclusión, Seguridad Social y Migraciones</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 12 de febrero de 2026, de la Subsecretaría, por la que se convoca la provisión de puesto de trabajo por el sistema de libre designación.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4127" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4127">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4127</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4127" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4127">Más... (Referencia BOE-A-2026-4127)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transformación Digital y de la Función Pública</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Dirección General de la Función Pública, por la que se publica la resolución que declara desierta la convocatoria para la provisión de puesto de trabajo reservado al personal funcionario de administración local con habilitación de carácter nacional, por el sistema de libre designación.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4128" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4128">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4128</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4128" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4128">Más... (Referencia BOE-A-2026-4128)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Tribunal de Cuentas</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Presidencia del Tribunal de Cuentas, por la que se aprueba la relación provisional de personas admitidas y excluidas en el proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo Superior de Auditores del Tribunal de Cuentas, convocado por Resolución de 16 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4129" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4129">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4129</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4129" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4129">Más... (Referencia BOE-A-2026-4129)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Tribunal de Cuentas</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Presidencia del Tribunal de Cuentas, por la que se aprueba la relación provisional de personas admitidas y excluidas en el proceso selectivo para ingreso, por el sistema general de acceso libre y promoción interna, en el Cuerpo Superior de Letrados del Tribunal de Cuentas, convocado por Resolución de 16 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4130" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4130">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4130</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4130" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4130">Más... (Referencia BOE-A-2026-4130)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Tribunal de Cuentas</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Presidencia del Tribunal de Cuentas, por la que se aprueba la relación provisional de personas admitidas y excluidas en el proceso selectivo para ingreso, por el sistema general de acceso libre, en el Cuerpo Técnico de Auditoría y Control Externo del Tribunal de Cuentas, convocado por Resolución de 16 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4131" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4131">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4131</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4131" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4131">Más... (Referencia BOE-A-2026-4131)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Tribunal de Cuentas</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Presidencia del Tribunal de Cuentas, por la que se aprueba la relación provisional de personas admitidas en las pruebas selectivas, por el sistema de concurso-oposición, para personal laboral fijo, por promoción interna, en la categoría profesional de Técnico Superior de Servicios Comunes, convocadas por Resolución de 16 de diciembre de 2025.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4132" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4132">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4132</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4132" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4132">Más... (Referencia BOE-A-2026-4132)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Comunidad Autónoma de Andalucía</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Secretaría General de Servicios Judiciales, de la Consejería de Justicia, Administración Local y Función Pública, por la que se convoca concurso para la provisión de puestos de trabajo en el Tribunal Superior de Justicia de Andalucía.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4133" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4133">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4133</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4133" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4133">Más... (Referencia BOE-A-2026-4133)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Comunidad Autónoma de Andalucía</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Secretaría General de Servicios Judiciales, de la Consejería de Justicia, Administración Local y Función Pública, por la que se convoca concurso para la provisión de puestos de trabajo en Oficinas Judiciales de los partidos judiciales de Algeciras, Almería, Arcos de la Frontera, Cádiz, Granada, Jaén, Jerez de la Frontera, La Línea de la Concepción, Málaga, Motril, Palma del Condado, Sevilla, Utrera y Vera.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4134" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4134">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4134</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4134" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4134">Más... (Referencia BOE-A-2026-4134)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Comunidad Autónoma de Andalucía</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Secretaría General de Servicios Judiciales, de la Consejería de Justicia, Administración Local y Función Pública, por la que se convoca la provisión de puestos de trabajo por el sistema de libre designación en el Tribunal Superior de Justicia de Andalucía.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4135" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4135">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4135</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4135" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4135">Más... (Referencia BOE-A-2026-4135)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, del Ayuntamiento de Puçol (Valencia/València), referente a la convocatoria para proveer puesto de trabajo por el sistema de concurso.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4136" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4136">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4136</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4136" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4136">Más... (Referencia BOE-A-2026-4136)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 6 de febrero de 2026, del Ayuntamiento de Sant Vicent del Raspeig/San Vicente del Raspeig (Alicante/Alacant), referente a la convocatoria para proveer una plaza.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4137" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4137">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4137</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4137" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4137">Más... (Referencia BOE-A-2026-4137)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 6 de febrero de 2026, del Ayuntamiento de Sant Vicent del Raspeig/San Vicente del Raspeig (Alicante/Alacant), referente a la convocatoria para proveer varias plazas.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4138" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4138">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4138</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4138" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4138">Más... (Referencia BOE-A-2026-4138)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, del Ayuntamiento de Villena (Alicante/Alacant), referente a la convocatoria para proveer varias plazas.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4139" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4139">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4139</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4139" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4139">Más... (Referencia BOE-A-2026-4139)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 18 de febrero de 2026, del Ayuntamiento de Caldas de Reis (Pontevedra), referente a la convocatoria para proveer una plaza.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4140" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4140">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4140</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4140" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4140">Más... (Referencia BOE-A-2026-4140)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Administración Local</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 18 de febrero de 2026, del Ayuntamiento de Astorga (León), referente a la convocatoria para proveer una plaza.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4141" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4141">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4141</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4141" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4141">Más... (Referencia BOE-A-2026-4141)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 12 de febrero de 2026, conjunta de la Universidad de Granada y el Servicio Andaluz de Salud, por la que se convoca concurso de acceso a plazas vinculadas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4142" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4142">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4142</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4142" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4142">Más... (Referencia BOE-A-2026-4142)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, conjunta de la Universidad de Granada y el Servicio Andaluz de Salud, por la que se convoca concurso de acceso a plazas vinculadas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4143" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4143">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4143</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4143" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4143">Más... (Referencia BOE-A-2026-4143)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Universidad de Las Palmas de Gran Canaria, por la que se convoca concurso de acceso a plazas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4144" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4144">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4144</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4144" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4144">Más... (Referencia BOE-A-2026-4144)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Universidad de Alcalá, por la que se convoca concurso de acceso a plazas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4145" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4145">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4145</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4145" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4145">Más... (Referencia BOE-A-2026-4145)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Universidad de Las Palmas de Gran Canaria, por la que se convoca concurso de acceso a plaza de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4146" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4146">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4146</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4146" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4146">Más... (Referencia BOE-A-2026-4146)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 13 de febrero de 2026, de la Universitat de València, por la que se convoca concurso de acceso a plazas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4147" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4147">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4147</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4147" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4147">Más... (Referencia BOE-A-2026-4147)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Universidad del País Vasco/Euskal Herriko Unibertsitatea, por la que se convoca concurso de acceso a plazas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4148" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4148">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4148</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4148" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4148">Más... (Referencia BOE-A-2026-4148)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 17 de febrero de 2026, de la Universidad de Córdoba, por la que se convoca concurso de acceso a plazas vinculadas de cuerpos docentes universitarios.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4149" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4149">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4149</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4149" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4149">Más... (Referencia BOE-A-2026-4149)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - II. Autoridades y personal</p>
+      <p>Resolución de 16 de febrero de 2026, de la Universidad de León, por la que se convoca proceso selectivo para ingreso, por el sistema general de acceso libre, en la Escala Auxiliar.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4150" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4150">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4150</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4150" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4150">Más... (Referencia BOE-A-2026-4150)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Consejo General del Poder Judicial</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Acuerdo de 10 de febrero de 2026, de la Comisión Permanente del Consejo General del Poder Judicial, por el que se publican las normas de reparto de las salas del Tribunal Superior de Justicia de La Rioja para 2026.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4151" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4151">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4151</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4151" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4151">Más... (Referencia BOE-A-2026-4151)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Asuntos Exteriores, Unión Europea y Cooperación</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 16 de febrero de 2026, de la Secretaría General Técnica, por la que se publica el Convenio entre la Universidad Particular Internacional SEK y el Consorcio Casa de América, para la consecución de los fines de promoción de la cultura iberoamericana en España.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4152" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4152">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4152</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4152" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4152">Más... (Referencia BOE-A-2026-4152)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 17 de febrero de 2026, de la Subsecretaría, por la que se publica el Convenio entre la Mutualidad General de Funcionarios Civiles del Estado, O.A., el Instituto Social de las Fuerzas Armadas, O.A., la Mutualidad General Judicial, O.A., y el Servicio Andaluz de Salud, para el acceso a la campaña de inmunización contra el Virus Respiratorio Sincitial y a las campañas de vacunación en centros escolares de Andalucía del colectivo infantil adscrito a entidades de seguro concertadas.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4153" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4153">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4153</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4153" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4153">Más... (Referencia BOE-A-2026-4153)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 17 de febrero de 2026, de la Subsecretaría, por la que se publica el Convenio de asistencia jurídica entre la Abogacía General del Estado y la Autoridad Portuaria de Santander.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4154" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4154">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4154</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4154" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4154">Más... (Referencia BOE-A-2026-4154)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 17 de febrero de 2026, de la Subsecretaría, por la que se publica el Convenio entre la Agencia Española de Cooperación Internacional para el Desarrollo y la Intervención General de la Administración del Estado, para la adhesión a los sistemas departamentales de la Intervención General de la Administración del Estado.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4155" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4155">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4155</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4155" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4155">Más... (Referencia BOE-A-2026-4155)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 17 de febrero de 2026, de la Subsecretaría, por la que se publica el Convenio entre el Ministerio de Defensa y el Instituto Social de la Marina, para la prestación mutua de asistencia sanitaria a la flota pesquera de bandera española que faena en el Índico y los buques de la Armada, en colaboración con el Centro Radio Médico Español y el Centro Asistencial en el extranjero de Seychelles.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4156" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4156">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4156</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4156" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4156">Más... (Referencia BOE-A-2026-4156)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 17 de febrero de 2026, de la Subsecretaría, por la que se publica el Convenio entre la Secretaría de Estado de Energía y la Comisión Nacional de los Mercados y la Competencia, para la colaboración en la gestión de las subvenciones directas a empresas distribuidoras de energía eléctrica para la realización de inversiones de digitalización de redes de distribución de energía eléctrica y en infraestructuras para la recarga del vehículo eléctrico, con cargo a los fondos del Plan de Recuperación, Transformación y Resiliencia.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4157" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4157">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4157</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4157" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4157">Más... (Referencia BOE-A-2026-4157)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación de la registradora de la propiedad de Almería n.º 2, por la que se suspende la asignación de número de registro único de alquiler de corta duración turístico de una finca registral por constar en los estatutos de la propiedad horizontal que se prohíbe especialmente «dar a los pisos destino distinto del de vivienda o ejercicio de una actividad profesional».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4158" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4158">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4158</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4158" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4158">Más... (Referencia BOE-A-2026-4158)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación realizada por el registrador de la propiedad de San Cristóbal de La Laguna n.º 2-Área Metropolitana de Santa Cruz de Tenerife, por la que en un procedimiento administrativo de expropiación forzosa con solicitud de inmatriculación de una finca en favor del Cabildo Insular de Tenerife suspende la inscripción del acta de ocupación y pago por el defecto subsanable consistente en la no constancia del número de identificación fiscal o número de identificación de extranjero de todos los intervinientes.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4159" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4159">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4159</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4159" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4159">Más... (Referencia BOE-A-2026-4159)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la denegación del registrador de la propiedad de Avilés n.º 2 a inscribir la representación gráfica georreferenciada alternativa de una finca por existir oposición de una Administración Pública basada en la existencia de un expediente de investigación de bienes que puede afectar a un camino público.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4160" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4160">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4160</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4160" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4160">Más... (Referencia BOE-A-2026-4160)</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="paginar">
+  <p class="linkSubir">
+    <a href="#top">subir</a>
+  </p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50">
+        <span class="pagAntxxx">4</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">6</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50">
+        <span class="pagAntxxx">7</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagAntxxx">8</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+      </div> <!-- .pool -->
+    </div> <!-- #contenedor -->
+    <div id="pie">
+      <div id="menuPie">
+        <div class="otros-enlaces">
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace"><a href="/contactar/" accesskey="3">Contactar</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php" hreflang="es">Sobre esta sede electrónica</a></div></li>
+            <li><div class="enlace"><a href="/informacion/mapa_web/" accesskey="2">Mapa</a></div></li>
+            <li><div class="enlace"><a href="/informacion/aviso_legal/index.php">Aviso legal</a></div></li>
+            <li><div class="enlace"><a href="/informacion/accesibilidad/" accesskey="0">Accesibilidad</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php#proteccion-de-datos" hreflang="es">Protección de datos</a></div></li>
+            <li><div class="enlace"><a href="/informacion/sistema_interno_informacion.php" hreflang="es">Sistema Interno de Información</a></div></li>
+            <li><div class="enlace"><a href="/informacion/tutoriales/" hreflang="es">Tutoriales</a></div></li>
+            </ul>
+            </div>
+          </div>
+          <div class="espacio"></div>
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace icono"><a href="/rss/" hreflang="es" lang="es" title="RSS"><img src="/imagenes/home/rss_32.png" srcset="/imagenes/home/rss_32.svg" alt="RSS"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=tw" hreflang="es" lang="es" title="boegob, el BOE en X"><img src="/imagenes/home/twitter_32.png" srcset="/imagenes/home/twitter_32.svg" alt="X"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=fb" hreflang="es" lang="es" title="El BOE en Facebook"><img src="/imagenes/home/facebook_32.png" srcset="/imagenes/home/facebook_32.svg" alt="Facebook"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=ln" hreflang="es" lang="es" title="El BOE en LinkedIn"><img src="/imagenes/home/linkedin_32.png" srcset="/imagenes/home/linkedin_32.svg" alt="LinkedIn"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=yt" hreflang="es" lang="es" title="El BOE en YouTube"><img src="/imagenes/home/youtube_32.png" srcset="/imagenes/home/youtube_32.svg" alt="YouTube"></a></div></li>
+            </ul>
+            </div>
+          </div>
+        </div> <!-- .franjaMenu -->
+      </div> <!-- #menuPie -->
+      <div class="franja-pie">
+        <p class="nombre-organismo">Agencia Estatal Boletín Oficial del Estado</p>
+        <p class="direccion-organismo"><abbr title="Avenida">Avda.</abbr> de Manoteras, 54 - 28050 Madrid</p>
+      </div>
+    </div> <!-- #pie -->
+    <script src="/js/desplegable.js"></script>
+  
+
+</body></html>

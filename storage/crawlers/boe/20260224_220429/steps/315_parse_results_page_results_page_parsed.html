@@ -1,0 +1,1007 @@
+<html lang="es"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex">
+    <meta name="Description" content="Buscar en todo el BOE">
+    <title>BOE.es - Buscar en todo el BOE</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <base target="_top">
+    <link type="text/css" href="/estilos/boe.css" rel="stylesheet">
+    <link rel="stylesheet" href="/estilos/buscador.css" type="text/css">
+    <!--[if lt IE 10]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie9.css" />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie8.css" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="header">
+      <h1 class="fuera">Agencia Estatal Boletín Oficial del Estado</h1>
+      <ul class="fuera">
+        <li><a accesskey="c" href="#contenedor" tabindex="-1">Ir a contenido</a></li>
+        <li><a accesskey="5" href="/diario_boe/" tabindex="-1">Consultar el diario oficial BOE</a></li>
+      </ul>
+      <div id="logosInicio">
+        <span id="logoPresidenciaMovil"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPRmovil.png" srcset="/imagenes/logoMPRmovil.svg" alt="Ministerio de la Presidencia"></a></span>
+        <span id="logoPresidencia"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPR.png" srcset="/imagenes/logoMPR.svg" alt="Ministerio de la Presidencia"></a></span>
+
+        <span id="logoAgencia"><a accesskey="1" href="/" title="Ir a la página de inicio"><img src="/imagenes/logoBOE.gif" srcset="/imagenes/logoBOE.svg" alt="Agencia Estatal Boletín Oficial del Estado"></a></span>
+        
+      </div> <!-- #logosInicio -->
+    </div> <!-- #header -->
+    <div id="top" class="banda-menu">
+    <div class="menu-wrapper">
+      <div id="logo-movil-boe-container">
+        <a href="/" title="Ir a la página de inicio"><img alt="Agencia Estatal Boletín Oficial del Estado" src="/imagenes/logoBlanco128.png"></a>
+      </div>
+      <ul class="menu">
+        <li class="menu-item menu-idiomas">
+          <div id="selector-idioma">
+            <span class="fuera">Idioma actual:</span>
+            <input id="activar-idiomas" type="checkbox" class="fuera">
+            <label class="idioma-actual" for="activar-idiomas" title="Idiomas: Haga clic o utilice barra espaciadora para abrir o cerrar opciones"><span class="descripcion-idioma pc tablet">Castellano</span><span class="fuera"> / </span><span class="descripcion-idioma movil">es</span><span class="triangulo"><span></span></span></label>
+            <p class="fuera">Puede seleccionar otro idioma:</p>
+            <ul id="lista-idiomas">
+              <li><a href="boe.php?lang=es" lang="es" hreflang="es"><span aria-hidden="true" class="idioma"><abbr title="español/castellano">es</abbr><span class="fuera"> / </span><em>Castellano</em></span></a></li>
+              <li><a href="boe.php?lang=ca" lang="ca" hreflang="ca"><span aria-hidden="true" class="idioma"><abbr title="català">ca</abbr><span class="fuera"> / </span><em>Català</em></span></a></li>
+              <li><a href="boe.php?lang=gl" lang="gl" hreflang="gl"><span aria-hidden="true" class="idioma"><abbr title="galego">gl</abbr><span class="fuera"> / </span><em>Galego</em></span></a></li>
+              <li><a href="boe.php?lang=eu" lang="eu" hreflang="eu"><span aria-hidden="true" class="idioma"><abbr title="euskara">eu</abbr><span class="fuera"> / </span><em>Euskara</em></span></a></li>
+              <li><a href="boe.php?lang=va" lang="ca-valencia" hreflang="ca-valencia"><span aria-hidden="true" class="idioma"><abbr title="valencià">va</abbr><span class="fuera"> / </span><em>Valencià</em></span></a></li>
+              <li><a href="boe.php?lang=en" lang="en" hreflang="en"><span aria-hidden="true" class="idioma"><abbr title="english">en</abbr><span class="fuera"> / </span><em>English</em></span></a></li>
+              <li><a href="boe.php?lang=fr" lang="fr" hreflang="fr"><span aria-hidden="true" class="idioma"><abbr title="français">fr</abbr><span class="fuera"> / </span><em>Français</em></span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="menu-item resto">
+          <a accesskey="4" href="/buscar/"><span class="botonBuscar">Buscar</span></a>
+        </li>
+        <li class="menu-item resto">
+          <a href="/mi_boe/">
+            <span class="botonMiBOE">Mi BOE <span class="luz">Desconectado.<br>Pulse para acceder al servicio 'Mi BOE'</span></span>
+          </a>
+        </li>
+        <li class="menu-item movil buscar">
+          <a href="/buscar/">
+            <img alt="Buscar" src="/imagenes/logoBuscar.png" srcset="/imagenes/logoBuscar.svg">
+          </a>
+        </li>
+        <li class="menu-item movil">
+          <a href="/mi_boe/">
+            <img alt="Mi BOE" src="/imagenes/logoMiBOE.png" srcset="/imagenes/logoMiBOE.svg">
+          </a>
+        </li>
+        <li class="menu-item menu-menu"><!--  -->
+          <input id="activar-menu" name="activar" type="checkbox" title="Desplegar menú" class="fuera">
+          <label class="click-desplegar resto" for="activar-menu" title="Menú: Haga clic o utilice barra espaciadora para abrir o cerrar opciones">Menú
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <input id="activar-menu-movil" name="activar" type="checkbox" title="Desplegar menú">
+          <label class="click-desplegar movil" for="activar-menu-movil"><em>Menú</em>
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <div class="menu-container">
+            <ul class="menu-item-list">
+              <li class="menu-item first">
+                <p><a href="/index.php#diarios" class="inline">Diarios Oficiales</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/diario_boe">BOE</a></li>
+                  <li><a href="/diario_borme">BORME</a></li>
+                  <li><a href="/legislacion/otros_diarios_oficiales.php">Otros diarios oficiales</a></li>
+                </ul>
+              </li>
+              <li class="menu-item">
+                <p><a href="/index.php#juridico">Información Jurídica</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/legislacion/">Todo el Derecho</a></li>
+                  <li><a href="/biblioteca_juridica/">Biblioteca Jurídica Digital</a></li>
+                </ul>
+              </li>
+              <li class="menu-item last">
+                <p><a href="/index.php#servicios-adicionales">Otros servicios</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/notificaciones">Notificaciones</a></li>
+                  <li><a href="/edictos_judiciales">Edictos judiciales</a></li>
+                  <li><a href="https://subastas.boe.es">Portal de subastas</a></li>
+                  <li><a href="/anuncios">Anunciantes</a></li>
+                  <li><a href="/datosabiertos/api/api.php">Datos abiertos</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div> <!-- .menu-container -->
+        </li><!--  -->
+      </ul>
+    </div> <!-- .menu-wrapper -->
+    </div> <!-- .banda-menu -->
+    <div id="franjaMigas">
+      <div class="contMigas">
+        <span class="fraseMigas">Está <abbr title="usted">Vd.</abbr> en</span>
+        <ul class="migas">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/buscar/">Buscar</a></li>
+          <li class="destino">Buscar en todo el BOE</li>
+        </ul>
+        <div id="solapa">
+        </div><!-- solapa -->
+      </div><!-- contMigas -->
+    </div> <!-- #franjaMigas -->
+    <div id="contenedor">
+      <div id="contenido" class="poolBdatos"><h2>Buscar en todo el BOE</h2>
+<div class="pretexto">
+    <ul class="navlist">
+        <li><a href="./boe.php?accion=&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50">Búsqueda</a></li>
+        <li><a href="./boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50" class="current">Resultados</a></li>
+        <li><a href="./boe.php?accion=Fav&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-300-50" class="guardar">Guardar <span class="tablet pc">búsqueda</span><img src="/imagenes/logoMiBOE_azul.png" srcset="/imagenes/logoMiBOE_azul.svg" alt="Mi BOE inactivo"></a></li>
+    </ul>
+</div>
+
+<div class="paginar" role="status">
+  <p>Resultados 301 a 350 de 9.974</p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAntxxx">6</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">7</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagAntxxx">8</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-400-50">
+        <span class="pagAntxxx">9</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="listadoResult">
+  <ul>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa de la registradora de la propiedad de El Campello, a la inscripción de una escritura de compraventa.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4161" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4161">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4161</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4161" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4161">Más... (Referencia BOE-A-2026-4161)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa de la registradora de la propiedad de Pontevedra n.º 1 a la asignación de número de registro de alquiler de corta duración.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4162" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4162">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4162</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4162" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4162">Más... (Referencia BOE-A-2026-4162)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Calafell, a inscribir una certificación de adjudicación dictada por la Tesorería General de la Seguridad Social en un procedimiento de apremio.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4163" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4163">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4163</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4163" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4163">Más... (Referencia BOE-A-2026-4163)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Madrid n.º 4, a la asignación de número de registro de alquiler de corta duración respecto de una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4164" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4164">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4164</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4164" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4164">Más... (Referencia BOE-A-2026-4164)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Vélez-Málaga n.º 2, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por disponerse en los estatutos inscritos de la propiedad horizontal que «se prohíbe especialmente a cada propietario, instalar en las viviendas negocios, círculos, academias, pensiones o asociaciones en el que el número de sus miembros o asociados sea excesivo o molesten o perturben la buena vecindad o tranquilidad de los vecinos».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4165" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4165">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4165</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4165" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4165">Más... (Referencia BOE-A-2026-4165)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Vélez-Málaga n.º 2, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por disponerse en los estatutos inscritos de la propiedad horizontal que «se prohíbe especialmente a cada propietario, instalar en las viviendas negocios, círculos, academias, pensiones o asociaciones en el que el número de sus miembros o asociados sea excesivo o molesten o perturben la buena vecindad o tranquilidad de los vecinos».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4166" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4166">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4166</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4166" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4166">Más... (Referencia BOE-A-2026-4166)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad interina de Chiclana de la Frontera n.º 2, por la que se suspende la asignación de número de registro único de alquiler de corta duración turístico por constar en los estatutos de la propiedad horizontal la prohibición expresa de la utilización de las viviendas para el ejercicio de cualquier actividad comercial.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4167" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4167">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4167</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4167" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4167">Más... (Referencia BOE-A-2026-4167)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Gijón n.º 1, por la que se suspende la asignación de un número de registro único de alquiler de corta duración de uso turístico por constar en los estatutos de la propiedad horizontal «los pisos se destinarán a viviendas u oficinas del titular y no podrán instalarse en ellas hospederías ni servicios o industrias que perjudiquen a la Comunidad, a la seguridad de la finca o afecten a la moral y a las buenas costumbres».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4168" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4168">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4168</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4168" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4168">Más... (Referencia BOE-A-2026-4168)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Zaragoza n.º 2, por la que se deniega la inscripción de tres fincas que fueron incluidas en un convenio regulador de pactos familiares, por razón de divorcio, y que habían sido adquiridas previamente al matrimonio en pro indiviso.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4169" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4169">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4169</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4169" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4169">Más... (Referencia BOE-A-2026-4169)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 22 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Torrevieja n.º 2, por la que se suspende la asignación de número de registro de alquiler de uso turístico para una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4170" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4170">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4170</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4170" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4170">Más... (Referencia BOE-A-2026-4170)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación negativa emitida por la registradora de la propiedad de Barcelona n.º 8, por la que se suspende la inscripción de una escritura de compraventa, en ejercicio de un derecho de opción, por haberse tomado con anterioridad a la escritura de compraventa sendas anotaciones de prohibición de disponer a favor de la Agencia Tributaria.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4171" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4171">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4171</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4171" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4171">Más... (Referencia BOE-A-2026-4171)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación negativa realizada por el registrador de la propiedad de Boadilla del Monte, relativo a un mandamiento remitido desde la Audiencia Nacional.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4172" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4172">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4172</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4172" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4172">Más... (Referencia BOE-A-2026-4172)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa de la registradora de la propiedad de Calp, a la asignación de número de registro de alquiler de corta duración para una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4173" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4173">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4173</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4173" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4173">Más... (Referencia BOE-A-2026-4173)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Armilla, a practicar el asiento de presentación de una instancia.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4174" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4174">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4174</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4174" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4174">Más... (Referencia BOE-A-2026-4174)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador mercantil XXIII de Madrid a inscribir una escritura de constitución de una sociedad.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4175" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4175">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4175</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4175" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4175">Más... (Referencia BOE-A-2026-4175)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Madrid n.º 27, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por no aportarse licencia de uso turístico para el municipio de Madrid.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4176" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4176">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4176</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4176" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4176">Más... (Referencia BOE-A-2026-4176)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 23 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación extendida por el registrador de la propiedad de Igualada n.º 2, por la que se suspende la inscripción de un auto judicial de sobreseimiento de procedimiento de ejecución hipotecaria.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4177" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4177">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4177</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4177" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4177">Más... (Referencia BOE-A-2026-4177)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la denegación del asiento de presentación del registrador de la propiedad de Villajoyosa n.º 2, en relación de la solicitud de asignación del número de registro de alquiler de corta duración, por no hallarse la finca situada en la demarcación territorial de dicho registro.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4178" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4178">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4178</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4178" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4178">Más... (Referencia BOE-A-2026-4178)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Noia a practicar asiento de presentación de una instancia privada.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4179" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4179">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4179</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4179" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4179">Más... (Referencia BOE-A-2026-4179)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Alcalá de Henares n.º 4, por la que se suspende la asignación de número de registro de alquiler de corta duración no turístico para cuatro habitaciones por disponerse en los estatutos inscritos de la propiedad horizontal que «queda, pues, prohibido el ejercicio de cualquier actividad industrial, así como las de carácter mercantil o artística en cuanto comporten apertura de oficina, despachos o centros que lleven consigo la presencia de empleados, afluencia de público, clientes, huéspedes, pacientes, alumnos».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4180" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4180">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4180</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4180" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4180">Más... (Referencia BOE-A-2026-4180)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Madrid n.º 37, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por no aportarse licencia de uso turístico para el municipio de Madrid.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4181" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4181">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4181</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4181" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4181">Más... (Referencia BOE-A-2026-4181)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Bilbao n.º 8, por la que se suspende la asignación de un número de registro único de alquiler de corta duración turístico por constar en los estatutos de la propiedad horizontal que «está prohibido el ejercicio de la actividad de pisos y apartamentos turísticos en todas las viviendas de la comunidad».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4182" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4182">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4182</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4182" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4182">Más... (Referencia BOE-A-2026-4182)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 24 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación negativa del registrador mercantil y de bienes muebles VIII de Barcelona de una escritura de prenda sin desplazamiento de un conjunto de bicicletas.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4183" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4183">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4183</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4183" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4183">Más... (Referencia BOE-A-2026-4183)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la calificación negativa del registrador de la propiedad de Lepe de la solicitud de asignación de número de registro de alquiler de corta duración para una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4184" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4184">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4184</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4184" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4184">Más... (Referencia BOE-A-2026-4184)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa de la registradora de la propiedad de Zaragoza n.º 3 a inscribir una escritura de compraventa.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4185" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4185">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4185</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4185" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4185">Más... (Referencia BOE-A-2026-4185)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Archidona a inscribir la representación gráfica georreferenciada catastral de una finca por advertir dudas de identidad, sin tramitarse el procedimiento regulado en el artículo 199 de la Ley Hipotecaria.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4186" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4186">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4186</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4186" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4186">Más... (Referencia BOE-A-2026-4186)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Benalmádena n.º 2 a la asignación de número de registro de alquiler de corta duración, turístico, finca completa, para una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4187" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4187">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4187</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4187" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4187">Más... (Referencia BOE-A-2026-4187)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la negativa del registrador de la propiedad de Marbella n.º 3 a la asignación de un número de registro de alquiler de corta duración.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4188" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4188">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4188</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4188" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4188">Más... (Referencia BOE-A-2026-4188)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad interina de Chiclana de la Frontera n.º 2, por la que se suspende la asignación de número de registro único de alquiler de corta duración turístico por constar en los estatutos de la propiedad horizontal la prohibición expresa de la utilización de las viviendas para el ejercicio de cualquier actividad comercial.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4189" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4189">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4189</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4189" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4189">Más... (Referencia BOE-A-2026-4189)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Estepona n.º 2, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por constar en los estatutos inscritos de la propiedad horizontal la prohibición expresa de ejercer en las viviendas «cualquier clase de negocio».</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4190" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4190">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4190</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4190" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4190">Más... (Referencia BOE-A-2026-4190)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Ávila n.º 1, por la que se suspende la rectificación de superficie de finca expropiada y resultante.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4191" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4191">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4191</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4191" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4191">Más... (Referencia BOE-A-2026-4191)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador de la propiedad de Algeciras n.º 2, por la que suspende la inscripción de una escritura de segregación y compraventa.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4192" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4192">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4192</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4192" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4192">Más... (Referencia BOE-A-2026-4192)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador mercantil y de bienes muebles I de Santa Cruz de Tenerife, por la que se rechaza el depósito de las cuentas anuales de una sociedad correspondientes al ejercicio 2024.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4193" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4193">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4193</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4193" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4193">Más... (Referencia BOE-A-2026-4193)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 27 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación del registrador mercantil y de bienes muebles I de Santa Cruz de Tenerife, por la que se rechaza el depósito de las cuentas anuales de una sociedad correspondientes al ejercicio 2024.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4194" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4194">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4194</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4194" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4194">Más... (Referencia BOE-A-2026-4194)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 28 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra el acuerdo de suspensión de la calificación de una solicitud de asignación de número de registro único de alquiler de corta duración turístico del registrador de la propiedad de Motril n.º 1, por constar presentada con anterioridad una escritura de elevación a público de los acuerdos de la comunidad de propietarios por la que se modifican sus estatutos para limitar el alquiler turístico o vacacional, la cual fue calificada negativamente y su asiento de presentación prorrogado.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4195" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4195">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4195</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4195" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4195">Más... (Referencia BOE-A-2026-4195)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 28 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Arzúa, por la que se suspende la inmatriculación de la mitad indivisa de una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4196" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4196">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4196</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4196" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4196">Más... (Referencia BOE-A-2026-4196)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 28 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación de la registradora de la propiedad de Madrid n.º 27, por la que se suspende la asignación de un número de registro de alquiler de corta duración turístico por constar en el Registro el uso de la finca como «local» y por no aportarse licencia de uso turístico para el municipio de Madrid.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4197" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4197">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4197</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4197" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4197">Más... (Referencia BOE-A-2026-4197)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 28 de octubre de 2025, de la Dirección General de Seguridad Jurídica y Fe Pública, en el recurso interpuesto contra la nota de calificación desfavorable emitida por la registradora de la propiedad de Madrid n.º 27 de una instancia de solicitud de asignación de número de registro de alquiler de corta duración respecto de una finca.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4198" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4198">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4198</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4198" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4198">Más... (Referencia BOE-A-2026-4198)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 3 de febrero de 2026, de la Dirección General para la Eficiencia del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 100/2025, interpuesto ante el Juzgado Central de lo Contencioso-Administrativo n.º 12.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4199" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4199">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4199</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4199" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4199">Más... (Referencia BOE-A-2026-4199)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 3 de febrero de 2026, de la Dirección General para la Eficiencia del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 763/2025, interpuesto ante la Audiencia Nacional, Sala de lo Contencioso-Administrativo, Sección Tercera.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4200" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4200">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4200</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4200" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4200">Más... (Referencia BOE-A-2026-4200)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 4 de febrero de 2026, de la Dirección General para la Eficiencia del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 82/2026, interpuesto ante el Tribunal Superior de Justicia de Madrid, Sala de la Contencioso-Administrativo, Sección Séptima.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4201" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4201">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4201</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4201" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4201">Más... (Referencia BOE-A-2026-4201)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 9 de febrero de 2026, de la Secretaría General para la Innovación y Calidad del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 38/2026, interpuesto ante el Tribunal Superior de Justicia de Madrid, Sala de lo Contencioso-Administrativo, Sección Séptima.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4202" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4202">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4202</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4202" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4202">Más... (Referencia BOE-A-2026-4202)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 9 de febrero de 2026, de la Secretaría General para la Innovación y Calidad del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 42/2026, interpuesto ante el Tribunal Superior de Justicia de Madrid, Sala de lo Contencioso-Administrativo, Sección Séptima.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4203" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4203">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4203</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4203" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4203">Más... (Referencia BOE-A-2026-4203)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de la Presidencia, Justicia y Relaciones con las Cortes</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 9 de febrero de 2026, de la Secretaría General para la Innovación y Calidad del Servicio Público de Justicia, por la que se emplaza a las personas interesadas en el recurso contencioso-administrativo 44/2026, interpuesto ante el Tribunal Superior de Justicia de Madrid, Sala de lo Contencioso-Administrativo, Sección Séptima.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4204" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4204">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4204</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4204" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4204">Más... (Referencia BOE-A-2026-4204)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Defensa</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución 1A0/38569/2025, de 22 de diciembre, del Centro Criptológico Nacional, por la que se certifica la seguridad del producto «CosmicGuard for Linux v2.2», solicitado por GMV Soluciones Globales Internet, SAU.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4205" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4205">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4205</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4205" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4205">Más... (Referencia BOE-A-2026-4205)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Defensa</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución 1A0/38057/2026, de 5 de febrero, del Centro Criptológico Nacional, por la que se certifica la seguridad del producto «ESET Endpoint Security v12.1.2057.3», solicitado por ESET spol. sro.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4206" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4206">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4206</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4206" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4206">Más... (Referencia BOE-A-2026-4206)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Hacienda</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 13 de febrero de 2026, de la Dirección General del Catastro, por la que se publica el Convenio con el Ayuntamiento de Ontígola.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4207" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4207">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4207</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4207" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4207">Más... (Referencia BOE-A-2026-4207)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Hacienda</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 13 de febrero de 2026, de la Dirección General del Catastro, por la que se publica el Convenio con el Ayuntamiento de Villadangos del Páramo.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4208" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4208">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4208</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4208" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4208">Más... (Referencia BOE-A-2026-4208)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Hacienda</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 13 de febrero de 2026, de la Dirección General del Catastro, por la que se publica el Convenio con el Colegio de Abogados de Girona.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4209" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4209">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4209</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4209" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4209">Más... (Referencia BOE-A-2026-4209)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio del Interior</p>
+      <p class="linea-pub">BOE 48 de 23/02/2026 
+       - III. Otras disposiciones</p>
+      <p>Resolución de 30 de enero de 2026, de la Subsecretaría, por la que se aprueba la Carta de Servicios de la Comandancia de la Guardia Civil de Cádiz.</p>
+      <a href="../buscar/doc.php?id=BOE-A-2026-4210" class="resultado-busqueda-link-defecto" title="Ref. BOE-A-2026-4210">
+        <span class="fuera">Ir al documento Ref. BOE-A-2026-4210</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-A-2026-4210" class="resultado-busqueda-link-otro" title="Ref. BOE-A-2026-4210">Más... (Referencia BOE-A-2026-4210)</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="paginar">
+  <p class="linkSubir">
+    <a href="#top">subir</a>
+  </p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAntxxx">6</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">7</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagAntxxx">8</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-400-50">
+        <span class="pagAntxxx">9</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-350-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+      </div> <!-- .pool -->
+    </div> <!-- #contenedor -->
+    <div id="pie">
+      <div id="menuPie">
+        <div class="otros-enlaces">
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace"><a href="/contactar/" accesskey="3">Contactar</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php" hreflang="es">Sobre esta sede electrónica</a></div></li>
+            <li><div class="enlace"><a href="/informacion/mapa_web/" accesskey="2">Mapa</a></div></li>
+            <li><div class="enlace"><a href="/informacion/aviso_legal/index.php">Aviso legal</a></div></li>
+            <li><div class="enlace"><a href="/informacion/accesibilidad/" accesskey="0">Accesibilidad</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php#proteccion-de-datos" hreflang="es">Protección de datos</a></div></li>
+            <li><div class="enlace"><a href="/informacion/sistema_interno_informacion.php" hreflang="es">Sistema Interno de Información</a></div></li>
+            <li><div class="enlace"><a href="/informacion/tutoriales/" hreflang="es">Tutoriales</a></div></li>
+            </ul>
+            </div>
+          </div>
+          <div class="espacio"></div>
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace icono"><a href="/rss/" hreflang="es" lang="es" title="RSS"><img src="/imagenes/home/rss_32.png" srcset="/imagenes/home/rss_32.svg" alt="RSS"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=tw" hreflang="es" lang="es" title="boegob, el BOE en X"><img src="/imagenes/home/twitter_32.png" srcset="/imagenes/home/twitter_32.svg" alt="X"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=fb" hreflang="es" lang="es" title="El BOE en Facebook"><img src="/imagenes/home/facebook_32.png" srcset="/imagenes/home/facebook_32.svg" alt="Facebook"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=ln" hreflang="es" lang="es" title="El BOE en LinkedIn"><img src="/imagenes/home/linkedin_32.png" srcset="/imagenes/home/linkedin_32.svg" alt="LinkedIn"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=yt" hreflang="es" lang="es" title="El BOE en YouTube"><img src="/imagenes/home/youtube_32.png" srcset="/imagenes/home/youtube_32.svg" alt="YouTube"></a></div></li>
+            </ul>
+            </div>
+          </div>
+        </div> <!-- .franjaMenu -->
+      </div> <!-- #menuPie -->
+      <div class="franja-pie">
+        <p class="nombre-organismo">Agencia Estatal Boletín Oficial del Estado</p>
+        <p class="direccion-organismo"><abbr title="Avenida">Avda.</abbr> de Manoteras, 54 - 28050 Madrid</p>
+      </div>
+    </div> <!-- #pie -->
+    <script src="/js/desplegable.js"></script>
+  
+
+</body></html>

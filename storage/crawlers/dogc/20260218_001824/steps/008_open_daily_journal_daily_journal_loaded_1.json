@@ -1,0 +1,9 @@
+{
+  "state": "OPEN_DAILY_JOURNAL",
+  "note": "daily_journal_loaded_1",
+  "captured_at": "2026-02-17T23:18:48.844261",
+  "url": "https://dogc.gencat.cat/ca/sumari-del-dogc/?anexos=1&selectedYear=2026&selectedMonth=1&numDOGC=9575&language=ca_ES",
+  "title": "Sumari del DOGC. Diari Oficial de la Generalitat de Catalunya",
+  "png": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260218_001824/steps/008_open_daily_journal_daily_journal_loaded_1.png",
+  "html": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260218_001824/steps/008_open_daily_journal_daily_journal_loaded_1.html"
+}

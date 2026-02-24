@@ -1,0 +1,108 @@
+<?php
+
+return [
+    'common' => [
+        'actions' => 'Accions',
+    ],
+    'roles' => [
+        'admin' => 'Administrador',
+        'regular' => 'Usuari',
+    ],
+    'locales' => [
+        'en' => 'Angles',
+        'es' => 'Castella',
+        'ca' => 'Catala',
+    ],
+    'users' => [
+        'navigation' => 'Usuaris',
+        'model_singular' => 'usuari',
+        'model_plural' => 'usuaris',
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Nom',
+            'email' => 'Correu',
+            'password' => 'Contrasenya',
+            'role' => 'Perfil',
+            'locale' => 'Idioma',
+            'created_at' => 'Creat el',
+        ],
+    ],
+    'sources' => [
+        'navigation' => 'Fonts',
+        'model_singular' => 'font',
+        'model_plural' => 'fonts',
+        'sections' => [
+            'general' => 'Informacio General',
+            'endpoints' => 'Endpoints de la Font',
+            'notes' => 'Notes Internes',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Nom',
+            'daily_journals' => 'Diaris',
+            'description' => 'Descripcio',
+            'base_url' => 'URL Base',
+            'slug' => 'Slug',
+            'start_at' => 'Inici',
+            'comments' => 'Comentaris',
+            'created_at' => 'Creat el',
+        ],
+    ],
+    'daily_journals' => [
+        'navigation' => 'Diaris',
+        'model_singular' => 'diari',
+        'model_plural' => 'diaris',
+        'sections' => [
+            'reference' => "Referencia de l'Edicio",
+            'content' => "Contingut de l'Edicio",
+        ],
+        'filters' => [
+            'issue_date_range' => "Rang de data de l'edicio",
+            'from' => 'Des de',
+            'to' => 'Fins a',
+            'source' => 'Font',
+            'from_indicator' => "Data d'edicio des de :date",
+            'to_indicator' => "Data d'edicio fins a :date",
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Font',
+            'issue_date' => "Data de l'edicio",
+            'notices' => 'Avisos',
+            'url' => 'URL',
+            'description' => 'Descripcio',
+            'created_at' => 'Creat el',
+        ],
+    ],
+    'notices' => [
+        'navigation' => 'Avisos',
+        'model_singular' => 'avis',
+        'model_plural' => 'avisos',
+        'sections' => [
+            'reference' => "Referencia de l'Avis",
+            'content' => "Contingut de l'Avis",
+        ],
+        'filters' => [
+            'issue_date_range' => "Rang de data de l'edicio",
+            'from' => 'Des de',
+            'to' => 'Fins a',
+            'daily_journal' => 'Diari',
+            'source' => 'Font',
+            'category' => 'Categoria',
+            'department' => 'Departament',
+            'from_indicator' => "Data d'edicio des de :date",
+            'to_indicator' => "Data d'edicio fins a :date",
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'daily_journal' => 'Diari',
+            'title' => 'Titol',
+            'category' => 'Categoria',
+            'department' => 'Departament',
+            'url' => 'URL',
+            'content' => 'Contingut',
+            'extra_info' => 'Informacio extra',
+            'created_at' => 'Creat el',
+        ],
+    ],
+];

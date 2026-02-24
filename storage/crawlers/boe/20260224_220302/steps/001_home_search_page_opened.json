@@ -1,0 +1,9 @@
+{
+  "state": "HOME",
+  "note": "search_page_opened",
+  "captured_at": "2026-02-24T21:03:12.905355",
+  "url": "https://www.boe.es/buscar/boe.php",
+  "title": "BOE.es - Buscar en todo el BOE",
+  "png": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/boe/20260224_220302/steps/001_home_search_page_opened.png",
+  "html": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/boe/20260224_220302/steps/001_home_search_page_opened.html"
+}

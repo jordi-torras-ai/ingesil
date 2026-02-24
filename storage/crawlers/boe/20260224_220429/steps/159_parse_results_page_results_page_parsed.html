@@ -1,0 +1,1001 @@
+<html lang="es"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="robots" content="noindex">
+    <meta name="Description" content="Buscar en todo el BOE">
+    <title>BOE.es - Buscar en todo el BOE</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <base target="_top">
+    <link type="text/css" href="/estilos/boe.css" rel="stylesheet">
+    <link rel="stylesheet" href="/estilos/buscador.css" type="text/css">
+    <!--[if lt IE 10]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie9.css" />
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" type="text/css" href="/estilos/boe_ie8.css" />
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <div id="header">
+      <h1 class="fuera">Agencia Estatal Boletín Oficial del Estado</h1>
+      <ul class="fuera">
+        <li><a accesskey="c" href="#contenedor" tabindex="-1">Ir a contenido</a></li>
+        <li><a accesskey="5" href="/diario_boe/" tabindex="-1">Consultar el diario oficial BOE</a></li>
+      </ul>
+      <div id="logosInicio">
+        <span id="logoPresidenciaMovil"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPRmovil.png" srcset="/imagenes/logoMPRmovil.svg" alt="Ministerio de la Presidencia"></a></span>
+        <span id="logoPresidencia"><a href="https://www.mpr.gob.es/" title="Ir al Ministerio de la Presidencia"><img src="/imagenes/logoMPR.png" srcset="/imagenes/logoMPR.svg" alt="Ministerio de la Presidencia"></a></span>
+
+        <span id="logoAgencia"><a accesskey="1" href="/" title="Ir a la página de inicio"><img src="/imagenes/logoBOE.gif" srcset="/imagenes/logoBOE.svg" alt="Agencia Estatal Boletín Oficial del Estado"></a></span>
+        
+      </div> <!-- #logosInicio -->
+    </div> <!-- #header -->
+    <div id="top" class="banda-menu">
+    <div class="menu-wrapper">
+      <div id="logo-movil-boe-container">
+        <a href="/" title="Ir a la página de inicio"><img alt="Agencia Estatal Boletín Oficial del Estado" src="/imagenes/logoBlanco128.png"></a>
+      </div>
+      <ul class="menu">
+        <li class="menu-item menu-idiomas">
+          <div id="selector-idioma">
+            <span class="fuera">Idioma actual:</span>
+            <input id="activar-idiomas" type="checkbox" class="fuera">
+            <label class="idioma-actual" for="activar-idiomas" title="Idiomas: Haga clic o utilice barra espaciadora para abrir o cerrar opciones"><span class="descripcion-idioma pc tablet">Castellano</span><span class="fuera"> / </span><span class="descripcion-idioma movil">es</span><span class="triangulo"><span></span></span></label>
+            <p class="fuera">Puede seleccionar otro idioma:</p>
+            <ul id="lista-idiomas">
+              <li><a href="boe.php?lang=es" lang="es" hreflang="es"><span aria-hidden="true" class="idioma"><abbr title="español/castellano">es</abbr><span class="fuera"> / </span><em>Castellano</em></span></a></li>
+              <li><a href="boe.php?lang=ca" lang="ca" hreflang="ca"><span aria-hidden="true" class="idioma"><abbr title="català">ca</abbr><span class="fuera"> / </span><em>Català</em></span></a></li>
+              <li><a href="boe.php?lang=gl" lang="gl" hreflang="gl"><span aria-hidden="true" class="idioma"><abbr title="galego">gl</abbr><span class="fuera"> / </span><em>Galego</em></span></a></li>
+              <li><a href="boe.php?lang=eu" lang="eu" hreflang="eu"><span aria-hidden="true" class="idioma"><abbr title="euskara">eu</abbr><span class="fuera"> / </span><em>Euskara</em></span></a></li>
+              <li><a href="boe.php?lang=va" lang="ca-valencia" hreflang="ca-valencia"><span aria-hidden="true" class="idioma"><abbr title="valencià">va</abbr><span class="fuera"> / </span><em>Valencià</em></span></a></li>
+              <li><a href="boe.php?lang=en" lang="en" hreflang="en"><span aria-hidden="true" class="idioma"><abbr title="english">en</abbr><span class="fuera"> / </span><em>English</em></span></a></li>
+              <li><a href="boe.php?lang=fr" lang="fr" hreflang="fr"><span aria-hidden="true" class="idioma"><abbr title="français">fr</abbr><span class="fuera"> / </span><em>Français</em></span></a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="menu-item resto">
+          <a accesskey="4" href="/buscar/"><span class="botonBuscar">Buscar</span></a>
+        </li>
+        <li class="menu-item resto">
+          <a href="/mi_boe/">
+            <span class="botonMiBOE">Mi BOE <span class="luz">Desconectado.<br>Pulse para acceder al servicio 'Mi BOE'</span></span>
+          </a>
+        </li>
+        <li class="menu-item movil buscar">
+          <a href="/buscar/">
+            <img alt="Buscar" src="/imagenes/logoBuscar.png" srcset="/imagenes/logoBuscar.svg">
+          </a>
+        </li>
+        <li class="menu-item movil">
+          <a href="/mi_boe/">
+            <img alt="Mi BOE" src="/imagenes/logoMiBOE.png" srcset="/imagenes/logoMiBOE.svg">
+          </a>
+        </li>
+        <li class="menu-item menu-menu"><!--  -->
+          <input id="activar-menu" name="activar" type="checkbox" title="Desplegar menú" class="fuera">
+          <label class="click-desplegar resto" for="activar-menu" title="Menú: Haga clic o utilice barra espaciadora para abrir o cerrar opciones">Menú
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <input id="activar-menu-movil" name="activar" type="checkbox" title="Desplegar menú">
+          <label class="click-desplegar movil" for="activar-menu-movil"><em>Menú</em>
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+          <div class="menu-container">
+            <ul class="menu-item-list">
+              <li class="menu-item first">
+                <p><a href="/index.php#diarios" class="inline">Diarios Oficiales</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/diario_boe">BOE</a></li>
+                  <li><a href="/diario_borme">BORME</a></li>
+                  <li><a href="/legislacion/otros_diarios_oficiales.php">Otros diarios oficiales</a></li>
+                </ul>
+              </li>
+              <li class="menu-item">
+                <p><a href="/index.php#juridico">Información Jurídica</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/legislacion/">Todo el Derecho</a></li>
+                  <li><a href="/biblioteca_juridica/">Biblioteca Jurídica Digital</a></li>
+                </ul>
+              </li>
+              <li class="menu-item last">
+                <p><a href="/index.php#servicios-adicionales">Otros servicios</a></p>
+                <ul class="sub-menu">
+                  <li><a href="/notificaciones">Notificaciones</a></li>
+                  <li><a href="/edictos_judiciales">Edictos judiciales</a></li>
+                  <li><a href="https://subastas.boe.es">Portal de subastas</a></li>
+                  <li><a href="/anuncios">Anunciantes</a></li>
+                  <li><a href="/datosabiertos/api/api.php">Datos abiertos</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div> <!-- .menu-container -->
+        </li><!--  -->
+      </ul>
+    </div> <!-- .menu-wrapper -->
+    </div> <!-- .banda-menu -->
+    <div id="franjaMigas">
+      <div class="contMigas">
+        <span class="fraseMigas">Está <abbr title="usted">Vd.</abbr> en</span>
+        <ul class="migas">
+          <li><a href="/">Inicio</a></li>
+          <li><a href="/buscar/">Buscar</a></li>
+          <li class="destino">Buscar en todo el BOE</li>
+        </ul>
+        <div id="solapa">
+        </div><!-- solapa -->
+      </div><!-- contMigas -->
+    </div> <!-- #franjaMigas -->
+    <div id="contenedor">
+      <div id="contenido" class="poolBdatos"><h2>Buscar en todo el BOE</h2>
+<div class="pretexto">
+    <ul class="navlist">
+        <li><a href="./boe.php?accion=&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50">Búsqueda</a></li>
+        <li><a href="./boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50" class="current">Resultados</a></li>
+        <li><a href="./boe.php?accion=Fav&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-150-50" class="guardar">Guardar <span class="tablet pc">búsqueda</span><img src="/imagenes/logoMiBOE_azul.png" srcset="/imagenes/logoMiBOE_azul.svg" alt="Mi BOE inactivo"></a></li>
+    </ul>
+</div>
+
+<div class="paginar" role="status">
+  <p>Resultados 151 a 200 de 9.974</p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-100-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-50-50">
+        <span class="pagAntxxx">2</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-100-50">
+        <span class="pagAntxxx">3</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">4</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAntxxx">6</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+<div class="listadoResult">
+  <ul>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Trabajo y Economía Social</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Resolución de la Dirección General de Trabajo por la que se anuncia el depósito de la modificación de los estatutos de la asociación empresarial denominada Unistock de España, con número de depósito 99002729 (antiguo número de depósito 3535).</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5641" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5641">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5641</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5641" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5641">Más... (Referencia BOE-B-2026-5641)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Trabajo y Economía Social</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Resolución de la Dirección General de Trabajo por la que se anuncia el depósito de la modificación de los estatutos del sindicato denominado Asociación Española de Árbitros de Fútbol, en siglas AESAF, con número de depósito 99106363.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5642" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5642">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5642</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5642" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5642">Más... (Referencia BOE-B-2026-5642)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Política Territorial y Memoria Democrática</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Dependencia de Industria y Energía de la Subdelegación del Gobierno en Segovia, por el que se somete a información pública la solicitud de autorización administrativa y aprobación del proyecto de ejecución del "Proyecto de modificación de posición segavi-04 del gasoducto "Segovia-Ávila" para inyección de biometano en el T.M. de Villacastín (Segovia)".</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5643" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5643">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5643</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5643" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5643">Más... (Referencia BOE-B-2026-5643)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Política Territorial y Memoria Democrática</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Delegación del Gobierno en Castilla y León por el que se convoca para el levantamiento de actas previas a la ocupación de bienes y derechos afectados por la instalación del parque eólico "Pedrecha" de 59,4 MW de potencia instalada y sus infraestructuras de evacuación, en los términos municipales de Cañamaque, Maján, Velilla de los Ajos y Serón de Nágima, en la provincia de Soria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5644" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5644">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5644</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5644" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5644">Más... (Referencia BOE-B-2026-5644)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Miño-Sil, O.A. de información pública del expediente de concesión aprovechamiento de 0,228 l/s de agua procedente de un pozo sito en la parcela 186 del polígono 95, en el lugar de Vilasuso, parroquia de Os Vilares (San Vicenzo), del término municipal de Guitiriz (Lugo) para usos ganadero y doméstico.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5645" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5645">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5645</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5645" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5645">Más... (Referencia BOE-B-2026-5645)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Miño-Sil, O.A. de información pública del expediente de concesión para aprovechamiento de 5,11 l/s agua procedente de seis pozos sitos en la parroquia de A Graña de Vilarente (Sta. Mª. Madanela), en el término municipal de Abadín (Lugo) para riego.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5646" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5646">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5646</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5646" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5646">Más... (Referencia BOE-B-2026-5646)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Miño-Sil, O.A. de información pública del expediente de autorización para la corta de 20 chopos, en el Dominio Público Hidráulico cartográfico y la margen derecha del río da Chanca, parcelas 34, 36 y 37 -polígono 518 de la localidad y Término Municipal de Lugo (Lugo).</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5647" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5647">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5647</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5647" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5647">Más... (Referencia BOE-B-2026-5647)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio del Organismo Autónomo Parques Nacionales por el que se convoca, mediante procedimiento abierto, licitación del expediente de: Enajenación del aprovechamiento de 40,7027 ha de olivar en la Finca Casablanca, propiedad del Organismo Autónomo Parques Nacionales (OAPN), en el P.N. Las Tablas de Daimiel (Ciudad Real). Temporadas 2026-2028 (EXP. 21026801).</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5648" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5648">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5648</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5648" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5648">Más... (Referencia BOE-B-2026-5648)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Demarcación de Costas en Asturias sobre información pública del proyecto "Construcción y estudios ambientales para la eliminación de rellenos degradados y ejecución de una nueva estructura de paso en el parque natural del Malecón de Ribadesella, t.m. de Ribadesella (Asturias)". Ref: 33-0637.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5649" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5649">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5649</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5649" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5649">Más... (Referencia BOE-B-2026-5649)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Tajo de información pública en el expediente de extinción del derecho a un aprovechamiento de 2,22 l/s de aguas subterráneas, con destino a riego, en el término municipal de Mascaraque (Toledo).</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5650" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5650">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5650</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5650" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5650">Más... (Referencia BOE-B-2026-5650)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Miño-Sil, O.A. por el que se hace público el otorgamiento de la concesión para aprovechamiento de 0,365 l/s de agua del Arroyo Turiello en el paraje "El Picón" en La Baña, T.M. de Encinedo (León), con destino a uso industrial, en el lugar de Paraje "El Picón" La Baña, término municipal de Encinedo (León). Expediente: A/24/10289.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5651" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5651">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5651</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5651" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5651">Más... (Referencia BOE-B-2026-5651)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Guadiana del inicio del trámite de competencia de proyectos de una concesión de aguas en los términos municipales de Abenójar y Almodóvar del Campo (Ciudad Real). Ref: SA-4199/2025.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5652" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5652">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5652</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5652" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5652">Más... (Referencia BOE-B-2026-5652)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Confederación Hidrográfica del Tajo O.A. de la información pública de la solicitud de la modificación de características de una concesión de aguas en el término municipal de Barrado (Cáceres), Malpartida de Plasencia (Cáceres). Referencia M-0068/2024.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5653" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5653">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5653</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5653" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5653">Más... (Referencia BOE-B-2026-5653)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Mancomunidad de los Canales del Taibilla sobre sometimiento a información pública de la relación de bienes y derechos afectados por el Proyecto de nuevo depósito de regulación para el municipio de Aspe (Ac/Aspe).</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5654" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5654">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5654</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5654" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5654">Más... (Referencia BOE-B-2026-5654)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio para la Transición Ecológica y el Reto Demográfico</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Subdirección General de Dominio Público Hidráulico e Infraestructuras de la Dirección General del Agua del Ministerio para la Transición Ecológica y el Reto Demográfico, relativo a la información pública del Anteproyecto y el Estudio de Impacto Ambiental de "Central Fotovoltaica para la Estación de Bombeo Moixent", y la relación de bienes y derechos afectados. Clave: 08.273-0019/2101 "Plan de Recuperación, Transformación y Resiliencia – Financiado por la Unión Europea – Next Generation EU".</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5655" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5655">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5655</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5655" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5655">Más... (Referencia BOE-B-2026-5655)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Sanidad</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Resolución de la Delegación del Gobierno para el Plan Nacional sobre Drogas, por la que se anuncia la venta en Subasta Pública Electrónica 1/2026 de Embarcaciones.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5656" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5656">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5656</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5656" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5656">Más... (Referencia BOE-B-2026-5656)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Ministerio de Sanidad</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Resolución de la Delegación del Gobierno para el Plan Nacional sobre Drogas, por la que se anuncia la venta en Subasta Pública Electrónica 2/2026 de Vehículos.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5657" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5657">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5657</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5657" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5657">Más... (Referencia BOE-B-2026-5657)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Comunidad Autónoma del Principado de Asturias</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>RESOLUCIÓN de 11 de febrero de 2026, de la Dirección General de Agricultura, Agroindustria y Desarrollo Rural de la Consejería de Medio Rural y Política Agraria del Principado de Asturias, por la que se da publicidad a la solicitud de modificación del Pliego de Condiciones de la Indicación Geográfica Protegida "Chosco de Tineo".</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5658" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5658">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5658</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5658" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5658">Más... (Referencia BOE-B-2026-5658)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Comunidad Autónoma de Canarias</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Dirección General de Energía de la Consejería de Transición Ecológica y Energía del Gobierno de Canarias por la que se concede a Parque Eólico Carretera de Arinaga, S.A., Declaración, en concreto, de Utilidad Pública del proyecto denominado "Parque Eólico Carretera de Arinaga", de 4,5 MW, en el término municipal de Agüimes, isla de Gran Canaria. Expediente ER190099.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5659" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5659">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5659</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5659" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5659">Más... (Referencia BOE-B-2026-5659)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Escuela Técnica Superior de Ingeniería Industrial de Albacete de la Universidad Castilla La Mancha sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5660" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5660">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5660</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5660" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5660">Más... (Referencia BOE-B-2026-5660)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de Escuela Técnica Superior de Arquitectura de la Universidad Politécnica de Madrid sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5661" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5661">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5661</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5661" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5661">Más... (Referencia BOE-B-2026-5661)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Universidad Alfonso X el Sabio sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5662" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5662">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5662</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5662" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5662">Más... (Referencia BOE-B-2026-5662)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Facultad de Economía y Empresa de la Universidad de Barcelona sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5663" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5663">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5663</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5663" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5663">Más... (Referencia BOE-B-2026-5663)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Facultat d'Infermeria i Podologia de la Universitat de València sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5664" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5664">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5664</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5664" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5664">Más... (Referencia BOE-B-2026-5664)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Universidad Carlos III de Madrid sobre Extravío de Título Universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5665" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5665">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5665</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5665" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5665">Más... (Referencia BOE-B-2026-5665)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Universidades</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Universidad de Las Palmas de Gran Canaria sobre extravío de título universitario.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5666" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5666">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5666</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5666" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5666">Más... (Referencia BOE-B-2026-5666)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de Lalueza sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5667" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5667">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5667</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5667" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5667">Más... (Referencia BOE-B-2026-5667)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de las Presas del Reguero Grande, de la Sierna y de Navianos sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5668" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5668">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5668</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5668" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5668">Más... (Referencia BOE-B-2026-5668)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes La Campana Jacinto Rus sobre convocatoria de asamblea general.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5669" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5669">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5669</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5669" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5669">Más... (Referencia BOE-B-2026-5669)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Acequia Común de Carlet sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5670" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5670">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5670</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5670" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5670">Más... (Referencia BOE-B-2026-5670)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes La Imagen sobre convocatoria de asamblea general.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5671" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5671">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5671</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5671" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5671">Más... (Referencia BOE-B-2026-5671)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de la Margen Izquierda del Canal del Pantano del Río Águeda sobre convocatoria de Junta ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5672" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5672">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5672</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5672" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5672">Más... (Referencia BOE-B-2026-5672)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Pozo Serrano Las Cabañas sobre convocatoria de asamblea general.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5673" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5673">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5673</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5673" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5673">Más... (Referencia BOE-B-2026-5673)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Zona de Aldover de la Comunidad de Regantes del Canal de la Derecha del Ebro sobre la convocatoria de Junta General Ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5674" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5674">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5674</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5674" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5674">Más... (Referencia BOE-B-2026-5674)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Junta Central de Regantes de La Mancha Oriental sobre convocatoria de Asamblea General Ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5675" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5675">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5675</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5675" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5675">Más... (Referencia BOE-B-2026-5675)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Junta Central de Usuarios del Vinalopo, Alacanti y Consorcio de Aguas de la Marina Baja sobre convocatoria de junta general ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5676" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5676">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5676</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5676" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5676">Más... (Referencia BOE-B-2026-5676)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Rio Alberche - Navatalgordo sobre convocatoria de Junta Ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5677" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5677">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5677</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5677" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5677">Más... (Referencia BOE-B-2026-5677)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes del Canal del conde de Lachar sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5678" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5678">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5678</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5678" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5678">Más... (Referencia BOE-B-2026-5678)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Margen Derecha de Pilar de la Horadada sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5679" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5679">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5679</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5679" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5679">Más... (Referencia BOE-B-2026-5679)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Cañadas de San Pedro de Murcia sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5680" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5680">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5680</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5680" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5680">Más... (Referencia BOE-B-2026-5680)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de la Conca de Barberà sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5681" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5681">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5681</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5681" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5681">Más... (Referencia BOE-B-2026-5681)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Santa Cecilia sobre convocatoria de Junta General Ordinaria.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5682" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5682">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5682</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5682" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5682">Más... (Referencia BOE-B-2026-5682)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Relámpago Armindez Minilla sobre convocatoria de asamblea general.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5683" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5683">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5683</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5683" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5683">Más... (Referencia BOE-B-2026-5683)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Rio Adaja sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5684" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5684">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5684</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5684" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5684">Más... (Referencia BOE-B-2026-5684)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de Montijo sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5685" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5685">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5685</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5685" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5685">Más... (Referencia BOE-B-2026-5685)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de Novales sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5686" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5686">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5686</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5686" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5686">Más... (Referencia BOE-B-2026-5686)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad Usuarios de aguas de usos domesticos de Picoña sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5687" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5687">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5687</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5687" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5687">Más... (Referencia BOE-B-2026-5687)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes de La Cova sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5688" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5688">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5688</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5688" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5688">Más... (Referencia BOE-B-2026-5688)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes San Miguel sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5689" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5689">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5689</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5689" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5689">Más... (Referencia BOE-B-2026-5689)</a>
+        </li>
+      </ul>
+    </li>
+    <li class="resultado-busqueda">
+      <p class="linea-dem">Otros Entes</p>
+      <p class="linea-pub">BOE 49 de 24/02/2026 
+       - V. Anuncios</p>
+      <p>Anuncio de la Comunidad de Regantes Piquero sobre convocatoria de Junta.</p>
+      <a href="../buscar/doc.php?id=BOE-B-2026-5690" class="resultado-busqueda-link-defecto" title="Ref. BOE-B-2026-5690">
+        <span class="fuera">Ir al documento Ref. BOE-B-2026-5690</span>
+      </a>
+      <ul>
+        <li class="puntoHTML">
+          <a href="../buscar/doc.php?id=BOE-B-2026-5690" class="resultado-busqueda-link-otro" title="Ref. BOE-B-2026-5690">Más... (Referencia BOE-B-2026-5690)</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+<div class="paginar">
+  <p class="linkSubir">
+    <a href="#top">subir</a>
+  </p>
+</div>
+<div class="paginar2">
+  <ul>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-100-50">
+        <span class="pagAnt"><abbr title="Página">Pág.</abbr> anterior</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9--50">
+        <span class="pagAntxxx">1</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-50-50">
+        <span class="pagAntxxx">2</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-100-50">
+        <span class="pagAntxxx">3</span>
+      </a>
+    </li>
+    <li>
+      <span class="fuera">Está usted en la página de resultados número </span>
+      <span class="current">4</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagAntxxx">5</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-250-50">
+        <span class="pagAntxxx">6</span>
+      </a>
+    </li>
+    <li>
+      <span>...</span>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-9950-50">
+        <span class="pagAntxxx">200</span>
+      </a>
+    </li>
+    <li>
+      <a href="boe.php?accion=Mas&amp;id_busqueda=RUZXR2tVU1J2NGQrbHJlU3JDaDhra1FCM29RR1d5Q0VnV04rUmRBYTRFRWpYS253dkpwVHp5R0piT1FXK3JubWYzODZaVUd0eUdaaEdVbDQxVzVOOGdmVy9PQkhJVVR1TkNzWFloUVl0VHVVSk5RVzNHcWxGUDlKai9MSjVZeDVwZFhCZlpBS3k3dFh0TEVuRzg5YzhWUGlJb3Z4aFBYWUlTVndZblpZRzVobmEydU1UbmVEVFR1Y1VTVkFHQ1RPZ2dvbDlIVTVwazZ1ekZWL09sMTJPaVg1dlBOU1R3d2t0em9QV3p2KzExOWhKenBqRGxlZEc2N250MFhjSklSbnpnNG5RRklxY3pkaXhMRGpXbVVISmY4VFUySXcrNGtVTU5vUXd4YkJUeVE9-200-50">
+        <span class="pagSig"><abbr title="Página">Pág.</abbr> siguiente</span>
+      </a>
+    </li>
+  </ul>
+</div>
+      </div> <!-- .pool -->
+    </div> <!-- #contenedor -->
+    <div id="pie">
+      <div id="menuPie">
+        <div class="otros-enlaces">
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace"><a href="/contactar/" accesskey="3">Contactar</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php" hreflang="es">Sobre esta sede electrónica</a></div></li>
+            <li><div class="enlace"><a href="/informacion/mapa_web/" accesskey="2">Mapa</a></div></li>
+            <li><div class="enlace"><a href="/informacion/aviso_legal/index.php">Aviso legal</a></div></li>
+            <li><div class="enlace"><a href="/informacion/accesibilidad/" accesskey="0">Accesibilidad</a></div></li>
+            <li><div class="enlace"><a href="/informacion/index.php#proteccion-de-datos" hreflang="es">Protección de datos</a></div></li>
+            <li><div class="enlace"><a href="/informacion/sistema_interno_informacion.php" hreflang="es">Sistema Interno de Información</a></div></li>
+            <li><div class="enlace"><a href="/informacion/tutoriales/" hreflang="es">Tutoriales</a></div></li>
+            </ul>
+            </div>
+          </div>
+          <div class="espacio"></div>
+          <div class="grupo-otros-enlaces">
+          	<div class="lista-pie">
+          	<ul>
+            <li><div class="enlace icono"><a href="/rss/" hreflang="es" lang="es" title="RSS"><img src="/imagenes/home/rss_32.png" srcset="/imagenes/home/rss_32.svg" alt="RSS"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=tw" hreflang="es" lang="es" title="boegob, el BOE en X"><img src="/imagenes/home/twitter_32.png" srcset="/imagenes/home/twitter_32.svg" alt="X"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=fb" hreflang="es" lang="es" title="El BOE en Facebook"><img src="/imagenes/home/facebook_32.png" srcset="/imagenes/home/facebook_32.svg" alt="Facebook"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=ln" hreflang="es" lang="es" title="El BOE en LinkedIn"><img src="/imagenes/home/linkedin_32.png" srcset="/imagenes/home/linkedin_32.svg" alt="LinkedIn"></a></div></li>
+            <li><div class="enlace icono"><a href="/redes_sociales?pag=yt" hreflang="es" lang="es" title="El BOE en YouTube"><img src="/imagenes/home/youtube_32.png" srcset="/imagenes/home/youtube_32.svg" alt="YouTube"></a></div></li>
+            </ul>
+            </div>
+          </div>
+        </div> <!-- .franjaMenu -->
+      </div> <!-- #menuPie -->
+      <div class="franja-pie">
+        <p class="nombre-organismo">Agencia Estatal Boletín Oficial del Estado</p>
+        <p class="direccion-organismo"><abbr title="Avenida">Avda.</abbr> de Manoteras, 54 - 28050 Madrid</p>
+      </div>
+    </div> <!-- #pie -->
+    <script src="/js/desplegable.js"></script>
+  
+
+</body></html>

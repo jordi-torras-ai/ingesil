@@ -1,0 +1,108 @@
+<?php
+
+return [
+    'common' => [
+        'actions' => 'Acciones',
+    ],
+    'roles' => [
+        'admin' => 'Administrador',
+        'regular' => 'Usuario',
+    ],
+    'locales' => [
+        'en' => 'Ingles',
+        'es' => 'Espanol',
+        'ca' => 'Catalan',
+    ],
+    'users' => [
+        'navigation' => 'Usuarios',
+        'model_singular' => 'usuario',
+        'model_plural' => 'usuarios',
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Nombre',
+            'email' => 'Correo',
+            'password' => 'Contrasena',
+            'role' => 'Perfil',
+            'locale' => 'Idioma',
+            'created_at' => 'Creado el',
+        ],
+    ],
+    'sources' => [
+        'navigation' => 'Fuentes',
+        'model_singular' => 'fuente',
+        'model_plural' => 'fuentes',
+        'sections' => [
+            'general' => 'Informacion General',
+            'endpoints' => 'Endpoints de la Fuente',
+            'notes' => 'Notas Internas',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Nombre',
+            'daily_journals' => 'Diarios',
+            'description' => 'Descripcion',
+            'base_url' => 'URL Base',
+            'slug' => 'Slug',
+            'start_at' => 'Inicio',
+            'comments' => 'Comentarios',
+            'created_at' => 'Creado el',
+        ],
+    ],
+    'daily_journals' => [
+        'navigation' => 'Diarios',
+        'model_singular' => 'diario',
+        'model_plural' => 'diarios',
+        'sections' => [
+            'reference' => 'Referencia de la Edicion',
+            'content' => 'Contenido de la Edicion',
+        ],
+        'filters' => [
+            'issue_date_range' => 'Rango de fecha de edicion',
+            'from' => 'Desde',
+            'to' => 'Hasta',
+            'source' => 'Fuente',
+            'from_indicator' => 'Fecha de edicion desde :date',
+            'to_indicator' => 'Fecha de edicion hasta :date',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Fuente',
+            'issue_date' => 'Fecha de edicion',
+            'notices' => 'Avisos',
+            'url' => 'URL',
+            'description' => 'Descripcion',
+            'created_at' => 'Creado el',
+        ],
+    ],
+    'notices' => [
+        'navigation' => 'Avisos',
+        'model_singular' => 'aviso',
+        'model_plural' => 'avisos',
+        'sections' => [
+            'reference' => 'Referencia del Aviso',
+            'content' => 'Contenido del Aviso',
+        ],
+        'filters' => [
+            'issue_date_range' => 'Rango de fecha de edicion',
+            'from' => 'Desde',
+            'to' => 'Hasta',
+            'daily_journal' => 'Diario',
+            'source' => 'Fuente',
+            'category' => 'Categoria',
+            'department' => 'Departamento',
+            'from_indicator' => 'Fecha de edicion desde :date',
+            'to_indicator' => 'Fecha de edicion hasta :date',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'daily_journal' => 'Diario',
+            'title' => 'Titulo',
+            'category' => 'Categoria',
+            'department' => 'Departamento',
+            'url' => 'URL',
+            'content' => 'Contenido',
+            'extra_info' => 'Informacion extra',
+            'created_at' => 'Creado el',
+        ],
+    ],
+];

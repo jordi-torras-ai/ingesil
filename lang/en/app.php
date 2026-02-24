@@ -1,0 +1,108 @@
+<?php
+
+return [
+    'common' => [
+        'actions' => 'Actions',
+    ],
+    'roles' => [
+        'admin' => 'Admin',
+        'regular' => 'Regular',
+    ],
+    'locales' => [
+        'en' => 'English',
+        'es' => 'Spanish',
+        'ca' => 'Catalan',
+    ],
+    'users' => [
+        'navigation' => 'Users',
+        'model_singular' => 'user',
+        'model_plural' => 'users',
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Name',
+            'email' => 'Email',
+            'password' => 'Password',
+            'role' => 'Profile',
+            'locale' => 'Language',
+            'created_at' => 'Created at',
+        ],
+    ],
+    'sources' => [
+        'navigation' => 'Sources',
+        'model_singular' => 'source',
+        'model_plural' => 'sources',
+        'sections' => [
+            'general' => 'General Information',
+            'endpoints' => 'Source Endpoints',
+            'notes' => 'Internal Notes',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'name' => 'Name',
+            'daily_journals' => 'Daily journals',
+            'description' => 'Description',
+            'base_url' => 'Base URL',
+            'slug' => 'Slug',
+            'start_at' => 'Start at',
+            'comments' => 'Comments',
+            'created_at' => 'Created at',
+        ],
+    ],
+    'daily_journals' => [
+        'navigation' => 'Daily Journals',
+        'model_singular' => 'daily journal',
+        'model_plural' => 'daily journals',
+        'sections' => [
+            'reference' => 'Issue Reference',
+            'content' => 'Issue Content',
+        ],
+        'filters' => [
+            'issue_date_range' => 'Issue date range',
+            'from' => 'From',
+            'to' => 'To',
+            'source' => 'Source',
+            'from_indicator' => 'Issue date from :date',
+            'to_indicator' => 'Issue date to :date',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Source',
+            'issue_date' => 'Issue date',
+            'notices' => 'Notices',
+            'url' => 'URL',
+            'description' => 'Description',
+            'created_at' => 'Created at',
+        ],
+    ],
+    'notices' => [
+        'navigation' => 'Notices',
+        'model_singular' => 'notice',
+        'model_plural' => 'notices',
+        'sections' => [
+            'reference' => 'Notice Reference',
+            'content' => 'Notice Content',
+        ],
+        'filters' => [
+            'issue_date_range' => 'Issue date range',
+            'from' => 'From',
+            'to' => 'To',
+            'daily_journal' => 'Daily journal',
+            'source' => 'Source',
+            'category' => 'Category',
+            'department' => 'Department',
+            'from_indicator' => 'Issue date from :date',
+            'to_indicator' => 'Issue date to :date',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'daily_journal' => 'Daily journal',
+            'title' => 'Title',
+            'category' => 'Category',
+            'department' => 'Department',
+            'url' => 'URL',
+            'content' => 'Content',
+            'extra_info' => 'Extra info',
+            'created_at' => 'Created at',
+        ],
+    ],
+];
