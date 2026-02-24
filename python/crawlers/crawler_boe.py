@@ -101,6 +101,22 @@ def wait_dom_ready(driver: WebDriver, timeout_seconds: int) -> None:
     )
 
 
+def _set_date_input(driver: WebDriver, element, value: str) -> None:
+    # Native send_keys can be flaky on date inputs in headless mode.
+    driver.execute_script(
+        """
+        const el = arguments[0];
+        const val = arguments[1];
+        el.focus();
+        el.value = val;
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+        """,
+        element,
+        value,
+    )
+
+
 def parse_eu_date(value: str) -> date:
     return datetime.strptime(value.strip(), "%d/%m/%Y").date()
 
@@ -403,20 +419,41 @@ def state_prepare_search(context: CrawlerContext) -> BoeState:
 
     from_input = context.driver.find_element(By.ID, "desdeFP")
     to_input = context.driver.find_element(By.ID, "hastaFP")
-    from_input.clear()
-    from_input.send_keys(context.from_date.isoformat())
-    to_input.clear()
-    to_input.send_keys(context.to_date.isoformat())
+    from_value = context.from_date.isoformat()
+    to_value = context.to_date.isoformat()
+    _set_date_input(context.driver, from_input, from_value)
+    _set_date_input(context.driver, to_input, to_value)
+    context.logger.info(
+        "Date inputs set: desdeFP=%s hastaFP=%s",
+        from_input.get_attribute("value"),
+        to_input.get_attribute("value"),
+    )
 
     submit = context.driver.find_element(
         By.XPATH,
         "//div[contains(@class,'bloqueBotones')]//input[@type='submit' and @value='Buscar']",
     )
-    submit.click()
+    try:
+        submit.click()
+    except Exception:
+        context.logger.warning("Standard submit click failed, retrying via JS click.")
+        context.driver.execute_script("arguments[0].click();", submit)
+
+    before_url = context.driver.current_url
     wait_dom_ready(context.driver, context.timeout_seconds)
     WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: len(d.find_elements(By.CSS_SELECTOR, "li.resultado-busqueda")) > 0 or "No se han encontrado" in d.page_source
+        lambda d: (
+            d.current_url != before_url
+            or "accion=Buscar" in d.current_url
+            or "id_busqueda=" in d.current_url
+            or len(d.find_elements(By.CSS_SELECTOR, "li.resultado-busqueda")) > 0
+            or len(d.find_elements(By.CSS_SELECTOR, ".paginacion, .paginacion-mini, nav.paginacion")) > 0
+            or "No se han encontrado" in d.page_source
+            or "No se ha encontrado" in d.page_source
+        )
     )
+
+    context.logger.info("Search response URL: %s", context.driver.current_url)
 
     created = context.artifacts.capture(context.driver, state=BoeState.PREPARE_SEARCH.value, note="search_submitted")
     context.logger.info("Search submitted. Artifacts saved: %s", created)
@@ -634,7 +671,7 @@ def main() -> int:
         logger.info("Crawler finished with final state=%s", final_state.value)
         return 0
     except Exception as exc:  # pragma: no cover
-        logger.exception("Crawler failed: %s", exc)
+        logger.exception("Crawler failed: %s: %r", type(exc).__name__, exc)
         if driver is not None:
             try:
                 ArtifactWriter(run_dir=run_dir).capture(driver, state="ERROR", note="unhandled_exception")

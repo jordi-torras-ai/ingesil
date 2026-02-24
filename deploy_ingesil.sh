@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # --- Config (override via env if needed) ---
-APP_DIR="${APP_DIR:-/var/www/app.torras.ai/ingesil}"
+APP_DIR="${APP_DIR:-$SCRIPT_DIR/ingesil}"
 APP_USER="${APP_USER:-www-data}"
 BRANCH="${BRANCH:-main}"
 SERVICE_NAME="${SERVICE_NAME:-apache2}"
