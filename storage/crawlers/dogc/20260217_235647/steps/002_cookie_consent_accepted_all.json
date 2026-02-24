@@ -1,9 +1,0 @@
-{
-  "state": "COOKIE_CONSENT",
-  "note": "accepted_all",
-  "captured_at": "2026-02-17T22:56:54.401894",
-  "url": "https://dogc.gencat.cat/ca/inici/",
-  "title": "Inici. Diari Oficial de la Generalitat de Catalunya",
-  "png": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260217_235647/steps/002_cookie_consent_accepted_all.png",
-  "html": "/Users/jtorras/Library/CloudStorage/Dropbox/development/ingesil/storage/crawlers/dogc/20260217_235647/steps/002_cookie_consent_accepted_all.html"
-}
