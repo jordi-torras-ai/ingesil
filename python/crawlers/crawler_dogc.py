@@ -86,6 +86,9 @@ def parse_args() -> argparse.Namespace:
         default=None,
         help="Optional override for source start date (YYYY-MM-DD). If omitted, read from DB sources.start_at.",
     )
+    parser.add_argument("--day", default=None, help="Crawl only one day (YYYY-MM-DD).")
+    parser.add_argument("--from-date", default=None, help="Crawl window start date (YYYY-MM-DD).")
+    parser.add_argument("--to-date", default=None, help="Crawl window end date (YYYY-MM-DD).")
     parser.add_argument("--headless", action="store_true", help="Run Chrome headless")
     parser.add_argument("--headed", action="store_true", help="Force headed mode")
     return parser.parse_args()
@@ -247,16 +250,44 @@ def read_source_data_from_db(slug: str) -> tuple[int, date]:
     return source_id, datetime.strptime(str(value), "%Y-%m-%d").date()
 
 
-def resolve_source_context(args: argparse.Namespace, logger: logging.Logger) -> tuple[int, date]:
+def parse_iso_date(value: str, *, flag: str) -> date:
+    try:
+        return datetime.strptime(value.strip(), "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid {flag} value {value!r}. Expected YYYY-MM-DD.") from exc
+
+
+def resolve_source_context(args: argparse.Namespace, logger: logging.Logger) -> tuple[int, date, date]:
     source_id, db_start_date = read_source_data_from_db(args.slug)
     logger.info("Loaded source id=%s and start_at=%s from DB for slug=%s", source_id, db_start_date.isoformat(), args.slug)
 
-    if args.start_at:
-        override_start = datetime.strptime(args.start_at, "%Y-%m-%d").date()
-        logger.info("Using --start-at override: %s", override_start.isoformat())
-        return source_id, override_start
+    if args.day:
+        if args.from_date or args.to_date or args.start_at:
+            raise RuntimeError("Use either --day, --from-date/--to-date, or --start-at. Do not combine them.")
+        one_day = parse_iso_date(args.day, flag="--day")
+        logger.info("Using explicit single-day crawl window from --day: [%s -> %s]", one_day, one_day)
+        return source_id, one_day, one_day
 
-    return source_id, db_start_date
+    if args.from_date or args.to_date:
+        if args.start_at:
+            raise RuntimeError("Use either --start-at or --from-date/--to-date, not both.")
+        if not args.from_date or not args.to_date:
+            raise RuntimeError("Both --from-date and --to-date are required when using a date range override.")
+        start_date = parse_iso_date(args.from_date, flag="--from-date")
+        end_date = parse_iso_date(args.to_date, flag="--to-date")
+        if start_date > end_date:
+            raise RuntimeError(
+                f"Invalid date range: --from-date ({start_date.isoformat()}) is after --to-date ({end_date.isoformat()})."
+            )
+        logger.info("Using explicit crawl window from CLI: [%s -> %s]", start_date.isoformat(), end_date.isoformat())
+        return source_id, start_date, end_date
+
+    if args.start_at:
+        override_start = parse_iso_date(args.start_at, flag="--start-at")
+        logger.info("Using --start-at override: %s", override_start.isoformat())
+        return source_id, override_start, date.today()
+
+    return source_id, db_start_date, date.today()
 
 
 def find_calendar_month_text(driver: WebDriver, timeout_seconds: int) -> str:
@@ -1133,8 +1164,7 @@ def main() -> int:
     logger.info("Starting crawler for slug=%s", args.slug)
     logger.info("Mode: %s", "headless" if headless else "headed")
     logger.info("Run directory: %s", run_dir)
-    source_id, start_issue_date = resolve_source_context(args, logger)
-    end_issue_date = date.today()
+    source_id, start_issue_date, end_issue_date = resolve_source_context(args, logger)
     if start_issue_date > end_issue_date:
         raise RuntimeError(
             f"start_at ({start_issue_date.isoformat()}) cannot be after today ({end_issue_date.isoformat()})."

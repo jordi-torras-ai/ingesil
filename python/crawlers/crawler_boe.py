@@ -70,6 +70,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-id", default=datetime.now().strftime("%Y%m%d_%H%M%S"))
     parser.add_argument("--base-url", default=os.getenv("CRAWLER_BOE_BASE_URL"))
     parser.add_argument("--timeout", type=int, default=int(os.getenv("CRAWLER_TIMEOUT_SECONDS", "20")))
+    parser.add_argument("--day", default=None, help="Crawl only one day (YYYY-MM-DD).")
+    parser.add_argument("--from-date", default=None, help="Crawl window start date (YYYY-MM-DD).")
+    parser.add_argument("--to-date", default=None, help="Crawl window end date (YYYY-MM-DD).")
     parser.add_argument("--headless", action="store_true", help="Run Chrome headless")
     parser.add_argument("--headed", action="store_true", help="Force headed mode")
     return parser.parse_args()
@@ -121,6 +124,13 @@ def parse_eu_date(value: str) -> date:
     return datetime.strptime(value.strip(), "%d/%m/%Y").date()
 
 
+def parse_iso_date(value: str, *, flag: str) -> date:
+    try:
+        return datetime.strptime(value.strip(), "%Y-%m-%d").date()
+    except ValueError as exc:
+        raise RuntimeError(f"Invalid {flag} value {value!r}. Expected YYYY-MM-DD.") from exc
+
+
 def read_source_data_from_db(slug: str) -> tuple[int, date, str]:
     try:
         import psycopg
@@ -149,7 +159,35 @@ def read_source_data_from_db(slug: str) -> tuple[int, date, str]:
     return source_id, start_at, base_url
 
 
-def resolve_crawl_range(logger: logging.Logger, db_conn: object, source_id: int, source_start_at: date) -> tuple[date, date]:
+def resolve_crawl_range(
+    logger: logging.Logger,
+    db_conn: object,
+    source_id: int,
+    source_start_at: date,
+    *,
+    day: str | None,
+    from_date_raw: str | None,
+    to_date_raw: str | None,
+) -> tuple[date, date]:
+    if day:
+        if from_date_raw or to_date_raw:
+            raise RuntimeError("Use either --day or --from-date/--to-date, not both.")
+        single_day = parse_iso_date(day, flag="--day")
+        logger.info("Using explicit single-day crawl window from --day: [%s -> %s]", single_day, single_day)
+        return single_day, single_day
+
+    if from_date_raw or to_date_raw:
+        if not from_date_raw or not to_date_raw:
+            raise RuntimeError("Both --from-date and --to-date are required when using a date range override.")
+        from_date = parse_iso_date(from_date_raw, flag="--from-date")
+        to_date = parse_iso_date(to_date_raw, flag="--to-date")
+        if from_date > to_date:
+            raise RuntimeError(
+                f"Invalid date range: --from-date ({from_date.isoformat()}) is after --to-date ({to_date.isoformat()})."
+            )
+        logger.info("Using explicit crawl window from CLI: [%s -> %s]", from_date.isoformat(), to_date.isoformat())
+        return from_date, to_date
+
     cur = db_conn.cursor()
     try:
         cur.execute("SELECT MAX(issue_date) FROM daily_journals WHERE source_id = %s", (source_id,))
@@ -631,7 +669,15 @@ def main() -> int:
 
         source_id, source_start_at, source_base_url = read_source_data_from_db(args.slug)
         base_url = args.base_url or source_base_url or "https://www.boe.es/buscar/boe.php"
-        from_date, to_date = resolve_crawl_range(logger, db_conn, source_id, source_start_at)
+        from_date, to_date = resolve_crawl_range(
+            logger,
+            db_conn,
+            source_id,
+            source_start_at,
+            day=args.day,
+            from_date_raw=args.from_date,
+            to_date_raw=args.to_date,
+        )
 
         if from_date > to_date:
             logger.info("Nothing to crawl for BOE: from_date=%s is after today=%s", from_date.isoformat(), to_date.isoformat())
