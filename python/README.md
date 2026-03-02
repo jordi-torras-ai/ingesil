@@ -62,6 +62,13 @@ Optional env knobs (read from `.env`):
 - `CRAWLER_TIMEOUT_SECONDS=20`
 - `CRAWLER_DOGC_BASE_URL=https://dogc.gencat.cat/ca`
 - `CRAWLER_DOGC_DAILY_BASE_URL=https://dogc.gencat.cat/ca/sumari-del-dogc/`
+- `CRAWLER_BOE_BASE_URL=https://www.boe.es/buscar/boe.php`
+- `CRAWLER_OJEU_BASE_URL=https://eur-lex.europa.eu`
+- `CRAWLER_OJEU_SPARQL_ENDPOINT=https://publications.europa.eu/webapi/rdf/sparql`
+- `CRAWLER_OJEU_LIMIT=500`
+- `CRAWLER_BOPB_BASE_URL=https://bop.diba.cat`
+- `CRAWLER_BOPB_LISTING_BASE_URL=https://bop.diba.cat/anteriores`
+- `CRAWLER_BOPB_MAX_NOTICES=0` (0 = unlimited, useful for debug)
 
 ## DOGC calendar FSM
 

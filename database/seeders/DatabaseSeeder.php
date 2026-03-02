@@ -52,5 +52,35 @@ class DatabaseSeeder extends Seeder
             'start_at' => '2026-01-01',
             'comments' => null,
         ]);
+
+        Source::query()->updateOrCreate([
+            'slug' => 'boe',
+        ], [
+            'name' => 'BOE',
+            'description' => 'Boletín Oficial del Estado (Spain)',
+            'base_url' => 'https://www.boe.es/buscar/boe.php',
+            'start_at' => '2026-01-01',
+            'comments' => null,
+        ]);
+
+        Source::query()->updateOrCreate([
+            'slug' => 'ojeu',
+        ], [
+            'name' => 'OJEU',
+            'description' => 'Official Journal of the European Union',
+            'base_url' => 'https://eur-lex.europa.eu',
+            'start_at' => '2026-01-01',
+            'comments' => null,
+        ]);
+
+        Source::query()->updateOrCreate([
+            'slug' => 'bopb',
+        ], [
+            'name' => 'BOPB',
+            'description' => 'Butlletí Oficial de la Província de Barcelona',
+            'base_url' => 'https://bop.diba.cat',
+            'start_at' => '2026-01-01',
+            'comments' => null,
+        ]);
     }
 }
