@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'version' => env('APP_VERSION', 'dev'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -123,6 +125,13 @@ return [
     'maintenance' => [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
+    ],
+
+    'pipeline' => [
+        'daily_enabled' => filter_var(env('PIPELINE_DAILY_ENABLED', true), FILTER_VALIDATE_BOOL),
+        'daily_time' => env('PIPELINE_DAILY_TIME', '00:10'),
+        'timezone' => env('PIPELINE_TIMEZONE', 'Europe/Madrid'),
+        'crawler_command_timeout_seconds' => (int) env('CRAWLER_COMMAND_TIMEOUT_SECONDS', 7200),
     ],
 
 ];

@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -88,5 +89,10 @@ class User extends Authenticatable implements FilamentUser
             self::LOCALE_ES => __('app.locales.es'),
             self::LOCALE_CA => __('app.locales.ca'),
         ];
+    }
+
+    public function noticeAnalysisRuns(): HasMany
+    {
+        return $this->hasMany(NoticeAnalysisRun::class, 'requested_by_user_id');
     }
 }

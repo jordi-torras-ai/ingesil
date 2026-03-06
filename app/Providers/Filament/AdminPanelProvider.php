@@ -13,6 +13,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\MaxWidth;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -35,6 +36,10 @@ class AdminPanelProvider extends PanelProvider
             ->brandLogo(asset('images/branding/ingesil-logo-horizontal-light.svg'))
             ->darkModeBrandLogo(asset('images/branding/ingesil-logo-horizontal-dark.svg'))
             ->brandLogoHeight('3.6rem')
+            ->renderHook(
+                PanelsRenderHook::FOOTER,
+                fn (): string => view('filament.components.panel-footer')->render(),
+            )
             ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::Amber,

@@ -26,18 +26,28 @@ class EditProfile extends BaseEditProfile
      */
     protected function getForms(): array
     {
+        $user = $this->getUser();
+
+        $schema = [
+            $this->getLocaleFormComponent(),
+        ];
+
+        if ($user->isAdmin()) {
+            $schema = [
+                $this->getNameFormComponent(),
+                $this->getEmailFormComponent(),
+                $this->getLocaleFormComponent(),
+                $this->getPasswordFormComponent(),
+                $this->getPasswordConfirmationFormComponent(),
+            ];
+        }
+
         return [
             'form' => $this->form(
                 $this->makeForm()
-                    ->schema([
-                        $this->getNameFormComponent(),
-                        $this->getEmailFormComponent(),
-                        $this->getLocaleFormComponent(),
-                        $this->getPasswordFormComponent(),
-                        $this->getPasswordConfirmationFormComponent(),
-                    ])
+                    ->schema($schema)
                     ->operation('edit')
-                    ->model($this->getUser())
+                    ->model($user)
                     ->statePath('data')
                     ->inlineLabel(! static::isSimple()),
             ),
