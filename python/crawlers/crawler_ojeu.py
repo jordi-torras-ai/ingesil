@@ -112,6 +112,14 @@ def build_driver(headless: bool) -> WebDriver:
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--remote-debugging-port=0")
+    chrome_binary = os.getenv("CRAWLER_CHROME_BINARY", "/usr/bin/google-chrome")
+    if os.path.isfile(chrome_binary):
+        options.binary_location = chrome_binary
+    user_data_dir = Path(os.getenv("CRAWLER_CHROME_USER_DATA_DIR", "/tmp/ingesil-chrome"))
+    user_data_dir.mkdir(parents=True, exist_ok=True)
+    options.add_argument(f"--user-data-dir={user_data_dir}")
     if headless:
         options.add_argument("--headless=new")
     return webdriver.Chrome(options=options)

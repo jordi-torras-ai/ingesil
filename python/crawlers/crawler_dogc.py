@@ -109,6 +109,14 @@ def build_driver(headless: bool) -> WebDriver:
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-extensions")
+    options.add_argument("--remote-debugging-port=0")
+    chrome_binary = os.getenv("CRAWLER_CHROME_BINARY", "/usr/bin/google-chrome")
+    if os.path.isfile(chrome_binary):
+        options.binary_location = chrome_binary
+    user_data_dir = Path(os.getenv("CRAWLER_CHROME_USER_DATA_DIR", "/tmp/ingesil-chrome"))
+    user_data_dir.mkdir(parents=True, exist_ok=True)
+    options.add_argument(f"--user-data-dir={user_data_dir}")
     if headless:
         options.add_argument("--headless=new")
 
@@ -532,17 +540,23 @@ def fetch_pending_daily_journal(context: CrawlerContext) -> dict[str, object] | 
             FROM daily_journals dj
             LEFT JOIN notices n ON n.daily_journal_id = dj.id
             WHERE dj.source_id = %s
+              AND dj.issue_date BETWEEN %s AND %s
             GROUP BY dj.id
             HAVING COUNT(n.id) = 0
             ORDER BY dj.issue_date ASC, dj.id ASC
             """,
-            (context.source_id,),
+            (context.source_id, context.start_issue_date, context.end_issue_date),
         )
         rows = cur.fetchall()
     finally:
         cur.close()
 
-    context.logger.info("Pending daily journals with 0 notices in DB: %d", len(rows))
+    context.logger.info(
+        "Pending daily journals with 0 notices in DB for [%s -> %s]: %d",
+        context.start_issue_date.isoformat(),
+        context.end_issue_date.isoformat(),
+        len(rows),
+    )
     for row in rows:
         daily_journal_id = int(row[0])
         if daily_journal_id in attempted:
