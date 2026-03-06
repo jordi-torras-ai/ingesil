@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import html
 import logging
 import os
 import sys
@@ -13,7 +14,7 @@ import random
 import re
 import time
 import unicodedata
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -124,9 +125,27 @@ def build_driver(headless: bool) -> WebDriver:
 
 
 def wait_dom_ready(driver: WebDriver, timeout_seconds: int) -> None:
-    WebDriverWait(driver, timeout_seconds).until(
-        lambda d: d.execute_script("return document.readyState") == "complete"
-    )
+    deadline = datetime.now().timestamp() + timeout_seconds
+    last_error: Exception | None = None
+
+    while datetime.now().timestamp() < deadline:
+        try:
+            if driver.execute_script("return document.readyState") == "complete":
+                return
+        except Exception as exc:
+            last_error = exc
+            try:
+                if driver.find_elements(By.TAG_NAME, "body"):
+                    return
+            except Exception:
+                pass
+
+        time.sleep(0.25)
+
+    if last_error is not None:
+        raise RuntimeError(f"DOM readiness probe failed. last_error={last_error!r}")
+
+    raise RuntimeError("DOM readiness probe timed out.")
 
 
 def normalize_text(value: str) -> str:
@@ -585,11 +604,28 @@ def fetch_pending_daily_journal(context: CrawlerContext) -> dict[str, object] | 
 
 
 def extract_notice_candidates_from_daily_journal(context: CrawlerContext) -> list[dict[str, str]]:
+    html_source = context.driver.page_source or ""
+    parsed_rows = extract_notice_candidates_from_html(
+        html_source,
+        safe_driver_current_url(context.driver, fallback=str(context.current_daily_journal.get("url") or context.base_url))
+        if context.current_daily_journal is not None
+        else context.base_url,
+    )
+    if parsed_rows:
+        context.logger.info(
+            "Extracted %d notice candidates from daily journal page source.",
+            len(parsed_rows),
+        )
+        return parsed_rows
+
     rows: list[dict[str, str]] = []
     seen_urls: set[str] = set()
     # DOGC summary rows have one notice link and one PDF "Descarrega" link.
     # Restrict to the real notice link inside each `li.destacat_text`.
-    row_elements = context.driver.find_elements(By.CSS_SELECTOR, "div.wrapper-disposicions li.destacat_text")
+    row_elements = context.driver.find_elements(
+        By.XPATH,
+        "//div[contains(@class,'wrapper-disposicions')]//li[contains(@class,'destacat_text')]",
+    )
     context.logger.info("Summary page notice rows detected: %d", len(row_elements))
     for row_el in row_elements:
         anchors = row_el.find_elements(
@@ -633,7 +669,122 @@ def extract_notice_candidates_from_daily_journal(context: CrawlerContext) -> lis
     return rows
 
 
+def extract_notice_candidates_from_html(html_source: str, base_url: str) -> list[dict[str, str]]:
+    if "document-del-dogc" not in html_source:
+        return []
+
+    source = html_source
+    first_wrapper_index = source.find("wrapper-disposicions")
+    if first_wrapper_index >= 0:
+        source = source[first_wrapper_index:]
+
+    token_pattern = re.compile(
+        r"(?is)"
+        r"<h2\b[^>]*>(?P<h2>.*?)</h2>"
+        r"|<h3\b[^>]*>(?P<h3>.*?)</h3>"
+        r"|<h4\b[^>]*>(?P<h4>.*?)</h4>"
+        r"|<li\b[^>]*class=\"[^\"]*destacat_text[^\"]*\"[^>]*>(?P<li>.*?)</li>"
+    )
+    href_pattern = re.compile(r'(?is)<a\b[^>]*href="(?P<href>[^"]*document-del-dogc[^"]*)"[^>]*>(?P<title>.*?)</a>')
+
+    rows: list[dict[str, str]] = []
+    seen_urls: set[str] = set()
+    current_category = ""
+    current_department = ""
+
+    for match in token_pattern.finditer(source):
+        if match.group("h2") is not None:
+            current_category = clean_html_text(match.group("h2"))
+            current_department = ""
+            continue
+
+        if match.group("h3") is not None:
+            current_department = clean_html_text(match.group("h3"))
+            continue
+
+        if match.group("h4") is not None:
+            current_department = clean_html_text(match.group("h4"))
+            continue
+
+        li_html = match.group("li")
+        if li_html is None:
+            continue
+
+        link_match = href_pattern.search(li_html)
+        if link_match is None:
+            continue
+
+        href = clean_html_text(link_match.group("href"))
+        title = clean_html_text(link_match.group("title"))
+        if not href or not title:
+            continue
+
+        full_url = urljoin(base_url, href)
+        if full_url in seen_urls:
+            continue
+
+        rows.append(
+            {
+                "title": title,
+                "url": full_url,
+                "category": current_category,
+                "department": current_department,
+            }
+        )
+        seen_urls.add(full_url)
+
+    return rows
+
+
+def clean_html_text(value: str) -> str:
+    text = re.sub(r"(?is)<script\b[^>]*>.*?</script>", " ", value)
+    text = re.sub(r"(?is)<style\b[^>]*>.*?</style>", " ", text)
+    text = re.sub(r"(?is)<[^>]+>", " ", text)
+    text = html.unescape(text)
+    return " ".join(text.strip().split())
+
+
+def wait_for_daily_journal_markup(driver: WebDriver, timeout_seconds: int) -> None:
+    deadline = datetime.now().timestamp() + timeout_seconds
+    while datetime.now().timestamp() < deadline:
+        try:
+            source = driver.page_source or ""
+        except Exception:
+            source = ""
+
+        if "document-del-dogc" in source or "wrapper-disposicions" in source:
+            return
+
+        time.sleep(0.25)
+
+    raise RuntimeError("Daily journal markup did not appear before timeout.")
+
+
+def wait_for_notice_markup(driver: WebDriver, timeout_seconds: int) -> None:
+    deadline = datetime.now().timestamp() + timeout_seconds
+    while datetime.now().timestamp() < deadline:
+        try:
+            source = driver.page_source or ""
+        except Exception:
+            source = ""
+
+        if 'id="fullText"' in source or 'id="disposicions_cos_bloc"' in source:
+            return
+
+        time.sleep(0.25)
+
+    raise RuntimeError("Notice markup did not appear before timeout.")
+
+
 def extract_notice_detail(context: CrawlerContext) -> dict[str, str]:
+    html_source = context.driver.page_source or ""
+    parsed = extract_notice_detail_from_html(
+        html_source,
+        fallback_url=str(context.current_notice_candidate.get("url") or "") if context.current_notice_candidate else "",
+    )
+    if parsed["title"] or parsed["content"] or parsed["extra_info"]:
+        return parsed
+
     full_text = None
     full_text_els = context.driver.find_elements(By.CSS_SELECTOR, "#fullText")
     if full_text_els:
@@ -646,7 +797,7 @@ def extract_notice_detail(context: CrawlerContext) -> dict[str, str]:
             title = (title_els[0].text or "").strip()
 
     if not title:
-        page_title = (context.driver.title or "").strip()
+        page_title = safe_driver_title(context.driver).strip()
         if page_title and normalize_text(page_title) != "diari oficial de la generalitat de catalunya":
             title = page_title
 
@@ -690,8 +841,78 @@ def extract_notice_detail(context: CrawlerContext) -> dict[str, str]:
         "department": department,
         "content": content,
         "extra_info": extra_info,
-        "url": context.driver.current_url,
+        "url": safe_driver_current_url(
+            context.driver,
+            fallback=str(context.current_notice_candidate.get("url") or "") if context.current_notice_candidate else "",
+        ),
     }
+
+
+def extract_notice_detail_from_html(html_source: str, fallback_url: str) -> dict[str, str]:
+    title = ""
+    title_match = re.search(r'(?is)<div[^>]+id="fullText"[^>]*>.*?<h1[^>]*>(.*?)</h1>', html_source)
+    if title_match:
+        title = clean_html_text(title_match.group(1))
+
+    full_text_html = ""
+    full_text_match = re.search(r'(?is)<div[^>]+id="fullText"[^>]*>(.*?)(?:<div class="documentPeu"|</div>\s*</div>)', html_source)
+    if full_text_match:
+        full_text_html = full_text_match.group(1)
+
+    paragraphs: list[str] = []
+    if full_text_html:
+        for paragraph_match in re.finditer(r"(?is)<p[^>]*>(.*?)</p>", full_text_html):
+            text = clean_html_text(paragraph_match.group(1))
+            if not text:
+                continue
+            normalized = normalize_text(text)
+            if normalized == "descarrega":
+                continue
+            if re.search(r"\.pdf$", text, flags=re.IGNORECASE):
+                continue
+            if re.search(r"_cat\.pdf$", text, flags=re.IGNORECASE):
+                continue
+            paragraphs.append(text)
+
+    content = "\n\n".join(paragraphs).strip()
+    if title and content.startswith(title):
+        content = content[len(title):].lstrip()
+
+    metadata: dict[str, str] = {}
+    metadata_match = re.search(r'(?is)<ul[^>]+id="disposicions_cos_bloc"[^>]*>(.*?)</ul>', html_source)
+    if metadata_match:
+        for item_match in re.finditer(r"(?is)<li[^>]*>(.*?)</li>", metadata_match.group(1)):
+            raw_parts = re.split(r"(?is)<br\s*/?>", item_match.group(1))
+            parts = [clean_html_text(part) for part in raw_parts if clean_html_text(part)]
+            if len(parts) >= 2:
+                metadata[parts[0]] = parts[1]
+
+    category = metadata.get("Secció del DOGC", "").strip()
+    department = metadata.get("Organisme emissor", "").strip()
+    extra_info = "\n".join(f"{key}: {value}" for key, value in metadata.items()).strip()
+
+    return {
+        "title": title,
+        "category": category,
+        "department": department,
+        "content": content,
+        "extra_info": extra_info,
+        "url": fallback_url,
+    }
+
+
+def safe_driver_current_url(driver: WebDriver, fallback: str = "") -> str:
+    try:
+        return str(driver.current_url or fallback)
+    except Exception:
+        return fallback
+
+
+def safe_driver_title(driver: WebDriver) -> str:
+    try:
+        return str(driver.title or "")
+    except Exception:
+        return ""
 
 
 def upsert_notice(
@@ -948,7 +1169,12 @@ def state_open_daily_journal(context: CrawlerContext) -> DogcState:
         daily_journal_url,
     )
     context.driver.get(daily_journal_url)
-    wait_dom_ready(context.driver, context.timeout_seconds)
+    try:
+        wait_dom_ready(context.driver, context.timeout_seconds)
+    except Exception as exc:
+        context.logger.debug("DOM readiness probe failed for daily_journal id=%s: %r", daily_journal_id, exc)
+
+    wait_for_daily_journal_markup(context.driver, context.timeout_seconds)
 
     cookie_interrupt = maybe_route_to_cookie_state(context, current_state=DogcState.OPEN_DAILY_JOURNAL)
     if cookie_interrupt is not None:
@@ -1015,10 +1241,12 @@ def state_open_notice(context: CrawlerContext) -> DogcState:
         daily_journal_id,
     )
     context.driver.get(notice_url)
-    wait_dom_ready(context.driver, context.timeout_seconds)
-    WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: len(d.find_elements(By.CSS_SELECTOR, "#fullText h1")) > 0
-    )
+    try:
+        wait_dom_ready(context.driver, context.timeout_seconds)
+    except Exception as exc:
+        context.logger.debug("DOM readiness probe failed for notice URL=%s: %r", notice_url, exc)
+
+    wait_for_notice_markup(context.driver, context.timeout_seconds)
 
     cookie_interrupt = maybe_route_to_cookie_state(context, current_state=DogcState.OPEN_NOTICE)
     if cookie_interrupt is not None:
@@ -1154,12 +1382,18 @@ def simulate_human_transition(context: CrawlerContext, from_state: DogcState, to
 
     down_px = random.randint(max(80, int(viewport_height * 0.10)), max(180, int(viewport_height * 0.28)))
     up_px = random.randint(max(30, int(viewport_height * 0.05)), max(120, int(viewport_height * 0.16)))
-    context.driver.execute_script("window.scrollBy(0, arguments[0]);", down_px)
-    context.logger.info("Human pacing: scrolled down %dpx", down_px)
+    try:
+        context.driver.execute_script("window.scrollBy(0, arguments[0]);", down_px)
+        context.logger.info("Human pacing: scrolled down %dpx", down_px)
+    except Exception as exc:
+        context.logger.debug("Human pacing: down-scroll skipped due to JS error: %r", exc)
     time.sleep(random.uniform(0.2, 0.7))
 
-    context.driver.execute_script("window.scrollBy(0, arguments[0]);", -up_px)
-    context.logger.info("Human pacing: scrolled up %dpx", up_px)
+    try:
+        context.driver.execute_script("window.scrollBy(0, arguments[0]);", -up_px)
+        context.logger.info("Human pacing: scrolled up %dpx", up_px)
+    except Exception as exc:
+        context.logger.debug("Human pacing: up-scroll skipped due to JS error: %r", exc)
 
     second_pause = random.uniform(0.3, 0.9)
     time.sleep(second_pause)

@@ -24,15 +24,23 @@ class ArtifactWriter:
         html_path = self.steps_dir / f"{step_prefix}.html"
         meta_path = self.steps_dir / f"{step_prefix}.json"
 
-        driver.save_screenshot(str(png_path))
-        html_path.write_text(driver.page_source, encoding="utf-8")
+        try:
+            driver.save_screenshot(str(png_path))
+        except Exception:
+            png_path.write_bytes(b"")
+
+        try:
+            page_source = driver.page_source
+        except Exception:
+            page_source = ""
+        html_path.write_text(page_source, encoding="utf-8")
 
         metadata = {
             "state": state,
             "note": note,
             "captured_at": datetime.utcnow().isoformat(),
-            "url": driver.current_url,
-            "title": driver.title,
+            "url": self._safe_current_url(driver),
+            "title": self._safe_title(driver),
             "png": str(png_path),
             "html": str(html_path),
         }
@@ -40,3 +48,16 @@ class ArtifactWriter:
 
         return {"png": str(png_path), "html": str(html_path), "meta": str(meta_path)}
 
+    @staticmethod
+    def _safe_current_url(driver: WebDriver) -> str:
+        try:
+            return str(driver.current_url or "")
+        except Exception:
+            return ""
+
+    @staticmethod
+    def _safe_title(driver: WebDriver) -> str:
+        try:
+            return str(driver.title or "")
+        except Exception:
+            return ""
