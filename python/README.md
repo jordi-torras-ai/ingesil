@@ -70,6 +70,23 @@ Optional env knobs (read from `.env`):
 - `CRAWLER_BOPB_LISTING_BASE_URL=https://bop.diba.cat/anteriores`
 - `CRAWLER_BOPB_MAX_NOTICES=0` (0 = unlimited, useful for debug)
 
+## Embeddings
+
+After a successful `python/run_crawler.py ...` run, the wrapper dispatches Laravel notice embedding jobs asynchronously for the crawled source. If `--day YYYY-MM-DD` is provided, dispatch is restricted to that source and date.
+
+Skip this automatic dispatch when needed:
+
+```bash
+python python/run_crawler.py dogc --skip-embeddings --headless --day 2026-03-05
+```
+
+Manual backfill / requeue:
+
+```bash
+php artisan notices:embed --stale
+php artisan notices:embed --stale --source-slug=dogc --issue-date=2026-03-05
+```
+
 ## DOGC calendar FSM
 
 Current flow:

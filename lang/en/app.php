@@ -194,4 +194,115 @@ return [
             'created_at' => 'Created at',
         ],
     ],
+    'smart_search' => [
+        'navigation' => 'Smart Search',
+        'title' => 'Smart Search',
+        'sections' => [
+            'query' => 'Search',
+            'query_description' => 'Ask a question and narrow the semantic search scope before generating an answer.',
+            'answer' => 'Answer',
+            'answer_description' => 'AI-generated answer based only on the retrieved notices.',
+            'results' => 'Results',
+        ],
+        'fields' => [
+            'query' => 'Question',
+            'source' => 'Source',
+            'date_from' => 'Date from',
+            'date_to' => 'Date to',
+            'department' => 'Department',
+            'category' => 'Category',
+            'limit' => 'Documents',
+            'relevance' => 'Relevance',
+        ],
+        'actions' => [
+            'search' => 'Search',
+            'searching' => 'Searching...',
+            'thinking' => 'Thinking...',
+            'clear' => 'Clear',
+            'open_official' => 'Open official notice',
+            'view_notice' => 'View notice',
+        ],
+        'messages' => [
+            'results_count' => ':count document(s)',
+            'results_description' => 'Top :count notices ranked by semantic similarity.',
+            'empty_heading' => 'No results yet',
+            'empty_description' => 'Run a smart search to see matching notices.',
+            'no_results' => 'No semantically relevant notices were found for this query and filter combination.',
+            'no_answer' => 'No answer was generated.',
+            'answer_error_title' => 'Unable to generate answer',
+        ],
+    ],
+    'dashboard' => [
+        'library' => [
+            'heading' => 'Regulatory library',
+            'description' => 'Core publishing volume across the monitored official journals.',
+            'stats' => [
+                'sources' => [
+                    'label' => 'Sources',
+                    'description' => 'Tracked official journals',
+                ],
+                'daily_journals' => [
+                    'label' => 'Daily journals',
+                    'latest_issue' => 'Latest issue :date',
+                    'no_issue' => 'No issue dates yet',
+                ],
+                'notices' => [
+                    'label' => 'Notices',
+                    'description' => 'Total indexed publications',
+                ],
+            ],
+        ],
+        'analysis_health' => [
+            'heading' => 'Analysis operations',
+            'description' => 'Live processing state, recent AI screening outcomes, and operational risk indicators.',
+            'stats' => [
+                'runs_in_progress' => [
+                    'label' => 'Runs in progress',
+                    'description' => 'Currently active queues',
+                ],
+                'completed_today' => [
+                    'label' => 'Completed today',
+                    'description' => 'Runs finished today',
+                ],
+                'send_decisions' => [
+                    'label' => 'Send decisions (30d)',
+                    'description' => 'Relevant notices flagged for customers',
+                ],
+                'failed_analyses' => [
+                    'label' => 'Failed analyses (30d)',
+                    'queued' => ':count analyses still queued',
+                    'no_backlog' => 'No queue backlog',
+                ],
+            ],
+        ],
+        'daily_activity' => [
+            'heading' => 'Daily publication activity',
+            'description' => 'Notices and daily journals captured over the last 14 days.',
+            'datasets' => [
+                'notices' => 'Notices',
+                'daily_journals' => 'Daily journals',
+            ],
+        ],
+        'analysis_outcomes' => [
+            'heading' => 'Analysis outcomes',
+            'description' => 'Decision mix for processed notice analyses over the last 30 days.',
+            'labels' => [
+                'send' => 'Send',
+                'ignore' => 'Ignore',
+                'failed' => 'Failed',
+                'queued_processing' => 'Queued / Processing',
+            ],
+        ],
+        'latest_notices' => [
+            'heading' => 'Latest notices',
+            'columns' => [
+                'issue_date' => 'Issue date',
+                'source' => 'Source',
+                'title' => 'Title',
+                'url' => 'URL',
+            ],
+            'empty_heading' => 'No notices yet',
+            'empty_description' => 'Recent published notices will appear here once crawlers populate the library.',
+        ],
+    ],
 ];

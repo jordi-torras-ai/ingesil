@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Notice;
+use App\Support\NoticeEmbeddingText;
 use App\Services\OpenAIEmbeddings;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,7 +12,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 
 class ComputeNoticeEmbedding implements ShouldQueue
 {
@@ -37,7 +37,8 @@ class ComputeNoticeEmbedding implements ShouldQueue
             return;
         }
 
-        $input = $this->buildInput($notice);
+        $maxChars = (int) config('services.openai.embedding_input_max_chars', 8000);
+        $input = NoticeEmbeddingText::build($notice, $maxChars);
         if ($input === '') {
             return;
         }
@@ -51,42 +52,5 @@ class ComputeNoticeEmbedding implements ShouldQueue
         $notice->embedding_model = (string) config('services.openai.embedding_model', 'text-embedding-3-small');
         $notice->embedding_updated_at = Carbon::now();
         $notice->save();
-    }
-
-    private function buildInput(Notice $notice): string
-    {
-        $parts = [];
-
-        $title = trim((string) $notice->title);
-        if ($title !== '') {
-            $parts[] = 'Title: '.$title;
-        }
-
-        $category = trim((string) $notice->category);
-        if ($category !== '') {
-            $parts[] = 'Category: '.$category;
-        }
-
-        $department = trim((string) $notice->department);
-        if ($department !== '') {
-            $parts[] = 'Department: '.$department;
-        }
-
-        $content = trim((string) ($notice->content ?? ''));
-        if ($content !== '') {
-            $parts[] = "Content:\n".$content;
-        }
-
-        $text = trim(implode("\n", $parts));
-        if ($text === '') {
-            return '';
-        }
-
-        $maxChars = (int) config('services.openai.embedding_input_max_chars', 8000);
-        if ($maxChars > 0 && Str::length($text) > $maxChars) {
-            $text = Str::substr($text, 0, $maxChars);
-        }
-
-        return $text;
     }
 }

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\ComputeNoticeEmbedding;
 use App\Models\Notice;
 use App\Services\OpenAIEmbeddings;
+use App\Support\NoticeEmbeddingText;
 use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
@@ -14,6 +15,9 @@ class NoticesEmbedCommand extends Command
 {
     protected $signature = 'notices:embed
         {--stale : Also (re)embed notices updated since last embedding}
+        {--refresh : Recompute embeddings for all matching notices}
+        {--issue-date= : Restrict to notices whose daily journal issue date matches YYYY-MM-DD}
+        {--source-slug= : Restrict to notices belonging to one source slug}
         {--limit=0 : Max notices to enqueue/process}
         {--chunk=200 : Chunk size for scanning}
         {--sync : Compute embeddings inline (no queue)}
@@ -33,10 +37,35 @@ class NoticesEmbedCommand extends Command
         $chunk = max(10, (int) $this->option('chunk'));
         $sync = (bool) $this->option('sync');
         $queue = (string) $this->option('queue');
+        $refresh = (bool) $this->option('refresh');
+        $issueDate = trim((string) $this->option('issue-date'));
+        $sourceSlug = trim((string) $this->option('source-slug'));
 
         $baseQuery = Notice::query()
             ->select(['id'])
-            ->where(function (Builder $q) use ($includeStale): void {
+            ->when(
+                $issueDate !== '' || $sourceSlug !== '',
+                fn (Builder $query): Builder => $query->whereHas('dailyJournal', function (Builder $dailyJournalQuery) use ($issueDate, $sourceSlug): Builder {
+                    return $dailyJournalQuery
+                        ->when(
+                            $issueDate !== '',
+                            fn (Builder $query): Builder => $query->whereDate('issue_date', $issueDate)
+                        )
+                        ->when(
+                            $sourceSlug !== '',
+                            fn (Builder $query): Builder => $query->whereHas(
+                                'source',
+                                fn (Builder $sourceQuery): Builder => $sourceQuery->where('slug', $sourceSlug)
+                            )
+                        );
+                })
+            )
+            ->where(function (Builder $q) use ($includeStale, $refresh): void {
+                if ($refresh) {
+                    $q->whereRaw('1 = 1');
+                    return;
+                }
+
                 $embeddingColumn = Schema::hasColumn('notices', 'embedding_vector') ? 'embedding_vector' : 'embedding';
 
                 $q->whereNull($embeddingColumn);
@@ -64,12 +93,10 @@ class NoticesEmbedCommand extends Command
                 if ($sync) {
                     /** @var Notice $full */
                     $full = Notice::query()->findOrFail($notice->id);
-                    $input = trim(implode("\n", array_filter([
-                        $full->title ? 'Title: '.$full->title : null,
-                        $full->category ? 'Category: '.$full->category : null,
-                        $full->department ? 'Department: '.$full->department : null,
-                        $full->content ? "Content:\n".$full->content : null,
-                    ])));
+                    $input = NoticeEmbeddingText::build(
+                        $full,
+                        (int) config('services.openai.embedding_input_max_chars', 8000)
+                    );
 
                     if ($input !== '') {
                         $vector = $embeddings->embed($input);
@@ -90,7 +117,7 @@ class NoticesEmbedCommand extends Command
 
             $this->info("Processed: {$processed}");
             return true;
-        });
+        }, 'id', 'id');
 
         $this->info("Done. Total processed: {$processed}");
         return self::SUCCESS;
