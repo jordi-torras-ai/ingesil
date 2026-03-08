@@ -8,7 +8,7 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-Schedule::command('pipeline:daily-notices --headless')
+Schedule::command('pipeline:daily-notices --headless --continue-on-crawler-error')
     ->dailyAt((string) config('app.pipeline.daily_time', '00:10'))
     ->timezone((string) config('app.pipeline.timezone', 'Europe/Madrid'))
     ->when(fn (): bool => (bool) config('app.pipeline.daily_enabled', true))
