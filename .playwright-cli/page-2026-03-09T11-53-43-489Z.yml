@@ -1,0 +1,35 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - generic [ref=e7]:
+            - img "Logotip de Ingesil" [ref=e8]
+            - heading "Autenticació de dos factors" [level=1] [ref=e9]
+            - paragraph [ref=e10]: Escriu el codi de l’aplicació autenticadora per confirmar l’accés al compte.
+          - generic [ref=e11]:
+            - generic [ref=e15]:
+              - generic [ref=e16]:
+                - generic [ref=e18]:
+                  - text: Codi
+                  - superscript [ref=e19]: "*"
+                - link "Utilitza un codi de recuperació" [ref=e22] [cursor=pointer]:
+                  - /url: "#"
+                  - generic [ref=e23]: Utilitza un codi de recuperació
+              - generic [ref=e25]:
+                - textbox "Codi*" [active] [ref=e27]:
+                  - /placeholder: XXX-XXX
+                - button "Cancel" [ref=e30] [cursor=pointer]:
+                  - generic [ref=e31]: Cancel
+                  - img [ref=e32]
+            - button "Accedir" [ref=e36] [cursor=pointer]:
+              - generic [ref=e37]: Accedir
+        - generic:
+          - dialog
+        - generic:
+          - dialog
+        - generic:
+          - dialog
+    - generic [ref=e38]: © 2026 INGECAL INGENIERIA DE LA CALIDAD Y EL MEDIOAMBIENTE SL | Version v1.0.0
+  - generic:
+    - status

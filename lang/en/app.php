@@ -13,18 +13,56 @@ return [
         'es' => 'Spanish',
         'ca' => 'Catalan',
     ],
+    'language_page' => [
+        'navigation' => 'Language',
+        'title' => 'Language',
+        'sections' => [
+            'preferences' => 'Language preferences',
+            'preferences_description' => 'Choose the language used in the application.',
+        ],
+        'actions' => [
+            'save' => 'Save',
+        ],
+        'messages' => [
+            'saved' => 'Language updated successfully.',
+        ],
+    ],
     'users' => [
         'navigation' => 'Users',
         'model_singular' => 'user',
         'model_plural' => 'users',
+        'actions' => [
+            'force_reset_password' => 'Reset password and email link',
+            'force_reset_password_success_title' => 'Password reset started',
+            'force_reset_password_success_body' => 'The current password was invalidated and a reset link was sent to :email.',
+        ],
         'fields' => [
             'id' => 'ID',
             'name' => 'Name',
             'email' => 'Email',
             'password' => 'Password',
+            'current_password' => 'Current password',
+            'new_password' => 'New password',
+            'new_password_confirmation' => 'Confirm new password',
             'role' => 'Profile',
             'locale' => 'Language',
             'created_at' => 'Created at',
+        ],
+    ],
+    'password_reset' => [
+        'email' => [
+            'subject' => 'Reset your password',
+            'intro' => 'You are receiving this email because a password reset was requested for your account.',
+            'action' => 'Reset password',
+            'expiration' => 'This password reset link will expire in :count minutes.',
+            'outro' => 'If you did not request a password reset, no further action is required.',
+            'salutation' => 'Regards, Ingesil',
+        ],
+        'notifications' => [
+            'sent' => [
+                'title' => 'Reset email sent',
+                'body' => 'If the account exists, a password reset email has been sent.',
+            ],
         ],
     ],
     'sources' => [
@@ -52,6 +90,9 @@ return [
         'navigation' => 'Daily Journals',
         'model_singular' => 'daily journal',
         'model_plural' => 'daily journals',
+        'actions' => [
+            'crawler_runs' => 'Crawler runs',
+        ],
         'sections' => [
             'reference' => 'Issue Reference',
             'content' => 'Issue Content',
@@ -72,6 +113,53 @@ return [
             'url' => 'URL',
             'description' => 'Description',
             'created_at' => 'Created at',
+        ],
+    ],
+    'crawler_runs' => [
+        'navigation' => 'Crawler Runs',
+        'model_singular' => 'crawler run',
+        'model_plural' => 'crawler runs',
+        'sections' => [
+            'run' => 'Run Overview',
+            'files' => 'Artifacts',
+            'log' => 'Log Preview',
+        ],
+        'filters' => [
+            'source' => 'Source',
+            'status' => 'Status',
+            'triggered_by' => 'Triggered by',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Source',
+            'source_slug' => 'Source slug',
+            'issue_date' => 'Issue date',
+            'status' => 'Status',
+            'mode' => 'Mode',
+            'triggered_by' => 'Triggered by',
+            'exit_code' => 'Exit code',
+            'started_at' => 'Started at',
+            'finished_at' => 'Finished at',
+            'duration' => 'Duration',
+            'run_id' => 'Run ID',
+            'run_directory' => 'Run directory',
+            'log_path' => 'Log path',
+            'error_message' => 'Error',
+        ],
+        'actions' => [
+            'download_log' => 'Download log',
+        ],
+        'status' => [
+            'running' => 'Running',
+            'succeeded' => 'Succeeded',
+            'failed' => 'Failed',
+        ],
+        'triggered_by' => [
+            'manual' => 'Manual',
+            'pipeline' => 'Pipeline',
+        ],
+        'messages' => [
+            'log_not_available' => 'Log file is not available.',
         ],
     ],
     'notices' => [

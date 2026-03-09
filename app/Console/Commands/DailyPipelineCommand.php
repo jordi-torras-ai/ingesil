@@ -146,7 +146,7 @@ class DailyPipelineCommand extends Command
             throw new \RuntimeException("Crawler runner not found: {$runner}");
         }
 
-        $command = [$python, $runner, $slug, '--day', $issueDate];
+        $command = [$python, $runner, $slug, '--day', $issueDate, '--triggered-by=pipeline'];
         if ($headless) {
             $command[] = '--headless';
         }

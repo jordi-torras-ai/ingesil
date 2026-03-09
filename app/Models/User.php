@@ -4,16 +4,21 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Filament\Models\Contracts\FilamentUser;
+use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Filament\Panel;
+use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, CanResetPasswordContract
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+    use CanResetPasswordTrait;
+    use TwoFactorAuthenticatable;
 
     public const ROLE_ADMIN = 'admin';
     public const ROLE_REGULAR = 'regular';
@@ -94,5 +99,12 @@ class User extends Authenticatable implements FilamentUser
     public function noticeAnalysisRuns(): HasMany
     {
         return $this->hasMany(NoticeAnalysisRun::class, 'requested_by_user_id');
+    }
+
+    public function preferredLocaleForNotifications(): string
+    {
+        return in_array($this->locale, self::supportedLocales(), true)
+            ? $this->locale
+            : config('app.locale', self::LOCALE_EN);
     }
 }

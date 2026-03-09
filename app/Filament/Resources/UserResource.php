@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
+use App\Services\Auth\PasswordResetLinkSender;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -99,6 +101,7 @@ class UserResource extends Resource
                     ->minLength(8)
                     ->maxLength(255)
                     ->required(fn (string $operation): bool => $operation === 'create')
+                    ->visible(fn (string $operation): bool => $operation === 'create')
                     ->dehydrated(fn (?string $state): bool => filled($state)),
             ]);
     }
@@ -140,6 +143,21 @@ class UserResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('force_reset_password')
+                        ->label(__('app.users.actions.force_reset_password'))
+                        ->icon('heroicon-o-key')
+                        ->requiresConfirmation()
+                        ->action(function (User $record, PasswordResetLinkSender $sender): void {
+                            $sender->invalidateAndSend($record);
+
+                            Notification::make()
+                                ->success()
+                                ->title(__('app.users.actions.force_reset_password_success_title'))
+                                ->body(__('app.users.actions.force_reset_password_success_body', [
+                                    'email' => $record->email,
+                                ]))
+                                ->send();
+                        }),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),

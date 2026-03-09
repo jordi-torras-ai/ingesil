@@ -13,18 +13,56 @@ return [
         'es' => 'Castellà',
         'ca' => 'Català',
     ],
+    'language_page' => [
+        'navigation' => 'Idioma',
+        'title' => 'Idioma',
+        'sections' => [
+            'preferences' => 'Preferències d’idioma',
+            'preferences_description' => 'Tria l’idioma utilitzat a l’aplicació.',
+        ],
+        'actions' => [
+            'save' => 'Desa',
+        ],
+        'messages' => [
+            'saved' => 'Idioma actualitzat correctament.',
+        ],
+    ],
     'users' => [
         'navigation' => 'Usuaris',
         'model_singular' => 'usuari',
         'model_plural' => 'usuaris',
+        'actions' => [
+            'force_reset_password' => 'Restableix la contrasenya i envia l’enllaç',
+            'force_reset_password_success_title' => 'Restabliment iniciat',
+            'force_reset_password_success_body' => "La contrasenya actual s'ha invalidat i s'ha enviat un enllaç a :email.",
+        ],
         'fields' => [
             'id' => 'ID',
             'name' => 'Nom',
             'email' => 'Correu',
             'password' => 'Contrasenya',
+            'current_password' => 'Contrasenya actual',
+            'new_password' => 'Nova contrasenya',
+            'new_password_confirmation' => 'Confirma la nova contrasenya',
             'role' => 'Perfil',
             'locale' => 'Idioma',
             'created_at' => 'Creat el',
+        ],
+    ],
+    'password_reset' => [
+        'email' => [
+            'subject' => 'Restableix la contrasenya',
+            'intro' => "Has rebut aquest correu perquè s'ha sol·licitat un restabliment de contrasenya per al teu compte.",
+            'action' => 'Restableix la contrasenya',
+            'expiration' => 'Aquest enllaç de restabliment caducarà en :count minuts.',
+            'outro' => "Si no has sol·licitat aquest restabliment, no cal que facis res més.",
+            'salutation' => 'Salutacions, Ingesil',
+        ],
+        'notifications' => [
+            'sent' => [
+                'title' => 'Correu enviat',
+                'body' => "Si el compte existeix, s'ha enviat un correu de restabliment.",
+            ],
         ],
     ],
     'sources' => [
@@ -52,6 +90,9 @@ return [
         'navigation' => 'Diaris',
         'model_singular' => 'diari',
         'model_plural' => 'diaris',
+        'actions' => [
+            'crawler_runs' => 'Execucions del crawler',
+        ],
         'sections' => [
             'reference' => "Referència de l'edició",
             'content' => "Contingut de l'edició",
@@ -72,6 +113,53 @@ return [
             'url' => 'URL',
             'description' => 'Descripció',
             'created_at' => 'Creat el',
+        ],
+    ],
+    'crawler_runs' => [
+        'navigation' => 'Execucions del crawler',
+        'model_singular' => 'execució del crawler',
+        'model_plural' => 'execucions del crawler',
+        'sections' => [
+            'run' => 'Resum de l’execució',
+            'files' => 'Artefactes',
+            'log' => 'Vista prèvia del log',
+        ],
+        'filters' => [
+            'source' => 'Font',
+            'status' => 'Estat',
+            'triggered_by' => 'Llançat per',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Font',
+            'source_slug' => 'Slug de la font',
+            'issue_date' => "Data de l'edició",
+            'status' => 'Estat',
+            'mode' => 'Mode',
+            'triggered_by' => 'Llançat per',
+            'exit_code' => 'Codi de sortida',
+            'started_at' => 'Inici',
+            'finished_at' => 'Fi',
+            'duration' => 'Durada',
+            'run_id' => "ID d'execució",
+            'run_directory' => "Directori d'execució",
+            'log_path' => 'Ruta del log',
+            'error_message' => 'Error',
+        ],
+        'actions' => [
+            'download_log' => 'Descarrega el log',
+        ],
+        'status' => [
+            'running' => 'En execució',
+            'succeeded' => 'Correcta',
+            'failed' => 'Fallida',
+        ],
+        'triggered_by' => [
+            'manual' => 'Manual',
+            'pipeline' => 'Pipeline',
+        ],
+        'messages' => [
+            'log_not_available' => 'El fitxer de log no està disponible.',
         ],
     ],
     'notices' => [

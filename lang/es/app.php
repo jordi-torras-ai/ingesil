@@ -13,18 +13,56 @@ return [
         'es' => 'Español',
         'ca' => 'Catalán',
     ],
+    'language_page' => [
+        'navigation' => 'Idioma',
+        'title' => 'Idioma',
+        'sections' => [
+            'preferences' => 'Preferencias de idioma',
+            'preferences_description' => 'Elige el idioma utilizado en la aplicación.',
+        ],
+        'actions' => [
+            'save' => 'Guardar',
+        ],
+        'messages' => [
+            'saved' => 'Idioma actualizado correctamente.',
+        ],
+    ],
     'users' => [
         'navigation' => 'Usuarios',
         'model_singular' => 'usuario',
         'model_plural' => 'usuarios',
+        'actions' => [
+            'force_reset_password' => 'Restablecer contraseña y enviar enlace',
+            'force_reset_password_success_title' => 'Restablecimiento iniciado',
+            'force_reset_password_success_body' => 'La contraseña actual se ha invalidado y se ha enviado un enlace a :email.',
+        ],
         'fields' => [
             'id' => 'ID',
             'name' => 'Nombre',
             'email' => 'Correo',
             'password' => 'Contraseña',
+            'current_password' => 'Contraseña actual',
+            'new_password' => 'Nueva contraseña',
+            'new_password_confirmation' => 'Confirmar nueva contraseña',
             'role' => 'Perfil',
             'locale' => 'Idioma',
             'created_at' => 'Creado el',
+        ],
+    ],
+    'password_reset' => [
+        'email' => [
+            'subject' => 'Restablece tu contraseña',
+            'intro' => 'Has recibido este correo porque se solicitó un restablecimiento de contraseña para tu cuenta.',
+            'action' => 'Restablecer contraseña',
+            'expiration' => 'Este enlace de restablecimiento caducará en :count minutos.',
+            'outro' => 'Si no solicitaste este restablecimiento, no es necesario que hagas nada más.',
+            'salutation' => 'Un saludo, Ingesil',
+        ],
+        'notifications' => [
+            'sent' => [
+                'title' => 'Correo enviado',
+                'body' => 'Si la cuenta existe, se ha enviado un correo de restablecimiento.',
+            ],
         ],
     ],
     'sources' => [
@@ -52,6 +90,9 @@ return [
         'navigation' => 'Diarios',
         'model_singular' => 'diario',
         'model_plural' => 'diarios',
+        'actions' => [
+            'crawler_runs' => 'Ejecuciones del crawler',
+        ],
         'sections' => [
             'reference' => 'Referencia de la edición',
             'content' => 'Contenido de la edición',
@@ -72,6 +113,53 @@ return [
             'url' => 'URL',
             'description' => 'Descripción',
             'created_at' => 'Creado el',
+        ],
+    ],
+    'crawler_runs' => [
+        'navigation' => 'Ejecuciones del crawler',
+        'model_singular' => 'ejecución del crawler',
+        'model_plural' => 'ejecuciones del crawler',
+        'sections' => [
+            'run' => 'Resumen de la ejecución',
+            'files' => 'Artefactos',
+            'log' => 'Vista previa del log',
+        ],
+        'filters' => [
+            'source' => 'Fuente',
+            'status' => 'Estado',
+            'triggered_by' => 'Lanzado por',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'source' => 'Fuente',
+            'source_slug' => 'Slug de la fuente',
+            'issue_date' => 'Fecha de edición',
+            'status' => 'Estado',
+            'mode' => 'Modo',
+            'triggered_by' => 'Lanzado por',
+            'exit_code' => 'Código de salida',
+            'started_at' => 'Inicio',
+            'finished_at' => 'Fin',
+            'duration' => 'Duración',
+            'run_id' => 'ID de ejecución',
+            'run_directory' => 'Directorio de ejecución',
+            'log_path' => 'Ruta del log',
+            'error_message' => 'Error',
+        ],
+        'actions' => [
+            'download_log' => 'Descargar log',
+        ],
+        'status' => [
+            'running' => 'En ejecución',
+            'succeeded' => 'Correcta',
+            'failed' => 'Fallida',
+        ],
+        'triggered_by' => [
+            'manual' => 'Manual',
+            'pipeline' => 'Pipeline',
+        ],
+        'messages' => [
+            'log_not_available' => 'El archivo de log no está disponible.',
         ],
     ],
     'notices' => [

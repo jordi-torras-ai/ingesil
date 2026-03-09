@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\DailyJournalResource\Pages;
+use App\Models\CrawlerRun;
 use App\Models\DailyJournal;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -203,6 +204,23 @@ class DailyJournalResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
+                    Tables\Actions\Action::make('crawler_runs')
+                        ->label(__('app.daily_journals.actions.crawler_runs'))
+                        ->icon('heroicon-o-document-text')
+                        ->url(fn (DailyJournal $record): string => CrawlerRunResource::getUrl('index', [
+                            'tableFilters' => [
+                                'source_id' => [
+                                    'value' => (string) $record->source_id,
+                                ],
+                                'issue_date' => [
+                                    'issue_date' => $record->issue_date?->toDateString(),
+                                ],
+                            ],
+                        ]))
+                        ->visible(fn (DailyJournal $record): bool => CrawlerRun::query()
+                            ->where('source_id', $record->source_id)
+                            ->whereDate('issue_date', $record->issue_date)
+                            ->exists()),
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
