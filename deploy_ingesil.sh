@@ -154,7 +154,12 @@ fi
 
 echo "--------------------------------------------"
 echo "Running Laravel tasks..."
-as_app "php artisan key:generate --force || true"
+if ! grep -qE '^APP_KEY=base64:' .env; then
+  echo "APP_KEY missing, generating it once..."
+  as_app "php artisan key:generate --force"
+else
+  echo "APP_KEY already present, keeping existing key."
+fi
 as_app "php artisan storage:link || true"
 as_app "php artisan migrate --force"
 as_app "php artisan db:seed --force || true"

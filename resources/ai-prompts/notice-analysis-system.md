@@ -61,6 +61,7 @@ If the notice is relevant, return:
 
 {
   "decision": "send",
+  "reason": "...why this notice is relevant for organizations",
   "vector": "",
   "scope": "",
   "title": "",
@@ -68,6 +69,8 @@ If the notice is relevant, return:
   "repealed_provisions": "",
   "link": ""
 }
+
+For relevant notices, the reason should briefly explain why the notice matters operationally or legally for organizations.
 
 Field definitions:
 
@@ -81,6 +84,9 @@ Catalonia, Spain, European Union.
 
 title
 Use the title of the legal notice.
+
+reason
+Write a short justification for the send decision, focused on why the notice is relevant for organizations.
 
 summary
 Write a short summary explaining what the regulation establishes or modifies and how it may affect organizations.

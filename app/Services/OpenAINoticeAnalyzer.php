@@ -258,8 +258,9 @@ class OpenAINoticeAnalyzer
             throw new \RuntimeException("Invalid analysis decision: '{$decision}'.");
         }
 
+        $reason = trim((string) ($json['reason'] ?? ''));
+
         if ($decision === 'ignore') {
-            $reason = trim((string) ($json['reason'] ?? ''));
             if ($reason === '') {
                 throw new \RuntimeException('Analysis decision "ignore" requires a reason.');
             }
@@ -293,6 +294,10 @@ class OpenAINoticeAnalyzer
             throw new \RuntimeException('Analysis decision "send" requires title and summary.');
         }
 
+        if ($reason === '') {
+            throw new \RuntimeException('Analysis decision "send" requires a reason.');
+        }
+
         $repealedProvisions = trim((string) ($json['repealed_provisions'] ?? ''));
         if ($repealedProvisions === '') {
             $repealedProvisions = 'No repealed provisions mentioned.';
@@ -305,7 +310,7 @@ class OpenAINoticeAnalyzer
 
         return [
             'decision' => 'send',
-            'reason' => null,
+            'reason' => $reason,
             'vector' => $vector,
             'scope' => $scope,
             'title' => $title,
