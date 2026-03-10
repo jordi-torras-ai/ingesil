@@ -127,8 +127,8 @@ class CrawlerRunResource extends Resource
                 Forms\Components\Section::make(__('app.crawler_runs.sections.log'))
                     ->schema([
                         Forms\Components\View::make('filament.forms.components.log-preview')
-                            ->viewData([
-                                'content' => fn (?CrawlerRun $record): string => $record?->readLogPreview() ?? '',
+                            ->viewData(fn (?CrawlerRun $record): array => [
+                                'content' => $record?->readLogPreview() ?? '',
                             ])
                             ->columnSpanFull(),
                     ]),
