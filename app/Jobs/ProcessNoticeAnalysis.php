@@ -37,7 +37,7 @@ class ProcessNoticeAnalysis implements ShouldQueue
     {
         /** @var NoticeAnalysis|null $analysis */
         $analysis = NoticeAnalysis::query()
-            ->with(['notice.dailyJournal.source', 'noticeAnalysisRun'])
+            ->with(['notice.dailyJournal.source', 'noticeAnalysisRun.scope.translations'])
             ->find($this->noticeAnalysisId);
 
         if (! $analysis) {
@@ -60,14 +60,25 @@ class ProcessNoticeAnalysis implements ShouldQueue
         }
 
         $outputLocale = (string) ($analysis->noticeAnalysisRun?->locale ?? 'en');
-        $result = $analyzer->analyze($analysis->notice, $outputLocale);
+        $scope = $analysis->noticeAnalysisRun?->scope;
+        if (! $scope) {
+            throw new \RuntimeException('Notice analysis run has no scope.');
+        }
+
+        $result = $analyzer->analyze(
+            $analysis->notice,
+            $scope,
+            $outputLocale,
+            $analysis->noticeAnalysisRun?->system_prompt_path,
+            $analysis->noticeAnalysisRun?->user_prompt_path,
+        );
 
         $analysis->forceFill([
             'status' => NoticeAnalysis::STATUS_DONE,
             'decision' => $result['decision'] ?? null,
             'reason' => $result['reason'] ?? null,
             'vector' => $result['vector'] ?? null,
-            'scope' => $result['scope'] ?? null,
+            'jurisdiction' => $result['jurisdiction'] ?? null,
             'title' => $result['title'] ?? null,
             'summary' => $result['summary'] ?? null,
             'repealed_provisions' => $result['repealed_provisions'] ?? null,

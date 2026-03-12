@@ -51,6 +51,8 @@ return [
         'notice_analysis_system_prompt' => env('OPENAI_NOTICE_ANALYSIS_SYSTEM_PROMPT', 'ai-prompts/notice-analysis-system.md'),
         'notice_analysis_user_prompt' => env('OPENAI_NOTICE_ANALYSIS_USER_PROMPT', 'ai-prompts/notice-analysis-user.md'),
         'notice_analysis_input_max_chars' => env('OPENAI_NOTICE_ANALYSIS_INPUT_MAX_CHARS', 35000),
+        'company_notice_analysis_queue' => env('OPENAI_COMPANY_NOTICE_ANALYSIS_QUEUE', 'default'),
+        'company_notice_analysis_input_max_chars' => env('OPENAI_COMPANY_NOTICE_ANALYSIS_INPUT_MAX_CHARS', 35000),
         'smart_search_system_prompt' => env('OPENAI_SMART_SEARCH_SYSTEM_PROMPT', 'ai-prompts/smart-search-system.md'),
         'smart_search_user_prompt' => env('OPENAI_SMART_SEARCH_USER_PROMPT', 'ai-prompts/smart-search-user.md'),
         'smart_search_input_max_chars' => env('OPENAI_SMART_SEARCH_INPUT_MAX_CHARS', 28000),

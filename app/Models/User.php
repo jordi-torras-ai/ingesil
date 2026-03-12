@@ -8,6 +8,7 @@ use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Filament\Panel;
 use Illuminate\Auth\Passwords\CanResetPassword as CanResetPasswordTrait;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -99,6 +100,16 @@ class User extends Authenticatable implements FilamentUser, CanResetPasswordCont
     public function noticeAnalysisRuns(): HasMany
     {
         return $this->hasMany(NoticeAnalysisRun::class, 'requested_by_user_id');
+    }
+
+    public function companies(): BelongsToMany
+    {
+        return $this->belongsToMany(Company::class)->withTimestamps();
+    }
+
+    public function companyNoticeAnalysisEvents(): HasMany
+    {
+        return $this->hasMany(CompanyNoticeAnalysisEvent::class);
     }
 
     public function preferredLocaleForNotifications(): string

@@ -4,7 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\NoticeAnalysisRunResource\Pages;
 use App\Models\NoticeAnalysisRun;
+use App\Models\Scope;
 use App\Models\User;
+use App\Services\CompanyNoticeAnalysisRunner;
 use App\Services\NoticeAnalysisRunner;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -88,6 +90,11 @@ class NoticeAnalysisRunResource extends Resource
                     ->label(__('app.notice_analysis_runs.fields.issue_date'))
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('scope.code')
+                    ->label(__('app.notice_analysis_runs.fields.scope'))
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state, NoticeAnalysisRun $record): string => $record->scope?->name(app()->getLocale()) ?? (string) $state)
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('locale')
                     ->label(__('app.notice_analysis_runs.fields.locale'))
                     ->badge()
@@ -216,6 +223,17 @@ class NoticeAnalysisRunResource extends Resource
                 Tables\Filters\SelectFilter::make('locale')
                     ->label(__('app.notice_analysis_runs.filters.locale'))
                     ->options(User::localeOptions()),
+                Tables\Filters\SelectFilter::make('scope_id')
+                    ->label(__('app.notice_analysis_runs.filters.scope'))
+                    ->options(fn (): array => Scope::query()
+                        ->with('translations')
+                        ->orderBy('sort_order')
+                        ->orderBy('id')
+                        ->get()
+                        ->mapWithKeys(fn (Scope $scope): array => [
+                            (string) $scope->id => $scope->name(app()->getLocale()),
+                        ])
+                        ->all()),
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -245,6 +263,35 @@ class NoticeAnalysisRunResource extends Resource
                                     ->send();
                             }
                         }),
+                    Tables\Actions\Action::make('run_company_analysis')
+                        ->label(__('app.notice_analysis_runs.actions.run_company_analysis'))
+                        ->icon('heroicon-o-building-office-2')
+                        ->color('info')
+                        ->requiresConfirmation()
+                        ->visible(fn (NoticeAnalysisRun $record): bool => in_array($record->status, [
+                            NoticeAnalysisRun::STATUS_COMPLETED,
+                            NoticeAnalysisRun::STATUS_COMPLETED_WITH_ERRORS,
+                        ], true))
+                        ->action(function (NoticeAnalysisRun $record): void {
+                            try {
+                                $count = app(CompanyNoticeAnalysisRunner::class)->dispatchForNoticeAnalysisRun($record);
+
+                                Notification::make()
+                                    ->success()
+                                    ->title(__('app.notice_analysis_runs.actions.run_company_analysis_success_title'))
+                                    ->body(__('app.notice_analysis_runs.actions.run_company_analysis_success_body', [
+                                        'run' => $record->id,
+                                        'count' => $count,
+                                    ]))
+                                    ->send();
+                            } catch (\Throwable $exc) {
+                                Notification::make()
+                                    ->danger()
+                                    ->title(__('app.notice_analysis_runs.actions.run_company_analysis_error_title'))
+                                    ->body($exc->getMessage())
+                                    ->send();
+                            }
+                        }),
                     Tables\Actions\Action::make('view_results')
                         ->label(__('app.notice_analysis_runs.actions.view_results'))
                         ->icon('heroicon-o-list-bullet')
@@ -268,6 +315,21 @@ class NoticeAnalysisRunResource extends Resource
                             ->label(__('app.notice_analysis_runs.actions.issue_date'))
                             ->native(false)
                             ->required(),
+                        Forms\Components\Select::make('scope_id')
+                            ->label(__('app.notice_analysis_runs.actions.scope'))
+                            ->options(fn (): array => Scope::query()
+                                ->with('translations')
+                                ->where('is_active', true)
+                                ->orderBy('sort_order')
+                                ->orderBy('id')
+                                ->get()
+                                ->filter(fn (Scope $scope): bool => $scope->hasAnalysisPrompt())
+                                ->mapWithKeys(fn (Scope $scope): array => [
+                                    (string) $scope->id => $scope->name(app()->getLocale()),
+                                ])
+                                ->all())
+                            ->required()
+                            ->native(false),
                         Forms\Components\Select::make('locale')
                             ->label(__('app.notice_analysis_runs.actions.locale'))
                             ->options(User::localeOptions())
@@ -278,8 +340,10 @@ class NoticeAnalysisRunResource extends Resource
                     ->action(function (array $data): void {
                         try {
                             $issueDate = (string) ($data['issue_date'] ?? '');
+                            $scopeId = (int) ($data['scope_id'] ?? 0);
                             $locale = (string) ($data['locale'] ?? User::LOCALE_EN);
-                            $run = app(NoticeAnalysisRunner::class)->createRunForIssueDate($issueDate, auth()->id(), $locale);
+                            $scope = Scope::query()->with('translations')->findOrFail($scopeId);
+                            $run = app(NoticeAnalysisRunner::class)->createRunForIssueDate($issueDate, $scope, auth()->id(), $locale);
 
                             Notification::make()
                                 ->success()
@@ -287,6 +351,7 @@ class NoticeAnalysisRunResource extends Resource
                                 ->body(__('app.notice_analysis_runs.actions.create_run_success_body', [
                                     'run' => $run->id,
                                     'date' => $issueDate,
+                                    'scope' => $scope->name(app()->getLocale()),
                                     'language' => User::localeOptions()[$locale] ?? $locale,
                                 ]))
                                 ->send();
@@ -308,7 +373,7 @@ class NoticeAnalysisRunResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->with('requestedByUser');
+        return parent::getEloquentQuery()->with(['requestedByUser', 'scope.translations']);
     }
 
     public static function getPages(): array

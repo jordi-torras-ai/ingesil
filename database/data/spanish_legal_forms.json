@@ -1,0 +1,87 @@
+[
+  {
+    "code": "AUT",
+    "name": "Autónomo / Empresario individual",
+    "sort_order": 10
+  },
+  {
+    "code": "ERL",
+    "name": "Emprendedor de Responsabilidad Limitada",
+    "sort_order": 20
+  },
+  {
+    "code": "CB",
+    "name": "Comunidad de Bienes",
+    "sort_order": 30
+  },
+  {
+    "code": "SC",
+    "name": "Sociedad Civil",
+    "sort_order": 40
+  },
+  {
+    "code": "SCP",
+    "name": "Sociedad Civil Profesional",
+    "sort_order": 50
+  },
+  {
+    "code": "SL",
+    "name": "Sociedad de Responsabilidad Limitada",
+    "sort_order": 60
+  },
+  {
+    "code": "SLU",
+    "name": "Sociedad Limitada Unipersonal",
+    "sort_order": 70
+  },
+  {
+    "code": "SLNE",
+    "name": "Sociedad Limitada Nueva Empresa",
+    "sort_order": 80
+  },
+  {
+    "code": "SA",
+    "name": "Sociedad Anónima",
+    "sort_order": 90
+  },
+  {
+    "code": "SAU",
+    "name": "Sociedad Anónima Unipersonal",
+    "sort_order": 100
+  },
+  {
+    "code": "SLL",
+    "name": "Sociedad Limitada Laboral",
+    "sort_order": 110
+  },
+  {
+    "code": "SAL",
+    "name": "Sociedad Anónima Laboral",
+    "sort_order": 120
+  },
+  {
+    "code": "SCOM",
+    "name": "Sociedad Comanditaria Simple",
+    "sort_order": 130
+  },
+  {
+    "code": "SCOMPA",
+    "name": "Sociedad Comanditaria por Acciones",
+    "sort_order": 140
+  },
+  {
+    "code": "SCOOP",
+    "name": "Sociedad Cooperativa",
+    "sort_order": 150
+  },
+  {
+    "code": "AIE",
+    "name": "Agrupación de Interés Económico",
+    "sort_order": 160
+  },
+  {
+    "code": "UTE",
+    "name": "Unión Temporal de Empresas",
+    "sort_order": 170
+  }
+]

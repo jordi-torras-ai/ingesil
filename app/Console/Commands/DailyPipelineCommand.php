@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Source;
+use App\Models\Scope;
 use App\Models\User;
 use App\Services\NoticeAnalysisRunner;
 use Illuminate\Console\Command;
@@ -18,7 +19,7 @@ class DailyPipelineCommand extends Command
         {--headless : Force crawlers to run in headless mode}
         {--continue-on-crawler-error : Continue pipeline even if one crawler fails}';
 
-    protected $description = 'Run all crawlers for one issue date, then create and dispatch notice analysis runs per locale.';
+    protected $description = 'Run all crawlers for one issue date, then create and dispatch notice analysis runs per scope and locale.';
 
     public function handle(NoticeAnalysisRunner $runner): int
     {
@@ -67,26 +68,43 @@ class DailyPipelineCommand extends Command
             $this->warn('Crawler failures (continuing by option): '.implode(', ', $failedCrawlers));
         }
 
+        $scopes = Scope::query()
+            ->with('translations')
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get()
+            ->filter(fn (Scope $scope): bool => $scope->hasAnalysisPrompt())
+            ->values();
+
+        if ($scopes->isEmpty()) {
+            $this->error('No active scopes with prompt files are available.');
+            return self::FAILURE;
+        }
+
         $locales = $this->resolveLocales();
         if ($locales === []) {
             $this->error('No valid locales were provided.');
             return self::FAILURE;
         }
 
-        $this->line('Creating and dispatching analysis runs for locales: '.implode(', ', $locales));
+        $this->line('Creating and dispatching analysis runs for scopes/locales.');
 
-        foreach ($locales as $locale) {
-            $run = $runner->createRunForIssueDate($targetDate->toDateString(), null, $locale);
-            $run = $runner->dispatchRun($run);
+        foreach ($scopes as $scope) {
+            foreach ($locales as $locale) {
+                $run = $runner->createRunForIssueDate($targetDate->toDateString(), $scope, null, $locale);
+                $run = $runner->dispatchRun($run);
 
-            $this->info(sprintf(
-                'Run #%d locale=%s date=%s total=%d status=%s',
-                $run->id,
-                $locale,
-                (string) $run->issue_date?->toDateString(),
-                (int) $run->total_notices,
-                (string) $run->status
-            ));
+                $this->info(sprintf(
+                    'Run #%d scope=%s locale=%s date=%s total=%d status=%s',
+                    $run->id,
+                    $scope->code,
+                    $locale,
+                    (string) $run->issue_date?->toDateString(),
+                    (int) $run->total_notices,
+                    (string) $run->status
+                ));
+            }
         }
 
         $this->info('Daily pipeline finished successfully.');

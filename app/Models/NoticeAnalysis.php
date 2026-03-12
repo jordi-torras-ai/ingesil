@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class NoticeAnalysis extends Model
 {
@@ -22,7 +23,7 @@ class NoticeAnalysis extends Model
         'decision',
         'reason',
         'vector',
-        'scope',
+        'jurisdiction',
         'title',
         'summary',
         'repealed_provisions',
@@ -54,5 +55,10 @@ class NoticeAnalysis extends Model
     public function notice(): BelongsTo
     {
         return $this->belongsTo(Notice::class);
+    }
+
+    public function companyAnalyses(): HasMany
+    {
+        return $this->hasMany(CompanyNoticeAnalysis::class);
     }
 }

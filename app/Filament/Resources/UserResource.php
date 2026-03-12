@@ -11,6 +11,7 @@ use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class UserResource extends Resource
@@ -19,7 +20,7 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 13;
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -94,6 +95,12 @@ class UserResource extends Resource
                     ->required()
                     ->native(false)
                     ->in(User::supportedLocales()),
+                Forms\Components\Select::make('companies')
+                    ->label(__('app.users.fields.companies'))
+                    ->relationship('companies', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
                 Forms\Components\TextInput::make('password')
                     ->label(__('app.users.fields.password'))
                     ->password()
@@ -134,6 +141,11 @@ class UserResource extends Resource
                     ->label(__('app.users.fields.locale'))
                     ->formatStateUsing(fn (string $state): string => __('app.locales.' . $state))
                     ->badge()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('companies_count')
+                    ->label(__('app.users.fields.companies'))
+                    ->badge()
+                    ->color('primary')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('app.users.fields.created_at'))
@@ -179,5 +191,10 @@ class UserResource extends Resource
             'view' => Pages\ViewUser::route('/{record}'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withCount('companies');
     }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\NoticeAnalysisResource\Pages;
 use App\Models\NoticeAnalysis;
 use App\Models\NoticeAnalysisRun;
+use App\Models\Scope;
 use App\Models\Source;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -83,8 +84,12 @@ class NoticeAnalysisResource extends Resource
                         Forms\Components\TextInput::make('vector')
                             ->label(__('app.notice_analyses.fields.vector'))
                             ->disabled(),
-                        Forms\Components\TextInput::make('scope')
-                            ->label(__('app.notice_analyses.fields.scope'))
+                        Forms\Components\TextInput::make('noticeAnalysisRun.scope.code')
+                            ->label(__('app.notice_analyses.fields.analysis_scope'))
+                            ->formatStateUsing(fn (?string $state, NoticeAnalysis $record): string => $record->noticeAnalysisRun?->scope?->name(app()->getLocale()) ?? (string) $state)
+                            ->disabled(),
+                        Forms\Components\TextInput::make('jurisdiction')
+                            ->label(__('app.notice_analyses.fields.jurisdiction'))
                             ->disabled(),
                         Forms\Components\Textarea::make('reason')
                             ->label(__('app.notice_analyses.fields.reason'))
@@ -135,6 +140,15 @@ class NoticeAnalysisResource extends Resource
                     ->label(__('app.notice_analyses.fields.issue_date'))
                     ->date()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('noticeAnalysisRun.scope.code')
+                    ->label(__('app.notice_analyses.fields.analysis_scope'))
+                    ->badge()
+                    ->formatStateUsing(fn (?string $state, NoticeAnalysis $record): string => $record->noticeAnalysisRun?->scope?->name(app()->getLocale()) ?? (string) $state)
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('notice.dailyJournal.source.name')
+                    ->label(__('app.notice_analyses.fields.source'))
+                    ->badge()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('notice.title')
                     ->label(__('app.notice_analyses.fields.notice'))
                     ->searchable()
@@ -162,8 +176,8 @@ class NoticeAnalysisResource extends Resource
                 Tables\Columns\TextColumn::make('vector')
                     ->label(__('app.notice_analyses.fields.vector'))
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('scope')
-                    ->label(__('app.notice_analyses.fields.scope'))
+                Tables\Columns\TextColumn::make('jurisdiction')
+                    ->label(__('app.notice_analyses.fields.jurisdiction'))
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('processed_at')
                     ->label(__('app.notice_analyses.fields.processed_at'))
@@ -207,19 +221,38 @@ class NoticeAnalysisResource extends Resource
                             ->all();
                     })
                     ->searchable(),
-                Tables\Filters\SelectFilter::make('scope')
-                    ->label(__('app.notice_analyses.filters.scope'))
+                Tables\Filters\SelectFilter::make('scope_id')
+                    ->label(__('app.notice_analyses.filters.analysis_scope'))
+                    ->options(fn (): array => Scope::query()
+                        ->with('translations')
+                        ->orderBy('sort_order')
+                        ->orderBy('id')
+                        ->get()
+                        ->mapWithKeys(fn (Scope $scope): array => [
+                            (string) $scope->id => $scope->name(app()->getLocale()),
+                        ])
+                        ->all())
+                    ->query(fn (Builder $query, array $data): Builder => $query->when(
+                        $data['value'] ?? null,
+                        fn (Builder $query, string $scopeId): Builder => $query->whereHas(
+                            'noticeAnalysisRun',
+                            fn (Builder $runQuery): Builder => $runQuery->where('scope_id', $scopeId)
+                        )
+                    ))
+                    ->searchable(),
+                Tables\Filters\SelectFilter::make('jurisdiction')
+                    ->label(__('app.notice_analyses.filters.jurisdiction'))
                     ->options(function (): array {
                         return NoticeAnalysis::query()
-                            ->select('scope')
+                            ->select('jurisdiction')
                             ->selectRaw('COUNT(*) as aggregate')
-                            ->whereNotNull('scope')
-                            ->where('scope', '<>', '')
-                            ->groupBy('scope')
-                            ->orderBy('scope')
+                            ->whereNotNull('jurisdiction')
+                            ->where('jurisdiction', '<>', '')
+                            ->groupBy('jurisdiction')
+                            ->orderBy('jurisdiction')
                             ->get()
                             ->mapWithKeys(fn (NoticeAnalysis $analysis): array => [
-                                (string) $analysis->scope => sprintf('%s (%d)', $analysis->scope, $analysis->aggregate),
+                                (string) $analysis->jurisdiction => sprintf('%s (%d)', $analysis->jurisdiction, $analysis->aggregate),
                             ])
                             ->all();
                     })
@@ -318,7 +351,7 @@ class NoticeAnalysisResource extends Resource
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
-            ->with(['noticeAnalysisRun', 'notice']);
+            ->with(['noticeAnalysisRun.scope.translations', 'notice.dailyJournal.source']);
     }
 
     public static function getPages(): array

@@ -20,6 +20,7 @@ class NoticeAnalysisRun extends Model
     protected $fillable = [
         'status',
         'requested_by_user_id',
+        'scope_id',
         'issue_date',
         'locale',
         'total_notices',
@@ -32,6 +33,7 @@ class NoticeAnalysisRun extends Model
         'user_prompt_path',
         'started_at',
         'finished_at',
+        'company_runs_dispatched_at',
         'last_error',
     ];
 
@@ -44,6 +46,7 @@ class NoticeAnalysisRun extends Model
             'issue_date' => 'date',
             'started_at' => 'datetime',
             'finished_at' => 'datetime',
+            'company_runs_dispatched_at' => 'datetime',
         ];
     }
 
@@ -52,9 +55,19 @@ class NoticeAnalysisRun extends Model
         return $this->belongsTo(User::class, 'requested_by_user_id');
     }
 
+    public function scope(): BelongsTo
+    {
+        return $this->belongsTo(Scope::class);
+    }
+
     public function analyses(): HasMany
     {
         return $this->hasMany(NoticeAnalysis::class);
+    }
+
+    public function companyRuns(): HasMany
+    {
+        return $this->hasMany(CompanyNoticeAnalysisRun::class);
     }
 
     public function progressLabel(): string
@@ -100,5 +113,17 @@ class NoticeAnalysisRun extends Model
             'failed_count' => $failed,
             'finished_at' => $finishedAt,
         ])->save();
+
+        if (
+            in_array($status, [self::STATUS_COMPLETED, self::STATUS_COMPLETED_WITH_ERRORS], true)
+            && $this->company_runs_dispatched_at === null
+        ) {
+            try {
+                app(\App\Services\CompanyNoticeAnalysisRunner::class)
+                    ->dispatchForNoticeAnalysisRun($this, strictPrompt: false);
+            } catch (\Throwable $exc) {
+                report($exc);
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Jobs\ProcessNoticeAnalysis;
 use App\Models\Notice;
 use App\Models\NoticeAnalysis;
 use App\Models\NoticeAnalysisRun;
+use App\Models\Scope;
 use App\Models\User;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
@@ -16,6 +17,7 @@ class NoticeAnalysisRunner
 {
     public function createRunForIssueDate(
         string|CarbonInterface $issueDate,
+        Scope|int|string $scope,
         ?int $requestedByUserId = null,
         ?string $locale = null,
     ): NoticeAnalysisRun
@@ -24,10 +26,13 @@ class NoticeAnalysisRunner
             ? $issueDate->copy()->startOfDay()
             : Carbon::parse($issueDate)->startOfDay();
         $normalizedLocale = $this->normalizeLocale($locale);
+        $resolvedScope = $this->resolveScope($scope);
+        $promptPaths = $resolvedScope->analysisPromptRelativePaths();
 
         return NoticeAnalysisRun::query()->create([
             'status' => NoticeAnalysisRun::STATUS_QUEUED,
             'requested_by_user_id' => $requestedByUserId,
+            'scope_id' => $resolvedScope->id,
             'issue_date' => $normalizedIssueDate->toDateString(),
             'locale' => $normalizedLocale,
             'total_notices' => 0,
@@ -36,29 +41,48 @@ class NoticeAnalysisRunner
             'ignored_count' => 0,
             'failed_count' => 0,
             'model' => (string) config('services.openai.api_model', 'gpt-5-mini'),
-            'system_prompt_path' => (string) config('services.openai.notice_analysis_system_prompt', 'ai-prompts/notice-analysis-system.md'),
-            'user_prompt_path' => (string) config('services.openai.notice_analysis_user_prompt', 'ai-prompts/notice-analysis-user.md'),
+            'system_prompt_path' => $promptPaths['system'],
+            'user_prompt_path' => $promptPaths['user'],
             'started_at' => null,
             'finished_at' => null,
+            'company_runs_dispatched_at' => null,
         ]);
     }
 
     public function dispatchForIssueDate(
         string|CarbonInterface $issueDate,
+        Scope|int|string $scope,
         ?int $requestedByUserId = null,
         ?string $locale = null,
     ): NoticeAnalysisRun
     {
-        $run = $this->createRunForIssueDate($issueDate, $requestedByUserId, $locale);
+        $run = $this->createRunForIssueDate($issueDate, $scope, $requestedByUserId, $locale);
         return $this->dispatchRun($run);
     }
 
     public function dispatchRun(NoticeAnalysisRun $run): NoticeAnalysisRun
     {
+        $run->loadMissing('scope.translations');
+
         $issueDate = $run->issue_date?->toDateString();
         if (! $issueDate) {
             throw new RuntimeException('Run has no issue date.');
         }
+
+        $scope = $run->scope;
+        if (! $scope instanceof Scope) {
+            throw new RuntimeException('Run has no analysis scope.');
+        }
+
+        if (! $scope->is_active) {
+            throw new RuntimeException('Run scope is inactive.');
+        }
+
+        if (! $scope->hasAnalysisPrompt()) {
+            throw new RuntimeException('Run scope prompt files are missing.');
+        }
+
+        $promptPaths = $scope->analysisPromptRelativePaths();
 
         $noticeIds = Notice::query()
             ->select('notices.id')
@@ -115,7 +139,7 @@ class NoticeAnalysisRunner
                     'decision' => null,
                     'reason' => null,
                     'vector' => null,
-                    'scope' => null,
+                    'jurisdiction' => null,
                     'title' => null,
                     'summary' => null,
                     'repealed_provisions' => null,
@@ -133,6 +157,7 @@ class NoticeAnalysisRunner
                     'issue_date' => $issueDate,
                     'started_at' => $now,
                     'finished_at' => $now,
+                    'company_runs_dispatched_at' => null,
                     'total_notices' => 0,
                     'processed_notices' => 0,
                     'sent_count' => 0,
@@ -150,7 +175,10 @@ class NoticeAnalysisRunner
                 'locale' => $this->normalizeLocale((string) $lockedRun->locale),
                 'started_at' => $lockedRun->started_at ?? $now,
                 'finished_at' => null,
+                'company_runs_dispatched_at' => null,
                 'total_notices' => $total,
+                'system_prompt_path' => $promptPaths['system'],
+                'user_prompt_path' => $promptPaths['user'],
                 'last_error' => null,
             ])->save();
 
@@ -194,9 +222,18 @@ class NoticeAnalysisRunner
     /**
      * @param  list<int>  $noticeIds
      */
-    public function dispatch(array $noticeIds, ?int $requestedByUserId = null, ?string $issueDate = null): NoticeAnalysisRun
+    public function dispatch(
+        array $noticeIds,
+        Scope|int|string $scope,
+        ?int $requestedByUserId = null,
+        ?string $issueDate = null,
+        ?string $locale = null,
+    ): NoticeAnalysisRun
     {
         $uniqueNoticeIds = array_values(array_unique(array_map('intval', $noticeIds)));
+        $resolvedScope = $this->resolveScope($scope);
+        $promptPaths = $resolvedScope->analysisPromptRelativePaths();
+        $normalizedLocale = $this->normalizeLocale($locale);
 
         $existingNoticeIds = Notice::query()
             ->whereIn('id', $uniqueNoticeIds)
@@ -208,21 +245,33 @@ class NoticeAnalysisRunner
         $total = count($existingNoticeIds);
         $now = Carbon::now();
 
-        return DB::transaction(function () use ($existingNoticeIds, $requestedByUserId, $total, $now, $issueDate): NoticeAnalysisRun {
+        return DB::transaction(function () use (
+            $existingNoticeIds,
+            $requestedByUserId,
+            $resolvedScope,
+            $promptPaths,
+            $normalizedLocale,
+            $total,
+            $now,
+            $issueDate,
+        ): NoticeAnalysisRun {
             $run = NoticeAnalysisRun::query()->create([
                 'status' => $total > 0 ? NoticeAnalysisRun::STATUS_PROCESSING : NoticeAnalysisRun::STATUS_COMPLETED,
                 'requested_by_user_id' => $requestedByUserId,
+                'scope_id' => $resolvedScope->id,
                 'issue_date' => $issueDate,
+                'locale' => $normalizedLocale,
                 'total_notices' => $total,
                 'processed_notices' => 0,
                 'sent_count' => 0,
                 'ignored_count' => 0,
                 'failed_count' => 0,
                 'model' => (string) config('services.openai.api_model', 'gpt-5-mini'),
-                'system_prompt_path' => (string) config('services.openai.notice_analysis_system_prompt', 'ai-prompts/notice-analysis-system.md'),
-                'user_prompt_path' => (string) config('services.openai.notice_analysis_user_prompt', 'ai-prompts/notice-analysis-user.md'),
+                'system_prompt_path' => $promptPaths['system'],
+                'user_prompt_path' => $promptPaths['user'],
                 'started_at' => $total > 0 ? $now : null,
                 'finished_at' => $total > 0 ? null : $now,
+                'company_runs_dispatched_at' => null,
             ]);
 
             if ($existingNoticeIds === []) {
@@ -256,5 +305,33 @@ class NoticeAnalysisRunner
 
             return $run;
         });
+    }
+
+    private function resolveScope(Scope|int|string $scope): Scope
+    {
+        $resolvedScope = match (true) {
+            $scope instanceof Scope => $scope->loadMissing('translations'),
+            is_int($scope) || ctype_digit((string) $scope) => Scope::query()
+                ->with('translations')
+                ->find((int) $scope),
+            default => Scope::query()
+                ->with('translations')
+                ->where('code', trim((string) $scope))
+                ->first(),
+        };
+
+        if (! $resolvedScope instanceof Scope) {
+            throw new RuntimeException('Analysis scope not found.');
+        }
+
+        if (! $resolvedScope->is_active) {
+            throw new RuntimeException('Analysis scope is inactive.');
+        }
+
+        if (! $resolvedScope->hasAnalysisPrompt()) {
+            throw new RuntimeException('Analysis scope prompt files are missing.');
+        }
+
+        return $resolvedScope;
     }
 }

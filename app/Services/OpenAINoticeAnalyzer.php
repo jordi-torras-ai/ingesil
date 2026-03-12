@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Notice;
+use App\Models\Scope;
 use App\Models\User;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
@@ -34,7 +35,7 @@ class OpenAINoticeAnalyzer
     /**
      * @var list<string>
      */
-    private const ALLOWED_SCOPES = [
+    private const ALLOWED_JURISDICTIONS = [
         'Catalonia',
         'Spain',
         'European Union',
@@ -43,7 +44,13 @@ class OpenAINoticeAnalyzer
     /**
      * @return array<string, mixed>
      */
-    public function analyze(Notice $notice, string $outputLocale = 'en'): array
+    public function analyze(
+        Notice $notice,
+        Scope $scope,
+        string $outputLocale = 'en',
+        ?string $systemPromptPath = null,
+        ?string $userPromptPath = null,
+    ): array
     {
         $apiKey = (string) config('services.openai.api_key');
         if ($apiKey === '') {
@@ -55,9 +62,14 @@ class OpenAINoticeAnalyzer
         $maxCompletionTokens = (int) config('services.openai.max_completion_tokens', 16384);
         $maxInputChars = (int) config('services.openai.notice_analysis_input_max_chars', 35000);
         $normalizedLocale = $this->normalizeLocale($outputLocale);
+        [$resolvedSystemPromptPath, $resolvedUserPromptPath] = $this->resolvePromptPaths(
+            $scope,
+            $systemPromptPath,
+            $userPromptPath,
+        );
 
-        $systemPrompt = $this->loadPrompt((string) config('services.openai.notice_analysis_system_prompt', 'ai-prompts/notice-analysis-system.md'));
-        $userTemplate = $this->loadPrompt((string) config('services.openai.notice_analysis_user_prompt', 'ai-prompts/notice-analysis-user.md'));
+        $systemPrompt = $this->loadPrompt($resolvedSystemPromptPath);
+        $userTemplate = $this->loadPrompt($resolvedUserPromptPath);
 
         $userPrompt = $this->renderTemplate($userTemplate, [
             'notice_id' => (string) $notice->id,
@@ -70,6 +82,7 @@ class OpenAINoticeAnalyzer
             'notice_content' => $this->truncate((string) ($notice->content ?? ''), $maxInputChars),
             'output_locale' => $normalizedLocale,
             'output_language_name' => $this->localeLabel($normalizedLocale),
+            'scope_name' => $scope->name($normalizedLocale),
         ]);
 
         $payloads = [
@@ -172,6 +185,19 @@ class OpenAINoticeAnalyzer
     }
 
     /**
+     * @return array{0: string, 1: string}
+     */
+    private function resolvePromptPaths(Scope $scope, ?string $systemPromptPath, ?string $userPromptPath): array
+    {
+        $defaultPaths = $scope->analysisPromptRelativePaths();
+
+        return [
+            trim((string) $systemPromptPath) !== '' ? trim((string) $systemPromptPath) : $defaultPaths['system'],
+            trim((string) $userPromptPath) !== '' ? trim((string) $userPromptPath) : $defaultPaths['user'],
+        ];
+    }
+
+    /**
      * @param  array<string, string>  $variables
      */
     private function renderTemplate(string $template, array $variables): string
@@ -269,7 +295,7 @@ class OpenAINoticeAnalyzer
                 'decision' => 'ignore',
                 'reason' => $reason,
                 'vector' => null,
-                'scope' => null,
+                'jurisdiction' => null,
                 'title' => null,
                 'summary' => null,
                 'repealed_provisions' => null,
@@ -283,9 +309,9 @@ class OpenAINoticeAnalyzer
             throw new \RuntimeException("Invalid vector value: '{$vector}'.");
         }
 
-        $scope = trim((string) ($json['scope'] ?? ''));
-        if (! in_array($scope, self::ALLOWED_SCOPES, true)) {
-            throw new \RuntimeException("Invalid scope value: '{$scope}'.");
+        $jurisdiction = trim((string) ($json['jurisdiction'] ?? ''));
+        if (! in_array($jurisdiction, self::ALLOWED_JURISDICTIONS, true)) {
+            throw new \RuntimeException("Invalid jurisdiction value: '{$jurisdiction}'.");
         }
 
         $title = trim((string) ($json['title'] ?? ''));
@@ -312,7 +338,7 @@ class OpenAINoticeAnalyzer
             'decision' => 'send',
             'reason' => $reason,
             'vector' => $vector,
-            'scope' => $scope,
+            'jurisdiction' => $jurisdiction,
             'title' => $title,
             'summary' => $summary,
             'repealed_provisions' => $repealedProvisions,

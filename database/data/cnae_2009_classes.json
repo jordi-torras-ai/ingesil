@@ -1,0 +1,3147 @@
+[
+  {
+    "code": "0111",
+    "integrated_code": "A0111",
+    "title": "Cultivo de cereales (excepto arroz), leguminosas y semillas oleaginosas"
+  },
+  {
+    "code": "0112",
+    "integrated_code": "A0112",
+    "title": "Cultivo de arroz"
+  },
+  {
+    "code": "0113",
+    "integrated_code": "A0113",
+    "title": "Cultivo de hortalizas, raíces y tubérculos"
+  },
+  {
+    "code": "0114",
+    "integrated_code": "A0114",
+    "title": "Cultivo de caña de azúcar"
+  },
+  {
+    "code": "0115",
+    "integrated_code": "A0115",
+    "title": "Cultivo de tabaco"
+  },
+  {
+    "code": "0116",
+    "integrated_code": "A0116",
+    "title": "Cultivo de plantas para fibras textiles"
+  },
+  {
+    "code": "0119",
+    "integrated_code": "A0119",
+    "title": "Otros cultivos no perennes"
+  },
+  {
+    "code": "0121",
+    "integrated_code": "A0121",
+    "title": "Cultivo de la vid"
+  },
+  {
+    "code": "0122",
+    "integrated_code": "A0122",
+    "title": "Cultivo de frutos tropicales y subtropicales"
+  },
+  {
+    "code": "0123",
+    "integrated_code": "A0123",
+    "title": "Cultivo de cítricos"
+  },
+  {
+    "code": "0124",
+    "integrated_code": "A0124",
+    "title": "Cultivo de frutos con hueso y pepitas"
+  },
+  {
+    "code": "0125",
+    "integrated_code": "A0125",
+    "title": "Cultivo de otros árboles y arbustos frutales y frutos secos"
+  },
+  {
+    "code": "0126",
+    "integrated_code": "A0126",
+    "title": "Cultivo de frutos oleaginosos"
+  },
+  {
+    "code": "0127",
+    "integrated_code": "A0127",
+    "title": "Cultivo de plantas para bebidas"
+  },
+  {
+    "code": "0128",
+    "integrated_code": "A0128",
+    "title": "Cultivo de especias, plantas aromáticas, medicinales y farmacéuticas"
+  },
+  {
+    "code": "0129",
+    "integrated_code": "A0129",
+    "title": "Otros cultivos perennes"
+  },
+  {
+    "code": "0130",
+    "integrated_code": "A0130",
+    "title": "Propagación de plantas"
+  },
+  {
+    "code": "0141",
+    "integrated_code": "A0141",
+    "title": "Explotación de ganado bovino para la producción de leche"
+  },
+  {
+    "code": "0142",
+    "integrated_code": "A0142",
+    "title": "Explotación de otro ganado bovino y búfalos"
+  },
+  {
+    "code": "0143",
+    "integrated_code": "A0143",
+    "title": "Explotación de caballos y otros equinos"
+  },
+  {
+    "code": "0144",
+    "integrated_code": "A0144",
+    "title": "Explotación de camellos y otros camélidos"
+  },
+  {
+    "code": "0145",
+    "integrated_code": "A0145",
+    "title": "Explotación de ganado ovino y caprino"
+  },
+  {
+    "code": "0146",
+    "integrated_code": "A0146",
+    "title": "Explotación de ganado porcino"
+  },
+  {
+    "code": "0147",
+    "integrated_code": "A0147",
+    "title": "Avicultura"
+  },
+  {
+    "code": "0149",
+    "integrated_code": "A0149",
+    "title": "Otras explotaciones de ganado"
+  },
+  {
+    "code": "0150",
+    "integrated_code": "A0150",
+    "title": "Producción agrícola combinada con la producción ganadera"
+  },
+  {
+    "code": "0161",
+    "integrated_code": "A0161",
+    "title": "Actividades de apoyo a la agricultura"
+  },
+  {
+    "code": "0162",
+    "integrated_code": "A0162",
+    "title": "Actividades de apoyo a la ganadería"
+  },
+  {
+    "code": "0163",
+    "integrated_code": "A0163",
+    "title": "Actividades de preparación posterior a la cosecha"
+  },
+  {
+    "code": "0164",
+    "integrated_code": "A0164",
+    "title": "Tratamiento de semillas para reproducción"
+  },
+  {
+    "code": "0170",
+    "integrated_code": "A0170",
+    "title": "Caza, captura de animales y servicios relacionados con las mismas"
+  },
+  {
+    "code": "0210",
+    "integrated_code": "A0210",
+    "title": "Silvicultura y otras actividades forestales"
+  },
+  {
+    "code": "0220",
+    "integrated_code": "A0220",
+    "title": "Explotación de la madera"
+  },
+  {
+    "code": "0230",
+    "integrated_code": "A0230",
+    "title": "Recolección de productos silvestres, excepto madera"
+  },
+  {
+    "code": "0240",
+    "integrated_code": "A0240",
+    "title": "Servicios de apoyo a la silvicultura"
+  },
+  {
+    "code": "0311",
+    "integrated_code": "A0311",
+    "title": "Pesca marina"
+  },
+  {
+    "code": "0312",
+    "integrated_code": "A0312",
+    "title": "Pesca en agua dulce"
+  },
+  {
+    "code": "0321",
+    "integrated_code": "A0321",
+    "title": "Acuicultura marina"
+  },
+  {
+    "code": "0322",
+    "integrated_code": "A0322",
+    "title": "Acuicultura en agua dulce"
+  },
+  {
+    "code": "0510",
+    "integrated_code": "B0510",
+    "title": "Extracción de antracita y hulla"
+  },
+  {
+    "code": "0520",
+    "integrated_code": "B0520",
+    "title": "Extracción de lignito"
+  },
+  {
+    "code": "0610",
+    "integrated_code": "B0610",
+    "title": "Extracción de crudo de petróleo"
+  },
+  {
+    "code": "0620",
+    "integrated_code": "B0620",
+    "title": "Extracción de gas natural"
+  },
+  {
+    "code": "0710",
+    "integrated_code": "B0710",
+    "title": "Extracción de minerales de hierro"
+  },
+  {
+    "code": "0721",
+    "integrated_code": "B0721",
+    "title": "Extracción de minerales de uranio y torio"
+  },
+  {
+    "code": "0729",
+    "integrated_code": "B0729",
+    "title": "Extracción de otros minerales metálicos no férreos"
+  },
+  {
+    "code": "0811",
+    "integrated_code": "B0811",
+    "title": "Extracción de piedra ornamental y para la construcción, piedra caliza, yeso, creta y pizarra"
+  },
+  {
+    "code": "0812",
+    "integrated_code": "B0812",
+    "title": "Extracción de gravas y arenas; extracción de arcilla y caolín"
+  },
+  {
+    "code": "0891",
+    "integrated_code": "B0891",
+    "title": "Extracción de minerales para productos químicos y fertilizantes"
+  },
+  {
+    "code": "0892",
+    "integrated_code": "B0892",
+    "title": "Extracción de turba"
+  },
+  {
+    "code": "0893",
+    "integrated_code": "B0893",
+    "title": "Extracción de sal"
+  },
+  {
+    "code": "0899",
+    "integrated_code": "B0899",
+    "title": "Otras industrias extractivas n.c.o.p."
+  },
+  {
+    "code": "0910",
+    "integrated_code": "B0910",
+    "title": "Actividades de apoyo a la extracción de petróleo y gas natural"
+  },
+  {
+    "code": "0990",
+    "integrated_code": "B0990",
+    "title": "Actividades de apoyo a otras industrias extractivas"
+  },
+  {
+    "code": "1011",
+    "integrated_code": "C1011",
+    "title": "Procesado y conservación de carne"
+  },
+  {
+    "code": "1012",
+    "integrated_code": "C1012",
+    "title": "Procesado y conservación de volatería"
+  },
+  {
+    "code": "1013",
+    "integrated_code": "C1013",
+    "title": "Elaboración de productos cárnicos y de volatería"
+  },
+  {
+    "code": "1021",
+    "integrated_code": "C1021",
+    "title": "Procesado de pescados, crustáceos y moluscos"
+  },
+  {
+    "code": "1022",
+    "integrated_code": "C1022",
+    "title": "Fabricación de conservas de pescado"
+  },
+  {
+    "code": "1031",
+    "integrated_code": "C1031",
+    "title": "Procesado y conservación de patatas"
+  },
+  {
+    "code": "1032",
+    "integrated_code": "C1032",
+    "title": "Elaboración de zumos de frutas y hortalizas"
+  },
+  {
+    "code": "1039",
+    "integrated_code": "C1039",
+    "title": "Otro procesado y conservación de frutas y hortalizas"
+  },
+  {
+    "code": "1042",
+    "integrated_code": "C1042",
+    "title": "Fabricación de margarina y grasas comestibles similares"
+  },
+  {
+    "code": "1043",
+    "integrated_code": "C1043",
+    "title": "Fabricación de aceite de oliva"
+  },
+  {
+    "code": "1044",
+    "integrated_code": "C1044",
+    "title": "Fabricación de otros aceites y grasas"
+  },
+  {
+    "code": "1052",
+    "integrated_code": "C1052",
+    "title": "Elaboración de helados"
+  },
+  {
+    "code": "1053",
+    "integrated_code": "C1053",
+    "title": "Fabricación de quesos"
+  },
+  {
+    "code": "1054",
+    "integrated_code": "C1054",
+    "title": "Preparación de leche y otros productos lácteos"
+  },
+  {
+    "code": "1061",
+    "integrated_code": "C1061",
+    "title": "Fabricación de productos de molinería"
+  },
+  {
+    "code": "1062",
+    "integrated_code": "C1062",
+    "title": "Fabricación de almidones y productos amiláceos"
+  },
+  {
+    "code": "1071",
+    "integrated_code": "C1071",
+    "title": "Fabricación de pan y de productos frescos de panadería y pastelería"
+  },
+  {
+    "code": "1072",
+    "integrated_code": "C1072",
+    "title": "Fabricación de galletas y productos de panadería y pastelería de larga duración"
+  },
+  {
+    "code": "1073",
+    "integrated_code": "C1073",
+    "title": "Fabricación de pastas alimenticias, cuscús y productos similares"
+  },
+  {
+    "code": "1081",
+    "integrated_code": "C1081",
+    "title": "Fabricación de azúcar"
+  },
+  {
+    "code": "1082",
+    "integrated_code": "C1082",
+    "title": "Fabricación de cacao, chocolate y productos de confitería"
+  },
+  {
+    "code": "1083",
+    "integrated_code": "C1083",
+    "title": "Elaboración de café, té e infusiones"
+  },
+  {
+    "code": "1084",
+    "integrated_code": "C1084",
+    "title": "Elaboración de especias, salsas y condimentos"
+  },
+  {
+    "code": "1085",
+    "integrated_code": "C1085",
+    "title": "Elaboración de platos y comidas preparados"
+  },
+  {
+    "code": "1086",
+    "integrated_code": "C1086",
+    "title": "Elaboración de preparados alimenticios homogeneizados y alimentos dietéticos"
+  },
+  {
+    "code": "1089",
+    "integrated_code": "C1089",
+    "title": "Elaboración de otros productos alimenticios n.c.o.p."
+  },
+  {
+    "code": "1091",
+    "integrated_code": "C1091",
+    "title": "Fabricación de productos para la alimentación de animales de granja"
+  },
+  {
+    "code": "1092",
+    "integrated_code": "C1092",
+    "title": "Fabricación de productos para la alimentación de animales de compañía"
+  },
+  {
+    "code": "1101",
+    "integrated_code": "C1101",
+    "title": "Destilación, rectificación y mezcla de bebidas alcohólicas"
+  },
+  {
+    "code": "1102",
+    "integrated_code": "C1102",
+    "title": "Elaboración de vinos"
+  },
+  {
+    "code": "1103",
+    "integrated_code": "C1103",
+    "title": "Elaboración de sidra y otras bebidas fermentadas a partir de frutas"
+  },
+  {
+    "code": "1104",
+    "integrated_code": "C1104",
+    "title": "Elaboración de otras bebidas no destiladas, procedentes de la fermentación"
+  },
+  {
+    "code": "1105",
+    "integrated_code": "C1105",
+    "title": "Fabricación de cerveza"
+  },
+  {
+    "code": "1106",
+    "integrated_code": "C1106",
+    "title": "Fabricación de malta"
+  },
+  {
+    "code": "1107",
+    "integrated_code": "C1107",
+    "title": "Fabricación de bebidas no alcohólicas; producción de aguas minerales y otras aguas embotelladas"
+  },
+  {
+    "code": "1200",
+    "integrated_code": "C1200",
+    "title": "Industria del tabaco"
+  },
+  {
+    "code": "1310",
+    "integrated_code": "C1310",
+    "title": "Preparación e hilado de fibras textiles"
+  },
+  {
+    "code": "1320",
+    "integrated_code": "C1320",
+    "title": "Fabricación de tejidos textiles"
+  },
+  {
+    "code": "1330",
+    "integrated_code": "C1330",
+    "title": "Acabado de textiles"
+  },
+  {
+    "code": "1391",
+    "integrated_code": "C1391",
+    "title": "Fabricación de tejidos de punto"
+  },
+  {
+    "code": "1392",
+    "integrated_code": "C1392",
+    "title": "Fabricación de artículos confeccionados con textiles, excepto prendas de vestir"
+  },
+  {
+    "code": "1393",
+    "integrated_code": "C1393",
+    "title": "Fabricación de alfombras y moquetas"
+  },
+  {
+    "code": "1394",
+    "integrated_code": "C1394",
+    "title": "Fabricación de cuerdas, cordeles, bramantes y redes"
+  },
+  {
+    "code": "1395",
+    "integrated_code": "C1395",
+    "title": "Fabricación de telas no tejidas y artículos confeccionados con ellas, excepto prendas de vestir"
+  },
+  {
+    "code": "1396",
+    "integrated_code": "C1396",
+    "title": "Fabricación de otros productos textiles de uso técnico e industrial"
+  },
+  {
+    "code": "1399",
+    "integrated_code": "C1399",
+    "title": "Fabricación de otros productos textiles n.c.o.p."
+  },
+  {
+    "code": "1411",
+    "integrated_code": "C1411",
+    "title": "Confección de prendas de vestir de cuero"
+  },
+  {
+    "code": "1412",
+    "integrated_code": "C1412",
+    "title": "Confección de ropa de trabajo"
+  },
+  {
+    "code": "1413",
+    "integrated_code": "C1413",
+    "title": "Confección de otras prendas de vestir exteriores"
+  },
+  {
+    "code": "1414",
+    "integrated_code": "C1414",
+    "title": "Confección de ropa interior"
+  },
+  {
+    "code": "1419",
+    "integrated_code": "C1419",
+    "title": "Confección de otras prendas de vestir y accesorios"
+  },
+  {
+    "code": "1420",
+    "integrated_code": "C1420",
+    "title": "Fabricación de artículos de peletería"
+  },
+  {
+    "code": "1431",
+    "integrated_code": "C1431",
+    "title": "Confección de calcetería"
+  },
+  {
+    "code": "1439",
+    "integrated_code": "C1439",
+    "title": "Confección de otras prendas de vestir de punto"
+  },
+  {
+    "code": "1511",
+    "integrated_code": "C1511",
+    "title": "Preparación, curtido y acabado del cuero; preparación y teñido de pieles"
+  },
+  {
+    "code": "1512",
+    "integrated_code": "C1512",
+    "title": "Fabricación de artículos de marroquinería, viaje y de guarnicionería y talabartería"
+  },
+  {
+    "code": "1520",
+    "integrated_code": "C1520",
+    "title": "Fabricación de calzado"
+  },
+  {
+    "code": "1610",
+    "integrated_code": "C1610",
+    "title": "Aserrado y cepillado de la madera"
+  },
+  {
+    "code": "1621",
+    "integrated_code": "C1621",
+    "title": "Fabricación de chapas y tableros de madera"
+  },
+  {
+    "code": "1622",
+    "integrated_code": "C1622",
+    "title": "Fabricación de suelos de madera ensamblados"
+  },
+  {
+    "code": "1623",
+    "integrated_code": "C1623",
+    "title": "Fabricación de otras estructuras de madera y piezas de carpintería y ebanistería para la construcción"
+  },
+  {
+    "code": "1624",
+    "integrated_code": "C1624",
+    "title": "Fabricación de envases y embalajes de madera"
+  },
+  {
+    "code": "1629",
+    "integrated_code": "C1629",
+    "title": "Fabricación de otros productos de madera; artículos de corcho, cestería y espartería"
+  },
+  {
+    "code": "1711",
+    "integrated_code": "C1711",
+    "title": "Fabricación de pasta papelera"
+  },
+  {
+    "code": "1712",
+    "integrated_code": "C1712",
+    "title": "Fabricación de papel y cartón"
+  },
+  {
+    "code": "1721",
+    "integrated_code": "C1721",
+    "title": "Fabricación de papel y cartón ondulados; fabricación de envases y embalajes de papel y cartón"
+  },
+  {
+    "code": "1722",
+    "integrated_code": "C1722",
+    "title": "Fabricación de artículos de papel y cartón para uso doméstico, sanitario e higiénico"
+  },
+  {
+    "code": "1723",
+    "integrated_code": "C1723",
+    "title": "Fabricación de artículos de papelería"
+  },
+  {
+    "code": "1724",
+    "integrated_code": "C1724",
+    "title": "Fabricación de papeles pintados"
+  },
+  {
+    "code": "1729",
+    "integrated_code": "C1729",
+    "title": "Fabricación de otros artículos de papel y cartón"
+  },
+  {
+    "code": "1811",
+    "integrated_code": "C1811",
+    "title": "Artes gráficas y servicios relacionados con las mismas"
+  },
+  {
+    "code": "1812",
+    "integrated_code": "C1812",
+    "title": "Otras actividades de impresión y artes gráficas"
+  },
+  {
+    "code": "1813",
+    "integrated_code": "C1813",
+    "title": "Servicios de preimpresión y preparación de soportes"
+  },
+  {
+    "code": "1814",
+    "integrated_code": "C1814",
+    "title": "Encuadernación y servicios relacionados con la misma"
+  },
+  {
+    "code": "1820",
+    "integrated_code": "C1820",
+    "title": "Reproducción de soportes grabados"
+  },
+  {
+    "code": "1910",
+    "integrated_code": "C1910",
+    "title": "Coquerías"
+  },
+  {
+    "code": "1920",
+    "integrated_code": "C1920",
+    "title": "Refino de petróleo"
+  },
+  {
+    "code": "2011",
+    "integrated_code": "C2011",
+    "title": "Fabricación de gases industriales"
+  },
+  {
+    "code": "2012",
+    "integrated_code": "C2012",
+    "title": "Fabricación de colorantes y pigmentos"
+  },
+  {
+    "code": "2013",
+    "integrated_code": "C2013",
+    "title": "Fabricación de otros productos básicos de química inorgánica"
+  },
+  {
+    "code": "2014",
+    "integrated_code": "C2014",
+    "title": "Fabricación de otros productos básicos de química orgánica"
+  },
+  {
+    "code": "2015",
+    "integrated_code": "C2015",
+    "title": "Fabricación de fertilizantes y compuestos nitrogenados"
+  },
+  {
+    "code": "2016",
+    "integrated_code": "C2016",
+    "title": "Fabricación de plásticos en formas primarias"
+  },
+  {
+    "code": "2017",
+    "integrated_code": "C2017",
+    "title": "Fabricación de caucho sintético en formas primarias"
+  },
+  {
+    "code": "2020",
+    "integrated_code": "C2020",
+    "title": "Fabricación de pesticidas y otros productos agroquímicos"
+  },
+  {
+    "code": "2030",
+    "integrated_code": "C2030",
+    "title": "Fabricación de pinturas, barnices y revestimientos similares; tintas de imprenta y masillas"
+  },
+  {
+    "code": "2041",
+    "integrated_code": "C2041",
+    "title": "Fabricación de jabones, detergentes y otros artículos de limpieza y abrillantamiento"
+  },
+  {
+    "code": "2042",
+    "integrated_code": "C2042",
+    "title": "Fabricación de perfumes y cosméticos"
+  },
+  {
+    "code": "2051",
+    "integrated_code": "C2051",
+    "title": "Fabricación de explosivos"
+  },
+  {
+    "code": "2052",
+    "integrated_code": "C2052",
+    "title": "Fabricación de colas"
+  },
+  {
+    "code": "2053",
+    "integrated_code": "C2053",
+    "title": "Fabricación de aceites esenciales"
+  },
+  {
+    "code": "2059",
+    "integrated_code": "C2059",
+    "title": "Fabricación de otros productos químicos n.c.o.p."
+  },
+  {
+    "code": "2060",
+    "integrated_code": "C2060",
+    "title": "Fabricación de fibras artificiales y sintéticas"
+  },
+  {
+    "code": "2110",
+    "integrated_code": "C2110",
+    "title": "Fabricación de productos farmacéuticos de base"
+  },
+  {
+    "code": "2120",
+    "integrated_code": "C2120",
+    "title": "Fabricación de especialidades farmacéuticas"
+  },
+  {
+    "code": "2211",
+    "integrated_code": "C2211",
+    "title": "Fabricación de neumáticos y cámaras de caucho; reconstrucción y recauchutado de neumáticos"
+  },
+  {
+    "code": "2219",
+    "integrated_code": "C2219",
+    "title": "Fabricación de otros productos de caucho"
+  },
+  {
+    "code": "2221",
+    "integrated_code": "C2221",
+    "title": "Fabricación de placas, hojas, tubos y perfiles de plástico"
+  },
+  {
+    "code": "2222",
+    "integrated_code": "C2222",
+    "title": "Fabricación de envases y embalajes de plástico"
+  },
+  {
+    "code": "2223",
+    "integrated_code": "C2223",
+    "title": "Fabricación de productos de plástico para la construcción"
+  },
+  {
+    "code": "2229",
+    "integrated_code": "C2229",
+    "title": "Fabricación de otros productos de plástico"
+  },
+  {
+    "code": "2311",
+    "integrated_code": "C2311",
+    "title": "Fabricación de vidrio plano"
+  },
+  {
+    "code": "2312",
+    "integrated_code": "C2312",
+    "title": "Manipulado y transformación de vidrio plano"
+  },
+  {
+    "code": "2313",
+    "integrated_code": "C2313",
+    "title": "Fabricación de vidrio hueco"
+  },
+  {
+    "code": "2314",
+    "integrated_code": "C2314",
+    "title": "Fabricación de fibra de vidrio"
+  },
+  {
+    "code": "2319",
+    "integrated_code": "C2319",
+    "title": "Fabricación y manipulado de otro vidrio, incluido el vidrio técnico"
+  },
+  {
+    "code": "2320",
+    "integrated_code": "C2320",
+    "title": "Fabricación de productos cerámicos refractarios"
+  },
+  {
+    "code": "2331",
+    "integrated_code": "C2331",
+    "title": "Fabricación de azulejos y baldosas de cerámica"
+  },
+  {
+    "code": "2332",
+    "integrated_code": "C2332",
+    "title": "Fabricación de ladrillos, tejas y productos de tierras cocidas para la construcción"
+  },
+  {
+    "code": "2341",
+    "integrated_code": "C2341",
+    "title": "Fabricación de artículos cerámicos de uso doméstico y ornamental"
+  },
+  {
+    "code": "2342",
+    "integrated_code": "C2342",
+    "title": "Fabricación de aparatos sanitarios cerámicos"
+  },
+  {
+    "code": "2343",
+    "integrated_code": "C2343",
+    "title": "Fabricación de aisladores y piezas aislantes de material cerámico"
+  },
+  {
+    "code": "2344",
+    "integrated_code": "C2344",
+    "title": "Fabricación de otros productos cerámicos de uso técnico"
+  },
+  {
+    "code": "2349",
+    "integrated_code": "C2349",
+    "title": "Fabricación de otros productos cerámicos"
+  },
+  {
+    "code": "2351",
+    "integrated_code": "C2351",
+    "title": "Fabricación de cemento"
+  },
+  {
+    "code": "2352",
+    "integrated_code": "C2352",
+    "title": "Fabricación de cal y yeso"
+  },
+  {
+    "code": "2361",
+    "integrated_code": "C2361",
+    "title": "Fabricación de elementos de hormigón para la construcción"
+  },
+  {
+    "code": "2362",
+    "integrated_code": "C2362",
+    "title": "Fabricación de elementos de yeso para la construcción"
+  },
+  {
+    "code": "2363",
+    "integrated_code": "C2363",
+    "title": "Fabricación de hormigón fresco"
+  },
+  {
+    "code": "2364",
+    "integrated_code": "C2364",
+    "title": "Fabricación de mortero"
+  },
+  {
+    "code": "2365",
+    "integrated_code": "C2365",
+    "title": "Fabricación de fibrocemento"
+  },
+  {
+    "code": "2369",
+    "integrated_code": "C2369",
+    "title": "Fabricación de otros productos de hormigón, yeso y cemento"
+  },
+  {
+    "code": "2370",
+    "integrated_code": "C2370",
+    "title": "Corte, tallado y acabado de la piedra"
+  },
+  {
+    "code": "2391",
+    "integrated_code": "C2391",
+    "title": "Fabricación de productos abrasivos"
+  },
+  {
+    "code": "2399",
+    "integrated_code": "C2399",
+    "title": "Fabricación de otros productos minerales no metálicos n.c.o.p."
+  },
+  {
+    "code": "2410",
+    "integrated_code": "C2410",
+    "title": "Fabricación de productos básicos de hierro, acero y ferroaleaciones"
+  },
+  {
+    "code": "2420",
+    "integrated_code": "C2420",
+    "title": "Fabricación de tubos, tuberías, perfiles huecos y sus accesorios, de acero"
+  },
+  {
+    "code": "2431",
+    "integrated_code": "C2431",
+    "title": "Estirado en frío"
+  },
+  {
+    "code": "2432",
+    "integrated_code": "C2432",
+    "title": "Laminación en frío"
+  },
+  {
+    "code": "2433",
+    "integrated_code": "C2433",
+    "title": "Producción de perfiles en frío por conformación con plegado"
+  },
+  {
+    "code": "2434",
+    "integrated_code": "C2434",
+    "title": "Trefilado en frío"
+  },
+  {
+    "code": "2441",
+    "integrated_code": "C2441",
+    "title": "Producción de metales preciosos"
+  },
+  {
+    "code": "2442",
+    "integrated_code": "C2442",
+    "title": "Producción de aluminio"
+  },
+  {
+    "code": "2443",
+    "integrated_code": "C2443",
+    "title": "Producción de plomo, zinc y estaño"
+  },
+  {
+    "code": "2444",
+    "integrated_code": "C2444",
+    "title": "Producción de cobre"
+  },
+  {
+    "code": "2445",
+    "integrated_code": "C2445",
+    "title": "Producción de otros metales no férreos"
+  },
+  {
+    "code": "2446",
+    "integrated_code": "C2446",
+    "title": "Procesamiento de combustibles nucleares"
+  },
+  {
+    "code": "2451",
+    "integrated_code": "C2451",
+    "title": "Fundición de hierro"
+  },
+  {
+    "code": "2452",
+    "integrated_code": "C2452",
+    "title": "Fundición de acero"
+  },
+  {
+    "code": "2453",
+    "integrated_code": "C2453",
+    "title": "Fundición de metales ligeros"
+  },
+  {
+    "code": "2454",
+    "integrated_code": "C2454",
+    "title": "Fundición de otros metales no férreos"
+  },
+  {
+    "code": "2511",
+    "integrated_code": "C2511",
+    "title": "Fabricación de estructuras metálicas y sus componentes"
+  },
+  {
+    "code": "2512",
+    "integrated_code": "C2512",
+    "title": "Fabricación de carpintería metálica"
+  },
+  {
+    "code": "2521",
+    "integrated_code": "C2521",
+    "title": "Fabricación de radiadores y calderas para calefacción central"
+  },
+  {
+    "code": "2529",
+    "integrated_code": "C2529",
+    "title": "Fabricación de otras cisternas, grandes depósitos y contenedores de metal"
+  },
+  {
+    "code": "2530",
+    "integrated_code": "C2530",
+    "title": "Fabricación de generadores de vapor, excepto calderas de calefacción central"
+  },
+  {
+    "code": "2540",
+    "integrated_code": "C2540",
+    "title": "Fabricación de armas y municiones"
+  },
+  {
+    "code": "2550",
+    "integrated_code": "C2550",
+    "title": "Forja, estampación y embutición de metales; metalurgia de polvos"
+  },
+  {
+    "code": "2561",
+    "integrated_code": "C2561",
+    "title": "Tratamiento y revestimiento de metales"
+  },
+  {
+    "code": "2562",
+    "integrated_code": "C2562",
+    "title": "Ingeniería mecánica por cuenta de terceros"
+  },
+  {
+    "code": "2571",
+    "integrated_code": "C2571",
+    "title": "Fabricación de artículos de cuchillería y cubertería"
+  },
+  {
+    "code": "2572",
+    "integrated_code": "C2572",
+    "title": "Fabricación de cerraduras y herrajes"
+  },
+  {
+    "code": "2573",
+    "integrated_code": "C2573",
+    "title": "Fabricación de herramientas"
+  },
+  {
+    "code": "2591",
+    "integrated_code": "C2591",
+    "title": "Fabricación de bidones y toneles de hierro o acero"
+  },
+  {
+    "code": "2592",
+    "integrated_code": "C2592",
+    "title": "Fabricación de envases y embalajes metálicos ligeros"
+  },
+  {
+    "code": "2593",
+    "integrated_code": "C2593",
+    "title": "Fabricación de productos de alambre, cadenas y muelles"
+  },
+  {
+    "code": "2594",
+    "integrated_code": "C2594",
+    "title": "Fabricación de pernos y productos de tornillería"
+  },
+  {
+    "code": "2599",
+    "integrated_code": "C2599",
+    "title": "Fabricación de otros productos metálicos n.c.o.p."
+  },
+  {
+    "code": "2611",
+    "integrated_code": "C2611",
+    "title": "Fabricación de componentes electrónicos"
+  },
+  {
+    "code": "2612",
+    "integrated_code": "C2612",
+    "title": "Fabricación de circuitos impresos ensamblados"
+  },
+  {
+    "code": "2620",
+    "integrated_code": "C2620",
+    "title": "Fabricación de ordenadores y equipos periféricos"
+  },
+  {
+    "code": "2630",
+    "integrated_code": "C2630",
+    "title": "Fabricación de equipos de telecomunicaciones"
+  },
+  {
+    "code": "2640",
+    "integrated_code": "C2640",
+    "title": "Fabricación de productos electrónicos de consumo"
+  },
+  {
+    "code": "2651",
+    "integrated_code": "C2651",
+    "title": "Fabricación de instrumentos y aparatos de medida, verificación y navegación"
+  },
+  {
+    "code": "2652",
+    "integrated_code": "C2652",
+    "title": "Fabricación de relojes"
+  },
+  {
+    "code": "2660",
+    "integrated_code": "C2660",
+    "title": "Fabricación de equipos de radiación, electromédicos y electroterapéuticos"
+  },
+  {
+    "code": "2670",
+    "integrated_code": "C2670",
+    "title": "Fabricación de instrumentos de óptica y equipo fotográfico"
+  },
+  {
+    "code": "2680",
+    "integrated_code": "C2680",
+    "title": "Fabricación de soportes magnéticos y ópticos"
+  },
+  {
+    "code": "2711",
+    "integrated_code": "C2711",
+    "title": "Fabricación de motores, generadores y transformadores eléctricos"
+  },
+  {
+    "code": "2712",
+    "integrated_code": "C2712",
+    "title": "Fabricación de aparatos de distribución y control eléctrico"
+  },
+  {
+    "code": "2720",
+    "integrated_code": "C2720",
+    "title": "Fabricación de pilas y acumuladores eléctricos"
+  },
+  {
+    "code": "2731",
+    "integrated_code": "C2731",
+    "title": "Fabricación de cables de fibra óptica"
+  },
+  {
+    "code": "2732",
+    "integrated_code": "C2732",
+    "title": "Fabricación de otros hilos y cables electrónicos y eléctricos"
+  },
+  {
+    "code": "2733",
+    "integrated_code": "C2733",
+    "title": "Fabricación de dispositivos de cableado"
+  },
+  {
+    "code": "2740",
+    "integrated_code": "C2740",
+    "title": "Fabricación de lámparas y aparatos eléctricos de iluminación"
+  },
+  {
+    "code": "2751",
+    "integrated_code": "C2751",
+    "title": "Fabricación de electrodomésticos"
+  },
+  {
+    "code": "2752",
+    "integrated_code": "C2752",
+    "title": "Fabricación de aparatos domésticos no eléctricos"
+  },
+  {
+    "code": "2790",
+    "integrated_code": "C2790",
+    "title": "Fabricación de otro material y equipo eléctrico"
+  },
+  {
+    "code": "2811",
+    "integrated_code": "C2811",
+    "title": "Fabricación de motores y turbinas, excepto los destinados a aeronaves, vehículos automóviles y ciclomotores"
+  },
+  {
+    "code": "2812",
+    "integrated_code": "C2812",
+    "title": "Fabricación de equipos de transmisión hidráulica y neumática"
+  },
+  {
+    "code": "2813",
+    "integrated_code": "C2813",
+    "title": "Fabricación de otras bombas y compresores"
+  },
+  {
+    "code": "2814",
+    "integrated_code": "C2814",
+    "title": "Fabricación de otra grifería y válvulas"
+  },
+  {
+    "code": "2815",
+    "integrated_code": "C2815",
+    "title": "Fabricación de cojinetes, engranajes y órganos mecánicos de transmisión"
+  },
+  {
+    "code": "2821",
+    "integrated_code": "C2821",
+    "title": "Fabricación de hornos y quemadores"
+  },
+  {
+    "code": "2822",
+    "integrated_code": "C2822",
+    "title": "Fabricación de maquinaria de elevación y manipulación"
+  },
+  {
+    "code": "2823",
+    "integrated_code": "C2823",
+    "title": "Fabricación de máquinas y equipos de oficina, excepto equipos informáticos"
+  },
+  {
+    "code": "2824",
+    "integrated_code": "C2824",
+    "title": "Fabricación de herramientas eléctricas manuales"
+  },
+  {
+    "code": "2825",
+    "integrated_code": "C2825",
+    "title": "Fabricación de maquinaria de ventilación y refrigeración no doméstica"
+  },
+  {
+    "code": "2829",
+    "integrated_code": "C2829",
+    "title": "Fabricación de otra maquinaria de uso general n.c.o.p."
+  },
+  {
+    "code": "2830",
+    "integrated_code": "C2830",
+    "title": "Fabricación de maquinaria agraria y forestal"
+  },
+  {
+    "code": "2841",
+    "integrated_code": "C2841",
+    "title": "Fabricación de máquinas herramienta para trabajar el metal"
+  },
+  {
+    "code": "2849",
+    "integrated_code": "C2849",
+    "title": "Fabricación de otras máquinas herramienta"
+  },
+  {
+    "code": "2891",
+    "integrated_code": "C2891",
+    "title": "Fabricación de maquinaria para la industria metalúrgica"
+  },
+  {
+    "code": "2892",
+    "integrated_code": "C2892",
+    "title": "Fabricación de maquinaria para las industrias extractivas y de la construcción"
+  },
+  {
+    "code": "2893",
+    "integrated_code": "C2893",
+    "title": "Fabricación de maquinaria para la industria de la alimentación, bebidas y tabaco"
+  },
+  {
+    "code": "2894",
+    "integrated_code": "C2894",
+    "title": "Fabricación de maquinaria para las industrias textil, de la confección y del cuero"
+  },
+  {
+    "code": "2895",
+    "integrated_code": "C2895",
+    "title": "Fabricación de maquinaria para la industria del papel y del cartón"
+  },
+  {
+    "code": "2896",
+    "integrated_code": "C2896",
+    "title": "Fabricación de maquinaria para la industria del plástico y el caucho"
+  },
+  {
+    "code": "2899",
+    "integrated_code": "C2899",
+    "title": "Fabricación de otra maquinaria para usos específicos n.c.o.p."
+  },
+  {
+    "code": "2910",
+    "integrated_code": "C2910",
+    "title": "Fabricación de vehículos de motor"
+  },
+  {
+    "code": "2920",
+    "integrated_code": "C2920",
+    "title": "Fabricación de carrocerías para vehículos de motor; fabricación de remolques y semirremolques"
+  },
+  {
+    "code": "2931",
+    "integrated_code": "C2931",
+    "title": "Fabricación de equipos eléctricos y electrónicos para vehículos de motor"
+  },
+  {
+    "code": "2932",
+    "integrated_code": "C2932",
+    "title": "Fabricación de otros componentes, piezas y accesorios para vehículos de motor"
+  },
+  {
+    "code": "3011",
+    "integrated_code": "C3011",
+    "title": "Construcción de barcos y estructuras flotantes"
+  },
+  {
+    "code": "3012",
+    "integrated_code": "C3012",
+    "title": "Construcción de embarcaciones de recreo y deporte"
+  },
+  {
+    "code": "3020",
+    "integrated_code": "C3020",
+    "title": "Fabricación de locomotoras y material ferroviario"
+  },
+  {
+    "code": "3030",
+    "integrated_code": "C3030",
+    "title": "Construcción aeronáutica y espacial y su maquinaria"
+  },
+  {
+    "code": "3040",
+    "integrated_code": "C3040",
+    "title": "Fabricación de vehículos militares de combate"
+  },
+  {
+    "code": "3091",
+    "integrated_code": "C3091",
+    "title": "Fabricación de motocicletas"
+  },
+  {
+    "code": "3092",
+    "integrated_code": "C3092",
+    "title": "Fabricación de bicicletas y de vehículos para personas con discapacidad"
+  },
+  {
+    "code": "3099",
+    "integrated_code": "C3099",
+    "title": "Fabricación de otro material de transporte n.c.o.p."
+  },
+  {
+    "code": "3101",
+    "integrated_code": "C3101",
+    "title": "Fabricación de muebles de oficina y de establecimientos comerciales"
+  },
+  {
+    "code": "3102",
+    "integrated_code": "C3102",
+    "title": "Fabricación de muebles de cocina"
+  },
+  {
+    "code": "3103",
+    "integrated_code": "C3103",
+    "title": "Fabricación de colchones"
+  },
+  {
+    "code": "3109",
+    "integrated_code": "C3109",
+    "title": "Fabricación de otros muebles"
+  },
+  {
+    "code": "3211",
+    "integrated_code": "C3211",
+    "title": "Fabricación de monedas"
+  },
+  {
+    "code": "3212",
+    "integrated_code": "C3212",
+    "title": "Fabricación de artículos de joyería y artículos similares"
+  },
+  {
+    "code": "3213",
+    "integrated_code": "C3213",
+    "title": "Fabricación de artículos de bisutería y artículos similares"
+  },
+  {
+    "code": "3220",
+    "integrated_code": "C3220",
+    "title": "Fabricación de instrumentos musicales"
+  },
+  {
+    "code": "3230",
+    "integrated_code": "C3230",
+    "title": "Fabricación de artículos de deporte"
+  },
+  {
+    "code": "3240",
+    "integrated_code": "C3240",
+    "title": "Fabricación de juegos y juguetes"
+  },
+  {
+    "code": "3250",
+    "integrated_code": "C3250",
+    "title": "Fabricación de instrumentos y suministros médicos y odontológicos"
+  },
+  {
+    "code": "3291",
+    "integrated_code": "C3291",
+    "title": "Fabricación de escobas, brochas y cepillos"
+  },
+  {
+    "code": "3299",
+    "integrated_code": "C3299",
+    "title": "Otras industrias manufactureras n.c.o.p."
+  },
+  {
+    "code": "3311",
+    "integrated_code": "C3311",
+    "title": "Reparación de productos metálicos"
+  },
+  {
+    "code": "3312",
+    "integrated_code": "C3312",
+    "title": "Reparación de maquinaria"
+  },
+  {
+    "code": "3313",
+    "integrated_code": "C3313",
+    "title": "Reparación de equipos electrónicos y ópticos"
+  },
+  {
+    "code": "3314",
+    "integrated_code": "C3314",
+    "title": "Reparación de equipos eléctricos"
+  },
+  {
+    "code": "3315",
+    "integrated_code": "C3315",
+    "title": "Reparación y mantenimiento naval"
+  },
+  {
+    "code": "3316",
+    "integrated_code": "C3316",
+    "title": "Reparación y mantenimiento aeronáutico y espacial"
+  },
+  {
+    "code": "3317",
+    "integrated_code": "C3317",
+    "title": "Reparación y mantenimiento de otro material de transporte"
+  },
+  {
+    "code": "3319",
+    "integrated_code": "C3319",
+    "title": "Reparación de otros equipos"
+  },
+  {
+    "code": "3320",
+    "integrated_code": "C3320",
+    "title": "Instalación de máquinas y equipos industriales"
+  },
+  {
+    "code": "3512",
+    "integrated_code": "D3512",
+    "title": "Transporte de energía eléctrica"
+  },
+  {
+    "code": "3513",
+    "integrated_code": "D3513",
+    "title": "Distribución de energía eléctrica"
+  },
+  {
+    "code": "3514",
+    "integrated_code": "D3514",
+    "title": "Comercio de energía eléctrica"
+  },
+  {
+    "code": "3515",
+    "integrated_code": "D3515",
+    "title": "Producción de energía hidroeléctrica"
+  },
+  {
+    "code": "3516",
+    "integrated_code": "D3516",
+    "title": "Producción de energía eléctrica de origen térmico convencional"
+  },
+  {
+    "code": "3517",
+    "integrated_code": "D3517",
+    "title": "Producción de energía eléctrica de origen nuclear"
+  },
+  {
+    "code": "3518",
+    "integrated_code": "D3518",
+    "title": "Producción de energía eléctrica de origen eólico"
+  },
+  {
+    "code": "3519",
+    "integrated_code": "D3519",
+    "title": "Producción de energía eléctrica de otros tipos"
+  },
+  {
+    "code": "3521",
+    "integrated_code": "D3521",
+    "title": "Producción de gas"
+  },
+  {
+    "code": "3522",
+    "integrated_code": "D3522",
+    "title": "Distribución por tubería de combustibles gaseosos"
+  },
+  {
+    "code": "3523",
+    "integrated_code": "D3523",
+    "title": "Comercio de gas por tubería"
+  },
+  {
+    "code": "3530",
+    "integrated_code": "D3530",
+    "title": "Suministro de vapor y aire acondicionado"
+  },
+  {
+    "code": "3600",
+    "integrated_code": "E3600",
+    "title": "Captación, depuración y distribución de agua"
+  },
+  {
+    "code": "3700",
+    "integrated_code": "E3700",
+    "title": "Recogida y tratamiento de aguas residuales"
+  },
+  {
+    "code": "3811",
+    "integrated_code": "E3811",
+    "title": "Recogida de residuos no peligrosos"
+  },
+  {
+    "code": "3812",
+    "integrated_code": "E3812",
+    "title": "Recogida de residuos peligrosos"
+  },
+  {
+    "code": "3821",
+    "integrated_code": "E3821",
+    "title": "Tratamiento y eliminación de residuos no peligrosos"
+  },
+  {
+    "code": "3822",
+    "integrated_code": "E3822",
+    "title": "Tratamiento y eliminación de residuos peligrosos"
+  },
+  {
+    "code": "3831",
+    "integrated_code": "E3831",
+    "title": "Separación y clasificación de materiales"
+  },
+  {
+    "code": "3832",
+    "integrated_code": "E3832",
+    "title": "Valorización de materiales ya clasificados"
+  },
+  {
+    "code": "3900",
+    "integrated_code": "E3900",
+    "title": "Actividades de descontaminación y otros servicios de gestión de residuos"
+  },
+  {
+    "code": "4110",
+    "integrated_code": "F4110",
+    "title": "Promoción inmobiliaria"
+  },
+  {
+    "code": "4121",
+    "integrated_code": "F4121",
+    "title": "Construcción de edificios residenciales"
+  },
+  {
+    "code": "4122",
+    "integrated_code": "F4122",
+    "title": "Construcción de edificios no residenciales"
+  },
+  {
+    "code": "4211",
+    "integrated_code": "F4211",
+    "title": "Construcción de carreteras y autopistas"
+  },
+  {
+    "code": "4212",
+    "integrated_code": "F4212",
+    "title": "Construcción de vías férreas de superficie y subterráneas"
+  },
+  {
+    "code": "4213",
+    "integrated_code": "F4213",
+    "title": "Construcción de puentes y túneles"
+  },
+  {
+    "code": "4221",
+    "integrated_code": "F4221",
+    "title": "Construcción de redes para fluidos"
+  },
+  {
+    "code": "4222",
+    "integrated_code": "F4222",
+    "title": "Construcción de redes eléctricas y de telecomunicaciones"
+  },
+  {
+    "code": "4291",
+    "integrated_code": "F4291",
+    "title": "Obras hidráulicas"
+  },
+  {
+    "code": "4299",
+    "integrated_code": "F4299",
+    "title": "Construcción de otros proyectos de ingeniería civil n.c.o.p."
+  },
+  {
+    "code": "4311",
+    "integrated_code": "F4311",
+    "title": "Demolición"
+  },
+  {
+    "code": "4312",
+    "integrated_code": "F4312",
+    "title": "Preparación de terrenos"
+  },
+  {
+    "code": "4313",
+    "integrated_code": "F4313",
+    "title": "Perforaciones y sondeos"
+  },
+  {
+    "code": "4321",
+    "integrated_code": "F4321",
+    "title": "Instalaciones eléctricas"
+  },
+  {
+    "code": "4322",
+    "integrated_code": "F4322",
+    "title": "Fontanería, instalaciones de sistemas de calefacción y aire acondicionado"
+  },
+  {
+    "code": "4329",
+    "integrated_code": "F4329",
+    "title": "Otras instalaciones en obras de construcción"
+  },
+  {
+    "code": "4331",
+    "integrated_code": "F4331",
+    "title": "Revocamiento"
+  },
+  {
+    "code": "4332",
+    "integrated_code": "F4332",
+    "title": "Instalación de carpintería"
+  },
+  {
+    "code": "4333",
+    "integrated_code": "F4333",
+    "title": "Revestimiento de suelos y paredes"
+  },
+  {
+    "code": "4334",
+    "integrated_code": "F4334",
+    "title": "Pintura y acristalamiento"
+  },
+  {
+    "code": "4339",
+    "integrated_code": "F4339",
+    "title": "Otro acabado de edificios"
+  },
+  {
+    "code": "4391",
+    "integrated_code": "F4391",
+    "title": "Construcción de cubiertas"
+  },
+  {
+    "code": "4399",
+    "integrated_code": "F4399",
+    "title": "Otras actividades de construcción especializada n.c.o.p."
+  },
+  {
+    "code": "4511",
+    "integrated_code": "G4511",
+    "title": "Venta de automóviles y vehículos de motor ligeros"
+  },
+  {
+    "code": "4519",
+    "integrated_code": "G4519",
+    "title": "Venta de otros vehículos de motor"
+  },
+  {
+    "code": "4520",
+    "integrated_code": "G4520",
+    "title": "Mantenimiento y reparación de vehículos de motor"
+  },
+  {
+    "code": "4531",
+    "integrated_code": "G4531",
+    "title": "Comercio al por mayor de repuestos y accesorios de vehículos de motor"
+  },
+  {
+    "code": "4532",
+    "integrated_code": "G4532",
+    "title": "Comercio al por menor de repuestos y accesorios de vehículos de motor"
+  },
+  {
+    "code": "4540",
+    "integrated_code": "G4540",
+    "title": "Venta, mantenimiento y reparación de motocicletas y de sus repuestos y accesorios"
+  },
+  {
+    "code": "4611",
+    "integrated_code": "G4611",
+    "title": "Intermediarios del comercio de materias primas agrarias, animales vivos, materias primas textiles y productos semielaborados"
+  },
+  {
+    "code": "4612",
+    "integrated_code": "G4612",
+    "title": "Intermediarios del comercio de combustibles, minerales, metales y productos químicos industriales"
+  },
+  {
+    "code": "4613",
+    "integrated_code": "G4613",
+    "title": "Intermediarios del comercio de la madera y materiales de construcción"
+  },
+  {
+    "code": "4614",
+    "integrated_code": "G4614",
+    "title": "Intermediarios del comercio de maquinaria, equipo industrial, embarcaciones y aeronaves"
+  },
+  {
+    "code": "4615",
+    "integrated_code": "G4615",
+    "title": "Intermediarios del comercio de muebles, artículos para el hogar y ferretería"
+  },
+  {
+    "code": "4616",
+    "integrated_code": "G4616",
+    "title": "Intermediarios del comercio de textiles, prendas de vestir, peletería, calzado y artículos de cuero"
+  },
+  {
+    "code": "4617",
+    "integrated_code": "G4617",
+    "title": "Intermediarios del comercio de productos alimenticios, bebidas y tabaco"
+  },
+  {
+    "code": "4618",
+    "integrated_code": "G4618",
+    "title": "Intermediarios del comercio especializados en la venta de otros productos específicos"
+  },
+  {
+    "code": "4619",
+    "integrated_code": "G4619",
+    "title": "Intermediarios del comercio de productos diversos"
+  },
+  {
+    "code": "4621",
+    "integrated_code": "G4621",
+    "title": "Comercio al por mayor de cereales, tabaco en rama, simientes y alimentos para animales"
+  },
+  {
+    "code": "4622",
+    "integrated_code": "G4622",
+    "title": "Comercio al por mayor de flores y plantas"
+  },
+  {
+    "code": "4623",
+    "integrated_code": "G4623",
+    "title": "Comercio al por mayor de animales vivos"
+  },
+  {
+    "code": "4624",
+    "integrated_code": "G4624",
+    "title": "Comercio al por mayor de cueros y pieles"
+  },
+  {
+    "code": "4631",
+    "integrated_code": "G4631",
+    "title": "Comercio al por mayor de frutas y hortalizas"
+  },
+  {
+    "code": "4632",
+    "integrated_code": "G4632",
+    "title": "Comercio al por mayor de carne y productos cárnicos"
+  },
+  {
+    "code": "4633",
+    "integrated_code": "G4633",
+    "title": "Comercio al por mayor de productos lácteos, huevos, aceites y grasas comestibles"
+  },
+  {
+    "code": "4634",
+    "integrated_code": "G4634",
+    "title": "Comercio al por mayor de bebidas"
+  },
+  {
+    "code": "4635",
+    "integrated_code": "G4635",
+    "title": "Comercio al por mayor de productos del tabaco"
+  },
+  {
+    "code": "4636",
+    "integrated_code": "G4636",
+    "title": "Comercio al por mayor de azúcar, chocolate y confitería"
+  },
+  {
+    "code": "4637",
+    "integrated_code": "G4637",
+    "title": "Comercio al por mayor de café, té, cacao y especias"
+  },
+  {
+    "code": "4638",
+    "integrated_code": "G4638",
+    "title": "Comercio al por mayor de pescados y mariscos y otros productos alimenticios"
+  },
+  {
+    "code": "4639",
+    "integrated_code": "G4639",
+    "title": "Comercio al por mayor, no especializado, de productos alimenticios, bebidas y tabaco"
+  },
+  {
+    "code": "4641",
+    "integrated_code": "G4641",
+    "title": "Comercio al por mayor de textiles"
+  },
+  {
+    "code": "4642",
+    "integrated_code": "G4642",
+    "title": "Comercio al por mayor de prendas de vestir y calzado"
+  },
+  {
+    "code": "4643",
+    "integrated_code": "G4643",
+    "title": "Comercio al por mayor de aparatos electrodomésticos"
+  },
+  {
+    "code": "4644",
+    "integrated_code": "G4644",
+    "title": "Comercio al por mayor de porcelana, cristalería y artículos de limpieza"
+  },
+  {
+    "code": "4645",
+    "integrated_code": "G4645",
+    "title": "Comercio al por mayor de productos perfumería y cosmética"
+  },
+  {
+    "code": "4646",
+    "integrated_code": "G4646",
+    "title": "Comercio al por mayor de productos farmacéuticos"
+  },
+  {
+    "code": "4647",
+    "integrated_code": "G4647",
+    "title": "Comercio al por mayor de muebles, alfombras y aparatos de iluminación"
+  },
+  {
+    "code": "4648",
+    "integrated_code": "G4648",
+    "title": "Comercio al por mayor de artículos de relojería y joyería"
+  },
+  {
+    "code": "4649",
+    "integrated_code": "G4649",
+    "title": "Comercio al por mayor de otros artículos de uso doméstico"
+  },
+  {
+    "code": "4651",
+    "integrated_code": "G4651",
+    "title": "Comercio al por mayor de ordenadores, equipos periféricos y programas informáticos"
+  },
+  {
+    "code": "4652",
+    "integrated_code": "G4652",
+    "title": "Comercio al por mayor de equipos electrónicos y de telecomunicaciones y sus componentes"
+  },
+  {
+    "code": "4661",
+    "integrated_code": "G4661",
+    "title": "Comercio al por mayor de maquinaria, equipos y suministros agrícolas"
+  },
+  {
+    "code": "4662",
+    "integrated_code": "G4662",
+    "title": "Comercio al por mayor de máquinas herramienta"
+  },
+  {
+    "code": "4663",
+    "integrated_code": "G4663",
+    "title": "Comercio al por mayor de maquinaria para la minería, la construcción y la ingeniería civil"
+  },
+  {
+    "code": "4664",
+    "integrated_code": "G4664",
+    "title": "Comercio al por mayor de maquinaria para la industria textil y de máquinas de coser y tricotar"
+  },
+  {
+    "code": "4665",
+    "integrated_code": "G4665",
+    "title": "Comercio al por mayor de muebles de oficina"
+  },
+  {
+    "code": "4666",
+    "integrated_code": "G4666",
+    "title": "Comercio al por mayor de otra maquinaria y equipo de oficina"
+  },
+  {
+    "code": "4669",
+    "integrated_code": "G4669",
+    "title": "Comercio al por mayor de otra maquinaria y equipo"
+  },
+  {
+    "code": "4671",
+    "integrated_code": "G4671",
+    "title": "Comercio al por mayor de combustibles sólidos, líquidos y gaseosos, y productos similares"
+  },
+  {
+    "code": "4672",
+    "integrated_code": "G4672",
+    "title": "Comercio al por mayor de metales y minerales metálicos"
+  },
+  {
+    "code": "4673",
+    "integrated_code": "G4673",
+    "title": "Comercio al por mayor de madera, materiales de construcción y aparatos sanitarios"
+  },
+  {
+    "code": "4674",
+    "integrated_code": "G4674",
+    "title": "Comercio al por mayor de ferretería, fontanería y calefacción"
+  },
+  {
+    "code": "4675",
+    "integrated_code": "G4675",
+    "title": "Comercio al por mayor de productos químicos"
+  },
+  {
+    "code": "4676",
+    "integrated_code": "G4676",
+    "title": "Comercio al por mayor de otros productos semielaborados"
+  },
+  {
+    "code": "4677",
+    "integrated_code": "G4677",
+    "title": "Comercio al por mayor de chatarra y productos de desecho"
+  },
+  {
+    "code": "4690",
+    "integrated_code": "G4690",
+    "title": "Comercio al por mayor no especializado"
+  },
+  {
+    "code": "4711",
+    "integrated_code": "G4711",
+    "title": "Comercio al por menor en establecimientos no especializados, con predominio en productos alimenticios, bebidas y tabaco"
+  },
+  {
+    "code": "4719",
+    "integrated_code": "G4719",
+    "title": "Otro comercio al por menor en establecimientos no especializados"
+  },
+  {
+    "code": "4721",
+    "integrated_code": "G4721",
+    "title": "Comercio al por menor de frutas y hortalizas en establecimientos especializados"
+  },
+  {
+    "code": "4722",
+    "integrated_code": "G4722",
+    "title": "Comercio al por menor de carne y productos cárnicos en establecimientos especializados"
+  },
+  {
+    "code": "4723",
+    "integrated_code": "G4723",
+    "title": "Comercio al por menor de pescados y mariscos en establecimientos especializados"
+  },
+  {
+    "code": "4724",
+    "integrated_code": "G4724",
+    "title": "Comercio al por menor de pan y productos de panadería, confitería y pastelería en establecimientos especializados"
+  },
+  {
+    "code": "4725",
+    "integrated_code": "G4725",
+    "title": "Comercio al por menor de bebidas en establecimientos especializados"
+  },
+  {
+    "code": "4726",
+    "integrated_code": "G4726",
+    "title": "Comercio al por menor de productos de tabaco en establecimientos especializados"
+  },
+  {
+    "code": "4729",
+    "integrated_code": "G4729",
+    "title": "Otro comercio al por menor de productos alimenticios en establecimientos especializados"
+  },
+  {
+    "code": "4730",
+    "integrated_code": "G4730",
+    "title": "Comercio al por menor de combustible para la automoción en establecimientos especializados"
+  },
+  {
+    "code": "4741",
+    "integrated_code": "G4741",
+    "title": "Comercio al por menor de ordenadores, equipos periféricos y programas informáticos en establecimientos especializados"
+  },
+  {
+    "code": "4742",
+    "integrated_code": "G4742",
+    "title": "Comercio al por menor de equipos de telecomunicaciones en establecimientos especializados"
+  },
+  {
+    "code": "4743",
+    "integrated_code": "G4743",
+    "title": "Comercio al por menor de equipos de audio y vídeo en establecimientos especializados"
+  },
+  {
+    "code": "4751",
+    "integrated_code": "G4751",
+    "title": "Comercio al por menor de textiles en establecimientos especializados"
+  },
+  {
+    "code": "4752",
+    "integrated_code": "G4752",
+    "title": "Comercio al por menor de ferretería, pintura y vidrio en establecimientos especializados"
+  },
+  {
+    "code": "4753",
+    "integrated_code": "G4753",
+    "title": "Comercio al por menor de alfombras, moquetas y revestimientos de paredes y suelos en establecimientos especializados"
+  },
+  {
+    "code": "4754",
+    "integrated_code": "G4754",
+    "title": "Comercio al por menor de aparatos electrodomésticos en establecimientos especializados"
+  },
+  {
+    "code": "4759",
+    "integrated_code": "G4759",
+    "title": "Comercio al por menor de muebles, aparatos de iluminación y otros artículos de uso doméstico en establecimientos especializados"
+  },
+  {
+    "code": "4761",
+    "integrated_code": "G4761",
+    "title": "Comercio al por menor de libros en establecimientos especializados"
+  },
+  {
+    "code": "4762",
+    "integrated_code": "G4762",
+    "title": "Comercio al por menor de periódicos y artículos de papelería en establecimientos especializados"
+  },
+  {
+    "code": "4763",
+    "integrated_code": "G4763",
+    "title": "Comercio al por menor de grabaciones de música y vídeo en establecimientos especializados"
+  },
+  {
+    "code": "4764",
+    "integrated_code": "G4764",
+    "title": "Comercio al por menor de artículos deportivos en establecimientos especializados"
+  },
+  {
+    "code": "4765",
+    "integrated_code": "G4765",
+    "title": "Comercio al por menor de juegos y juguetes en establecimientos especializados"
+  },
+  {
+    "code": "4771",
+    "integrated_code": "G4771",
+    "title": "Comercio al por menor de prendas de vestir en establecimientos especializados"
+  },
+  {
+    "code": "4772",
+    "integrated_code": "G4772",
+    "title": "Comercio al por menor de calzado y artículos de cuero en establecimientos especializados"
+  },
+  {
+    "code": "4773",
+    "integrated_code": "G4773",
+    "title": "Comercio al por menor de productos farmacéuticos en establecimientos especializados"
+  },
+  {
+    "code": "4774",
+    "integrated_code": "G4774",
+    "title": "Comercio al por menor de artículos médicos y ortopédicos en establecimientos especializados"
+  },
+  {
+    "code": "4775",
+    "integrated_code": "G4775",
+    "title": "Comercio al por menor de productos cosméticos e higiénicos en establecimientos especializados"
+  },
+  {
+    "code": "4776",
+    "integrated_code": "G4776",
+    "title": "Comercio al por menor de flores, plantas, semillas, fertilizantes, animales de compañía y alimentos para los mismos en establecimientos especializados"
+  },
+  {
+    "code": "4777",
+    "integrated_code": "G4777",
+    "title": "Comercio al por menor de artículos de relojería y joyería en establecimientos especializados"
+  },
+  {
+    "code": "4778",
+    "integrated_code": "G4778",
+    "title": "Otro comercio al por menor de artículos nuevos en establecimientos especializados"
+  },
+  {
+    "code": "4779",
+    "integrated_code": "G4779",
+    "title": "Comercio al por menor de artículos de segunda mano en establecimientos"
+  },
+  {
+    "code": "4781",
+    "integrated_code": "G4781",
+    "title": "Comercio al por menor de productos alimenticios, bebidas y tabaco en puestos de venta y en mercadillos"
+  },
+  {
+    "code": "4782",
+    "integrated_code": "G4782",
+    "title": "Comercio al por menor de productos textiles, prendas de vestir y calzado en puestos de venta y en mercadillos"
+  },
+  {
+    "code": "4789",
+    "integrated_code": "G4789",
+    "title": "Comercio al por menor de otros productos en puestos de venta y en mercadillos"
+  },
+  {
+    "code": "4791",
+    "integrated_code": "G4791",
+    "title": "Comercio al por menor por correspondencia o Internet"
+  },
+  {
+    "code": "4799",
+    "integrated_code": "G4799",
+    "title": "Otro comercio al por menor no realizado ni en establecimientos, ni en puestos de venta ni en mercadillos"
+  },
+  {
+    "code": "4910",
+    "integrated_code": "H4910",
+    "title": "Transporte interurbano de pasajeros por ferrocarril"
+  },
+  {
+    "code": "4920",
+    "integrated_code": "H4920",
+    "title": "Transporte de mercancías por ferrocarril"
+  },
+  {
+    "code": "4931",
+    "integrated_code": "H4931",
+    "title": "Transporte terrestre urbano y suburbano de pasajeros"
+  },
+  {
+    "code": "4932",
+    "integrated_code": "H4932",
+    "title": "Transporte por taxi"
+  },
+  {
+    "code": "4939",
+    "integrated_code": "H4939",
+    "title": "tipos de transporte terrestre de pasajeros n.c.o.p."
+  },
+  {
+    "code": "4941",
+    "integrated_code": "H4941",
+    "title": "Transporte de mercancías por carretera"
+  },
+  {
+    "code": "4942",
+    "integrated_code": "H4942",
+    "title": "Servicios de mudanza"
+  },
+  {
+    "code": "4950",
+    "integrated_code": "H4950",
+    "title": "Transporte por tubería"
+  },
+  {
+    "code": "5010",
+    "integrated_code": "H5010",
+    "title": "Transporte marítimo de pasajeros"
+  },
+  {
+    "code": "5020",
+    "integrated_code": "H5020",
+    "title": "Transporte marítimo de mercancías"
+  },
+  {
+    "code": "5030",
+    "integrated_code": "H5030",
+    "title": "Transporte de pasajeros por vías navegables interiores"
+  },
+  {
+    "code": "5040",
+    "integrated_code": "H5040",
+    "title": "Transporte de mercancías por vías navegables interiores"
+  },
+  {
+    "code": "5110",
+    "integrated_code": "H5110",
+    "title": "Transporte aéreo de pasajeros"
+  },
+  {
+    "code": "5121",
+    "integrated_code": "H5121",
+    "title": "Transporte aéreo de mercancías"
+  },
+  {
+    "code": "5122",
+    "integrated_code": "H5122",
+    "title": "Transporte espacial"
+  },
+  {
+    "code": "5210",
+    "integrated_code": "H5210",
+    "title": "Depósito y almacenamiento"
+  },
+  {
+    "code": "5221",
+    "integrated_code": "H5221",
+    "title": "Actividades anexas al transporte terrestre"
+  },
+  {
+    "code": "5222",
+    "integrated_code": "H5222",
+    "title": "Actividades anexas al transporte marítimo y por vías navegables interiores"
+  },
+  {
+    "code": "5223",
+    "integrated_code": "H5223",
+    "title": "Actividades anexas al transporte aéreo"
+  },
+  {
+    "code": "5224",
+    "integrated_code": "H5224",
+    "title": "Manipulación de mercancías"
+  },
+  {
+    "code": "5229",
+    "integrated_code": "H5229",
+    "title": "Otras actividades anexas al transporte"
+  },
+  {
+    "code": "5310",
+    "integrated_code": "H5310",
+    "title": "Actividades postales sometidas a la obligación del servicio universal"
+  },
+  {
+    "code": "5320",
+    "integrated_code": "H5320",
+    "title": "Otras actividades postales y de correos"
+  },
+  {
+    "code": "5510",
+    "integrated_code": "I5510",
+    "title": "Hoteles y alojamientos similares"
+  },
+  {
+    "code": "5520",
+    "integrated_code": "I5520",
+    "title": "Alojamientos turísticos y otros alojamientos de corta estancia"
+  },
+  {
+    "code": "5530",
+    "integrated_code": "I5530",
+    "title": "Campings y aparcamientos para caravanas"
+  },
+  {
+    "code": "5590",
+    "integrated_code": "I5590",
+    "title": "Otros alojamientos"
+  },
+  {
+    "code": "5610",
+    "integrated_code": "I5610",
+    "title": "Restaurantes y puestos de comidas"
+  },
+  {
+    "code": "5621",
+    "integrated_code": "I5621",
+    "title": "Provisión de comidas preparadas para eventos"
+  },
+  {
+    "code": "5629",
+    "integrated_code": "I5629",
+    "title": "Otros servicios de comidas"
+  },
+  {
+    "code": "5630",
+    "integrated_code": "I5630",
+    "title": "Establecimientos de bebidas"
+  },
+  {
+    "code": "5811",
+    "integrated_code": "J5811",
+    "title": "Edición de libros"
+  },
+  {
+    "code": "5812",
+    "integrated_code": "J5812",
+    "title": "Edición de directorios y guías de direcciones postales"
+  },
+  {
+    "code": "5813",
+    "integrated_code": "J5813",
+    "title": "Edición de periódicos"
+  },
+  {
+    "code": "5814",
+    "integrated_code": "J5814",
+    "title": "Edición de revistas"
+  },
+  {
+    "code": "5819",
+    "integrated_code": "J5819",
+    "title": "Otras actividades editoriales"
+  },
+  {
+    "code": "5821",
+    "integrated_code": "J5821",
+    "title": "Edición de videojuegos"
+  },
+  {
+    "code": "5829",
+    "integrated_code": "J5829",
+    "title": "Edición de otros programas informáticos"
+  },
+  {
+    "code": "5912",
+    "integrated_code": "J5912",
+    "title": "Actividades de postproducción cinematográfica, de vídeo y de programas de televisión"
+  },
+  {
+    "code": "5914",
+    "integrated_code": "J5914",
+    "title": "Actividades de exhibición cinematográfica"
+  },
+  {
+    "code": "5915",
+    "integrated_code": "J5915",
+    "title": "Actividades de producción cinematográfica y de vídeo"
+  },
+  {
+    "code": "5916",
+    "integrated_code": "J5916",
+    "title": "Actividades de producciones de programas de televisión"
+  },
+  {
+    "code": "5917",
+    "integrated_code": "J5917",
+    "title": "Actividades de distribución cinematográfica y de vídeo"
+  },
+  {
+    "code": "5918",
+    "integrated_code": "J5918",
+    "title": "Actividades de distribución de programas de televisión"
+  },
+  {
+    "code": "5920",
+    "integrated_code": "J5920",
+    "title": "Actividades de grabación de sonido y edición musical"
+  },
+  {
+    "code": "6010",
+    "integrated_code": "J6010",
+    "title": "Actividades de radiodifusión"
+  },
+  {
+    "code": "6020",
+    "integrated_code": "J6020",
+    "title": "Actividades de programación y emisión de televisión"
+  },
+  {
+    "code": "6110",
+    "integrated_code": "J6110",
+    "title": "Telecomunicaciones por cable"
+  },
+  {
+    "code": "6120",
+    "integrated_code": "J6120",
+    "title": "Telecomunicaciones inalámbricas"
+  },
+  {
+    "code": "6130",
+    "integrated_code": "J6130",
+    "title": "Telecomunicaciones por satélite"
+  },
+  {
+    "code": "6190",
+    "integrated_code": "J6190",
+    "title": "Otras actividades de telecomunicaciones"
+  },
+  {
+    "code": "6201",
+    "integrated_code": "J6201",
+    "title": "Actividades de programación informática"
+  },
+  {
+    "code": "6202",
+    "integrated_code": "J6202",
+    "title": "Actividades de consultoría informática"
+  },
+  {
+    "code": "6203",
+    "integrated_code": "J6203",
+    "title": "Gestión de recursos informáticos"
+  },
+  {
+    "code": "6209",
+    "integrated_code": "J6209",
+    "title": "Otros servicios relacionados con las tecnologías de la información y la informática"
+  },
+  {
+    "code": "6311",
+    "integrated_code": "J6311",
+    "title": "Proceso de datos, hosting y actividades relacionadas"
+  },
+  {
+    "code": "6312",
+    "integrated_code": "J6312",
+    "title": "Portales web"
+  },
+  {
+    "code": "6391",
+    "integrated_code": "J6391",
+    "title": "Actividades de las agencias de noticias"
+  },
+  {
+    "code": "6399",
+    "integrated_code": "J6399",
+    "title": "Otros servicios de información n.c.o.p."
+  },
+  {
+    "code": "6411",
+    "integrated_code": "K6411",
+    "title": "Banco central"
+  },
+  {
+    "code": "6419",
+    "integrated_code": "K6419",
+    "title": "Otra intermediación monetaria"
+  },
+  {
+    "code": "6420",
+    "integrated_code": "K6420",
+    "title": "Actividades de las sociedades holding"
+  },
+  {
+    "code": "6430",
+    "integrated_code": "K6430",
+    "title": "Inversión colectiva, fondos y entidades financieras similares"
+  },
+  {
+    "code": "6491",
+    "integrated_code": "K6491",
+    "title": "Arrendamiento financiero"
+  },
+  {
+    "code": "6492",
+    "integrated_code": "K6492",
+    "title": "Otras actividades crediticias"
+  },
+  {
+    "code": "6499",
+    "integrated_code": "K6499",
+    "title": "Otros servicios financieros, excepto seguros y fondos de pensiones n.c.o.p."
+  },
+  {
+    "code": "6511",
+    "integrated_code": "K6511",
+    "title": "Seguros de vida"
+  },
+  {
+    "code": "6512",
+    "integrated_code": "K6512",
+    "title": "Seguros distintos de los seguros de vida"
+  },
+  {
+    "code": "6520",
+    "integrated_code": "K6520",
+    "title": "Reaseguros"
+  },
+  {
+    "code": "6530",
+    "integrated_code": "K6530",
+    "title": "Fondos de pensiones"
+  },
+  {
+    "code": "6611",
+    "integrated_code": "K6611",
+    "title": "Administración de mercados financieros"
+  },
+  {
+    "code": "6612",
+    "integrated_code": "K6612",
+    "title": "Actividades de intermediación en operaciones con valores y otros activos"
+  },
+  {
+    "code": "6619",
+    "integrated_code": "K6619",
+    "title": "Otras actividades auxiliares a los servicios financieros, excepto seguros y fondos de pensiones"
+  },
+  {
+    "code": "6621",
+    "integrated_code": "K6621",
+    "title": "Evaluación de riesgos y daños"
+  },
+  {
+    "code": "6622",
+    "integrated_code": "K6622",
+    "title": "Actividades de agentes y corredores de seguros"
+  },
+  {
+    "code": "6629",
+    "integrated_code": "K6629",
+    "title": "Otras actividades auxiliares a seguros y fondos de pensiones"
+  },
+  {
+    "code": "6630",
+    "integrated_code": "K6630",
+    "title": "Actividades de gestión de fondos"
+  },
+  {
+    "code": "6810",
+    "integrated_code": "L6810",
+    "title": "Compraventa de bienes inmobiliarios por cuenta propia"
+  },
+  {
+    "code": "6820",
+    "integrated_code": "L6820",
+    "title": "Alquiler de bienes inmobiliarios por cuenta propia"
+  },
+  {
+    "code": "6831",
+    "integrated_code": "L6831",
+    "title": "Agentes de la propiedad inmobiliaria"
+  },
+  {
+    "code": "6832",
+    "integrated_code": "L6832",
+    "title": "Gestión y administración de la propiedad inmobiliaria"
+  },
+  {
+    "code": "6910",
+    "integrated_code": "M6910",
+    "title": "Actividades jurídicas"
+  },
+  {
+    "code": "6920",
+    "integrated_code": "M6920",
+    "title": "Actividades de contabilidad, teneduría de libros, auditoría y asesoría fiscal"
+  },
+  {
+    "code": "7010",
+    "integrated_code": "M7010",
+    "title": "Actividades de las sedes centrales"
+  },
+  {
+    "code": "7021",
+    "integrated_code": "M7021",
+    "title": "Relaciones públicas y comunicación"
+  },
+  {
+    "code": "7022",
+    "integrated_code": "M7022",
+    "title": "Otras actividades de consultoría de gestión empresarial"
+  },
+  {
+    "code": "7111",
+    "integrated_code": "M7111",
+    "title": "Servicios técnicos de arquitectura"
+  },
+  {
+    "code": "7112",
+    "integrated_code": "M7112",
+    "title": "Servicios técnicos de ingeniería y otras actividades relacionadas con el asesoramiento técnico"
+  },
+  {
+    "code": "7120",
+    "integrated_code": "M7120",
+    "title": "Ensayos y análisis técnicos"
+  },
+  {
+    "code": "7211",
+    "integrated_code": "M7211",
+    "title": "Investigación y desarrollo experimental en biotecnología"
+  },
+  {
+    "code": "7219",
+    "integrated_code": "M7219",
+    "title": "Otra investigación y desarrollo experimental en ciencias naturales y técnicas"
+  },
+  {
+    "code": "7220",
+    "integrated_code": "M7220",
+    "title": "Investigación y desarrollo experimental en ciencias sociales y humanidades"
+  },
+  {
+    "code": "7311",
+    "integrated_code": "M7311",
+    "title": "Agencias de publicidad"
+  },
+  {
+    "code": "7312",
+    "integrated_code": "M7312",
+    "title": "Servicios de representación de medios de comunicación"
+  },
+  {
+    "code": "7320",
+    "integrated_code": "M7320",
+    "title": "Estudio de mercado y realización de encuestas de opinión pública"
+  },
+  {
+    "code": "7410",
+    "integrated_code": "M7410",
+    "title": "Actividades de diseño especializado"
+  },
+  {
+    "code": "7420",
+    "integrated_code": "M7420",
+    "title": "Actividades de fotografía"
+  },
+  {
+    "code": "7430",
+    "integrated_code": "M7430",
+    "title": "Actividades de traducción e interpretación"
+  },
+  {
+    "code": "7490",
+    "integrated_code": "M7490",
+    "title": "Otras actividades profesionales, científicas y técnicas n.c.o.p."
+  },
+  {
+    "code": "7500",
+    "integrated_code": "M7500",
+    "title": "Actividades veterinarias"
+  },
+  {
+    "code": "7711",
+    "integrated_code": "N7711",
+    "title": "Alquiler de automóviles y vehículos de motor ligeros"
+  },
+  {
+    "code": "7712",
+    "integrated_code": "N7712",
+    "title": "Alquiler de camiones"
+  },
+  {
+    "code": "7721",
+    "integrated_code": "N7721",
+    "title": "Alquiler de artículos de ocio y deportivos"
+  },
+  {
+    "code": "7722",
+    "integrated_code": "N7722",
+    "title": "Alquiler de cintas de vídeo y discos"
+  },
+  {
+    "code": "7729",
+    "integrated_code": "N7729",
+    "title": "Alquiler de otros efectos personales y artículos de uso doméstico"
+  },
+  {
+    "code": "7731",
+    "integrated_code": "N7731",
+    "title": "Alquiler de maquinaria y equipo de uso agrícola"
+  },
+  {
+    "code": "7732",
+    "integrated_code": "N7732",
+    "title": "Alquiler de maquinaria y equipo para la construcción e ingeniería civil"
+  },
+  {
+    "code": "7733",
+    "integrated_code": "N7733",
+    "title": "Alquiler de maquinaria y equipo de oficina, incluidos ordenadores"
+  },
+  {
+    "code": "7734",
+    "integrated_code": "N7734",
+    "title": "Alquiler de medios de navegación"
+  },
+  {
+    "code": "7735",
+    "integrated_code": "N7735",
+    "title": "Alquiler de medios de transporte aéreo"
+  },
+  {
+    "code": "7739",
+    "integrated_code": "N7739",
+    "title": "Alquiler de otra maquinaria, equipos y bienes tangibles n.c.o.p."
+  },
+  {
+    "code": "7740",
+    "integrated_code": "N7740",
+    "title": "Arrendamiento de la propiedad intelectual y productos similares, excepto trabajos protegidos por los derechos de autor"
+  },
+  {
+    "code": "7810",
+    "integrated_code": "N7810",
+    "title": "Actividades de las agencias de colocación"
+  },
+  {
+    "code": "7820",
+    "integrated_code": "N7820",
+    "title": "Actividades de las empresas de trabajo temporal"
+  },
+  {
+    "code": "7830",
+    "integrated_code": "N7830",
+    "title": "Otra provisión de recursos humanos"
+  },
+  {
+    "code": "7911",
+    "integrated_code": "N7911",
+    "title": "Actividades de las agencias de viajes"
+  },
+  {
+    "code": "7912",
+    "integrated_code": "N7912",
+    "title": "Actividades de los operadores turísticos"
+  },
+  {
+    "code": "7990",
+    "integrated_code": "N7990",
+    "title": "Otros servicios de reservas y actividades relacionadas con los mismos"
+  },
+  {
+    "code": "8010",
+    "integrated_code": "N8010",
+    "title": "Actividades de seguridad privada"
+  },
+  {
+    "code": "8020",
+    "integrated_code": "N8020",
+    "title": "Servicios de sistemas de seguridad"
+  },
+  {
+    "code": "8030",
+    "integrated_code": "N8030",
+    "title": "Actividades de investigación"
+  },
+  {
+    "code": "8110",
+    "integrated_code": "N8110",
+    "title": "Servicios integrales a edificios e instalaciones"
+  },
+  {
+    "code": "8121",
+    "integrated_code": "N8121",
+    "title": "Limpieza general de edificios"
+  },
+  {
+    "code": "8122",
+    "integrated_code": "N8122",
+    "title": "Otras actividades de limpieza industrial y de edificios"
+  },
+  {
+    "code": "8129",
+    "integrated_code": "N8129",
+    "title": "Otras actividades de limpieza"
+  },
+  {
+    "code": "8130",
+    "integrated_code": "N8130",
+    "title": "Actividades de jardinería"
+  },
+  {
+    "code": "8211",
+    "integrated_code": "N8211",
+    "title": "Servicios administrativos combinados"
+  },
+  {
+    "code": "8219",
+    "integrated_code": "N8219",
+    "title": "Actividades de fotocopiado, preparación de documentos y otras actividades especializadas de oficina"
+  },
+  {
+    "code": "8220",
+    "integrated_code": "N8220",
+    "title": "Actividades de los centros de llamadas"
+  },
+  {
+    "code": "8230",
+    "integrated_code": "N8230",
+    "title": "Organización de convenciones y ferias de muestras"
+  },
+  {
+    "code": "8291",
+    "integrated_code": "N8291",
+    "title": "Actividades de las agencias de cobros y de información comercial"
+  },
+  {
+    "code": "8292",
+    "integrated_code": "N8292",
+    "title": "Actividades de envasado y empaquetado"
+  },
+  {
+    "code": "8299",
+    "integrated_code": "N8299",
+    "title": "Otras actividades de apoyo a las empresas n.c.o.p."
+  },
+  {
+    "code": "8411",
+    "integrated_code": "O8411",
+    "title": "Actividades generales de la Administración Pública"
+  },
+  {
+    "code": "8412",
+    "integrated_code": "O8412",
+    "title": "Regulación de las actividades sanitarias, educativas y culturales y otros servicios sociales, excepto Seguridad Social"
+  },
+  {
+    "code": "8413",
+    "integrated_code": "O8413",
+    "title": "Regulación de la actividad económica y contribución a su mayor eficiencia"
+  },
+  {
+    "code": "8421",
+    "integrated_code": "O8421",
+    "title": "Asuntos exteriores"
+  },
+  {
+    "code": "8422",
+    "integrated_code": "O8422",
+    "title": "Defensa"
+  },
+  {
+    "code": "8423",
+    "integrated_code": "O8423",
+    "title": "Justicia"
+  },
+  {
+    "code": "8424",
+    "integrated_code": "O8424",
+    "title": "Orden público y seguridad"
+  },
+  {
+    "code": "8425",
+    "integrated_code": "O8425",
+    "title": "Protección civil"
+  },
+  {
+    "code": "8430",
+    "integrated_code": "O8430",
+    "title": "Seguridad Social obligatoria"
+  },
+  {
+    "code": "8510",
+    "integrated_code": "P8510",
+    "title": "Educación preprimaria"
+  },
+  {
+    "code": "8520",
+    "integrated_code": "P8520",
+    "title": "Educación primaria"
+  },
+  {
+    "code": "8531",
+    "integrated_code": "P8531",
+    "title": "Educación secundaria general"
+  },
+  {
+    "code": "8532",
+    "integrated_code": "P8532",
+    "title": "Educación secundaria técnica y profesional"
+  },
+  {
+    "code": "8541",
+    "integrated_code": "P8541",
+    "title": "Educación postsecundaria no terciaria"
+  },
+  {
+    "code": "8543",
+    "integrated_code": "P8543",
+    "title": "Educación universitaria"
+  },
+  {
+    "code": "8544",
+    "integrated_code": "P8544",
+    "title": "Educación terciaria no universitaria"
+  },
+  {
+    "code": "8551",
+    "integrated_code": "P8551",
+    "title": "Educación deportiva y recreativa"
+  },
+  {
+    "code": "8552",
+    "integrated_code": "P8552",
+    "title": "Educación cultural"
+  },
+  {
+    "code": "8553",
+    "integrated_code": "P8553",
+    "title": "Actividades de las escuelas de conducción y pilotaje"
+  },
+  {
+    "code": "8559",
+    "integrated_code": "P8559",
+    "title": "Otra educación n.c.o.p."
+  },
+  {
+    "code": "8560",
+    "integrated_code": "P8560",
+    "title": "Actividades auxiliares a la educación"
+  },
+  {
+    "code": "8610",
+    "integrated_code": "Q8610",
+    "title": "Actividades hospitalarias"
+  },
+  {
+    "code": "8621",
+    "integrated_code": "Q8621",
+    "title": "Actividades de medicina general"
+  },
+  {
+    "code": "8622",
+    "integrated_code": "Q8622",
+    "title": "Actividades de medicina especializada"
+  },
+  {
+    "code": "8623",
+    "integrated_code": "Q8623",
+    "title": "Actividades odontológicas"
+  },
+  {
+    "code": "8690",
+    "integrated_code": "Q8690",
+    "title": "Otras actividades sanitarias"
+  },
+  {
+    "code": "8710",
+    "integrated_code": "Q8710",
+    "title": "Asistencia en establecimientos residenciales con cuidados sanitarios"
+  },
+  {
+    "code": "8720",
+    "integrated_code": "Q8720",
+    "title": "Asistencia en establecimientos residenciales para personas con discapacidad intelectual, enfermedad mental y drogodependencia"
+  },
+  {
+    "code": "8731",
+    "integrated_code": "Q8731",
+    "title": "Asistencia en establecimientos residenciales para personas mayores"
+  },
+  {
+    "code": "8732",
+    "integrated_code": "Q8732",
+    "title": "Asistencia en establecimientos residenciales para personas con discapacidad física"
+  },
+  {
+    "code": "8790",
+    "integrated_code": "Q8790",
+    "title": "Otras actividades de asistencia en establecimientos residenciales"
+  },
+  {
+    "code": "8811",
+    "integrated_code": "Q8811",
+    "title": "Actividades de servicios sociales sin alojamiento para personas mayores"
+  },
+  {
+    "code": "8812",
+    "integrated_code": "Q8812",
+    "title": "Actividades de servicios sociales sin alojamiento para personas con discapacidad"
+  },
+  {
+    "code": "8891",
+    "integrated_code": "Q8891",
+    "title": "Actividades de cuidado diurno de niños"
+  },
+  {
+    "code": "8899",
+    "integrated_code": "Q8899",
+    "title": "Otros actividades de servicios sociales sin alojamiento n.c.o.p."
+  },
+  {
+    "code": "9001",
+    "integrated_code": "R9001",
+    "title": "Artes escénicas"
+  },
+  {
+    "code": "9002",
+    "integrated_code": "R9002",
+    "title": "Actividades auxiliares a las artes escénicas"
+  },
+  {
+    "code": "9003",
+    "integrated_code": "R9003",
+    "title": "Creación artística y literaria"
+  },
+  {
+    "code": "9004",
+    "integrated_code": "R9004",
+    "title": "Gestión de salas de espectáculos"
+  },
+  {
+    "code": "9102",
+    "integrated_code": "R9102",
+    "title": "Actividades de museos"
+  },
+  {
+    "code": "9103",
+    "integrated_code": "R9103",
+    "title": "Gestión de lugares y edificios históricos"
+  },
+  {
+    "code": "9104",
+    "integrated_code": "R9104",
+    "title": "Actividades de los jardines botánicos, parques zoológicos y reservas naturales"
+  },
+  {
+    "code": "9105",
+    "integrated_code": "R9105",
+    "title": "Actividades de bibliotecas"
+  },
+  {
+    "code": "9106",
+    "integrated_code": "R9106",
+    "title": "Actividades de archivos"
+  },
+  {
+    "code": "9200",
+    "integrated_code": "R9200",
+    "title": "Actividades de juegos de azar y apuestas"
+  },
+  {
+    "code": "9311",
+    "integrated_code": "R9311",
+    "title": "Gestión de instalaciones deportivas"
+  },
+  {
+    "code": "9312",
+    "integrated_code": "R9312",
+    "title": "Actividades de los clubes deportivos"
+  },
+  {
+    "code": "9313",
+    "integrated_code": "R9313",
+    "title": "Actividades de los gimnasios"
+  },
+  {
+    "code": "9319",
+    "integrated_code": "R9319",
+    "title": "Otras actividades deportivas"
+  },
+  {
+    "code": "9321",
+    "integrated_code": "R9321",
+    "title": "Actividades de los parques de atracciones y los parques temáticos"
+  },
+  {
+    "code": "9329",
+    "integrated_code": "R9329",
+    "title": "Otras actividades recreativas y de entretenimiento"
+  },
+  {
+    "code": "9411",
+    "integrated_code": "S9411",
+    "title": "Actividades de organizaciones empresariales y patronales"
+  },
+  {
+    "code": "9412",
+    "integrated_code": "S9412",
+    "title": "Actividades de organizaciones profesionales"
+  },
+  {
+    "code": "9420",
+    "integrated_code": "S9420",
+    "title": "Actividades sindicales"
+  },
+  {
+    "code": "9491",
+    "integrated_code": "S9491",
+    "title": "Actividades de organizaciones religiosas"
+  },
+  {
+    "code": "9492",
+    "integrated_code": "S9492",
+    "title": "Actividades de organizaciones políticas"
+  },
+  {
+    "code": "9499",
+    "integrated_code": "S9499",
+    "title": "Otras actividades asociativas n.c.o.p."
+  },
+  {
+    "code": "9511",
+    "integrated_code": "S9511",
+    "title": "Reparación de ordenadores y equipos periféricos"
+  },
+  {
+    "code": "9512",
+    "integrated_code": "S9512",
+    "title": "Reparación de equipos de comunicación"
+  },
+  {
+    "code": "9521",
+    "integrated_code": "S9521",
+    "title": "Reparación de aparatos electrónicos de audio y vídeo de uso doméstico"
+  },
+  {
+    "code": "9522",
+    "integrated_code": "S9522",
+    "title": "Reparación de aparatos electrodomésticos y de equipos para el hogar y el jardín"
+  },
+  {
+    "code": "9523",
+    "integrated_code": "S9523",
+    "title": "Reparación de calzado y artículos de cuero"
+  },
+  {
+    "code": "9524",
+    "integrated_code": "S9524",
+    "title": "Reparación de muebles y artículos de menaje"
+  },
+  {
+    "code": "9525",
+    "integrated_code": "S9525",
+    "title": "Reparación de relojes y joyería"
+  },
+  {
+    "code": "9529",
+    "integrated_code": "S9529",
+    "title": "Reparación de otros efectos personales y artículos de uso doméstico"
+  },
+  {
+    "code": "9601",
+    "integrated_code": "S9601",
+    "title": "Lavado y limpieza de prendas textiles y de piel"
+  },
+  {
+    "code": "9602",
+    "integrated_code": "S9602",
+    "title": "Peluquería y otros tratamientos de belleza"
+  },
+  {
+    "code": "9603",
+    "integrated_code": "S9603",
+    "title": "Pompas fúnebres y actividades relacionadas"
+  },
+  {
+    "code": "9604",
+    "integrated_code": "S9604",
+    "title": "Actividades de mantenimiento físico"
+  },
+  {
+    "code": "9609",
+    "integrated_code": "S9609",
+    "title": "Otras servicios personales n.c.o.p."
+  },
+  {
+    "code": "9700",
+    "integrated_code": "T9700",
+    "title": "Actividades de los hogares como empleadores de personal doméstico"
+  },
+  {
+    "code": "9810",
+    "integrated_code": "T9810",
+    "title": "Actividades de los hogares como productores de bienes para uso propio"
+  },
+  {
+    "code": "9820",
+    "integrated_code": "T9820",
+    "title": "Actividades de los hogares como productores de servicios para uso propio"
+  },
+  {
+    "code": "9900",
+    "integrated_code": "U9900",
+    "title": "Actividades de organizaciones y organismos extraterritoriales"
+  }
+]

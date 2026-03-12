@@ -46,6 +46,7 @@ load_env() {
     exit 1
   fi
 
+  APP_VERSION="$(grep -E '^APP_VERSION=' .env | cut -d '=' -f2- || true)"
   DB_CONNECTION="$(grep -E '^DB_CONNECTION=' .env | cut -d '=' -f2- || true)"
   DB_DATABASE="$(grep -E '^DB_DATABASE=' .env | cut -d '=' -f2- || true)"
   DB_USERNAME="$(grep -E '^DB_USERNAME=' .env | cut -d '=' -f2- || true)"
@@ -60,6 +61,29 @@ load_env() {
     echo "DB_DATABASE, DB_USERNAME, and DB_PASSWORD must be set in .env."
     exit 1
   fi
+}
+
+prompt_app_version() {
+  local current_version="${APP_VERSION:-}"
+  local next_version
+
+  echo "Current APP_VERSION: ${current_version:-<empty>}"
+  read -r -p "New APP_VERSION (press Enter to keep current): " next_version
+
+  if [[ -z "$next_version" ]]; then
+    echo "Keeping APP_VERSION: ${current_version:-<empty>}"
+    return
+  fi
+
+  if grep -qE '^APP_VERSION=' .env; then
+    sed -i.bak "s|^APP_VERSION=.*$|APP_VERSION=${next_version}|" .env
+  else
+    printf '\nAPP_VERSION=%s\n' "$next_version" >> .env
+  fi
+
+  rm -f .env.bak
+  APP_VERSION="$next_version"
+  echo "Updated APP_VERSION to: $APP_VERSION"
 }
 
 ensure_db() {
@@ -121,7 +145,10 @@ echo "--------------------------------------------"
 echo "Deploying Ingesil (branch: $BRANCH)"
 echo "App dir: $APP_DIR"
 echo "App user: $APP_USER"
+echo "App version: ${APP_VERSION:-<empty>}"
 echo "DB: $DB_DATABASE (user: $DB_USERNAME)"
+
+prompt_app_version
 
 # Ensure ownership for deploy-critical paths
 chown -R "$APP_USER:$APP_USER" "$APP_DIR/.git" || true
@@ -160,7 +187,11 @@ if ! grep -qE '^APP_KEY=base64:' .env; then
 else
   echo "APP_KEY already present, keeping existing key."
 fi
-as_app "php artisan storage:link || true"
+if [[ -L "public/storage" || -e "public/storage" ]]; then
+  echo "Storage link already present, skipping."
+else
+  as_app "php artisan storage:link"
+fi
 as_app "php artisan migrate --force"
 as_app "php artisan db:seed --force || true"
 as_app "php artisan optimize:clear"
