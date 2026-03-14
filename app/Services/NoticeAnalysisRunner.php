@@ -96,7 +96,7 @@ class NoticeAnalysisRunner
         $total = count($noticeIds);
         $now = Carbon::now();
 
-        $updatedRun = DB::transaction(function () use ($run, $noticeIds, $issueDate, $total, $now): NoticeAnalysisRun {
+        $updatedRun = DB::transaction(function () use ($run, $noticeIds, $issueDate, $total, $now, $promptPaths): NoticeAnalysisRun {
             /** @var NoticeAnalysisRun $lockedRun */
             $lockedRun = NoticeAnalysisRun::query()->lockForUpdate()->findOrFail($run->id);
 
@@ -207,16 +207,7 @@ class NoticeAnalysisRunner
 
     private function normalizeLocale(?string $locale): string
     {
-        $value = trim(strtolower((string) $locale));
-        if ($value === '') {
-            return 'en';
-        }
-
-        if (! in_array($value, User::supportedLocales(), true)) {
-            return 'en';
-        }
-
-        return $value;
+        return User::LOCALE_EN;
     }
 
     /**

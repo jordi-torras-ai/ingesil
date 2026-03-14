@@ -14,3 +14,9 @@ Schedule::command('pipeline:daily-notices --headless --continue-on-crawler-error
     ->when(fn (): bool => (bool) config('app.pipeline.daily_enabled', true))
     ->withoutOverlapping()
     ->runInBackground();
+
+Schedule::command('notice-digests:send')
+    ->dailyAt((string) config('app.notifications.digest_time', '08:00'))
+    ->timezone((string) config('app.notifications.timezone', config('app.pipeline.timezone', 'Europe/Madrid')))
+    ->withoutOverlapping()
+    ->runInBackground();

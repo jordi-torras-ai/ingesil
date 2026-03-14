@@ -15,6 +15,11 @@ class AnalysisHealthStats extends StatsOverviewWidget
 
     protected int | string | array $columnSpan = 'full';
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
     protected function getHeading(): ?string
     {
         return __('app.dashboard.analysis_health.heading');

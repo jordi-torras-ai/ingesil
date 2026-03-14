@@ -6,6 +6,7 @@ use App\Jobs\ProcessCompanyNoticeAnalysis;
 use App\Models\Company;
 use App\Models\CompanyNoticeAnalysis;
 use App\Models\CompanyNoticeAnalysisRun;
+use App\Models\CompanyScopeSubscription;
 use App\Models\NoticeAnalysis;
 use App\Models\NoticeAnalysisRun;
 use App\Models\Scope;
@@ -39,27 +40,25 @@ class CompanyNoticeAnalysisRunner
             return 0;
         }
 
-        $companyIds = Company::query()
-            ->whereHas('scopes', fn ($query) => $query->where('scopes.id', $scope->id))
-            ->orderBy('id')
-            ->pluck('id')
-            ->map(fn (int $id): int => (int) $id)
-            ->all();
+        $subscriptions = CompanyScopeSubscription::query()
+            ->with(['company', 'scope.translations'])
+            ->where('scope_id', $scope->id)
+            ->orderBy('company_id')
+            ->orderBy('locale')
+            ->get();
 
-        foreach ($companyIds as $companyId) {
-            /** @var Company $company */
-            $company = Company::query()->findOrFail($companyId);
-            $this->dispatchCompanyRun($noticeAnalysisRun, $company);
+        foreach ($subscriptions as $subscription) {
+            $this->dispatchCompanyRun($noticeAnalysisRun, $subscription);
         }
 
         $noticeAnalysisRun->forceFill([
             'company_runs_dispatched_at' => Carbon::now(),
         ])->save();
 
-        return count($companyIds);
+        return $subscriptions->count();
     }
 
-    public function dispatchCompanyRun(NoticeAnalysisRun $noticeAnalysisRun, Company $company): CompanyNoticeAnalysisRun
+    public function dispatchCompanyRun(NoticeAnalysisRun $noticeAnalysisRun, CompanyScopeSubscription $subscription): CompanyNoticeAnalysisRun
     {
         $noticeAnalysisRun->loadMissing('scope.translations');
 
@@ -68,17 +67,28 @@ class CompanyNoticeAnalysisRunner
             throw new RuntimeException('Notice analysis run has no scope.');
         }
 
+        $company = $subscription->company;
+        if (! $company instanceof Company) {
+            throw new RuntimeException('Scope subscription has no company.');
+        }
+
+        if ((int) $subscription->scope_id !== (int) $scope->id) {
+            throw new RuntimeException('Scope subscription does not match the notice analysis run scope.');
+        }
+
         $promptPaths = $scope->companyAnalysisPromptRelativePaths();
         $now = Carbon::now();
 
-        $run = DB::transaction(function () use ($noticeAnalysisRun, $company, $promptPaths, $now): CompanyNoticeAnalysisRun {
+        $run = DB::transaction(function () use ($noticeAnalysisRun, $subscription, $company, $promptPaths, $now): CompanyNoticeAnalysisRun {
             /** @var CompanyNoticeAnalysisRun $run */
             $run = CompanyNoticeAnalysisRun::query()->firstOrCreate(
                 [
                     'notice_analysis_run_id' => $noticeAnalysisRun->id,
-                    'company_id' => $company->id,
+                    'company_scope_subscription_id' => $subscription->id,
                 ],
                 [
+                    'company_id' => $company->id,
+                    'locale' => $subscription->locale,
                     'status' => CompanyNoticeAnalysisRun::STATUS_QUEUED,
                     'total_notices' => 0,
                     'processed_notices' => 0,
@@ -167,6 +177,9 @@ class CompanyNoticeAnalysisRunner
             }
 
             $run->forceFill([
+                'company_id' => $company->id,
+                'company_scope_subscription_id' => $subscription->id,
+                'locale' => $subscription->locale,
                 'status' => CompanyNoticeAnalysisRun::STATUS_PROCESSING,
                 'model' => (string) config('services.openai.api_model', 'gpt-5-mini'),
                 'system_prompt_path' => $promptPaths['system'],

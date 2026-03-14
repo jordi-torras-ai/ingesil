@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAdminActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 class Company extends Model
 {
     use HasFactory;
+    use LogsAdminActivity;
 
     public const COUNTRY_SPAIN = 'es';
     public const DEFAULT_CURRENCY = 'EUR';
@@ -118,7 +120,14 @@ class Company extends Model
 
     public function scopes(): BelongsToMany
     {
-        return $this->belongsToMany(Scope::class)->withTimestamps();
+        return $this->belongsToMany(Scope::class, 'company_scope_subscriptions')
+            ->withPivot('locale')
+            ->withTimestamps();
+    }
+
+    public function scopeSubscriptions(): HasMany
+    {
+        return $this->hasMany(CompanyScopeSubscription::class);
     }
 
     public function featureAnswers(): HasMany
@@ -137,5 +146,19 @@ class Company extends Model
             CompanyNoticeAnalysis::class,
             CompanyNoticeAnalysisRun::class
         );
+    }
+
+    protected function activityLogAttributes(): array
+    {
+        return [
+            'name',
+            'country',
+            'spanish_legal_form_id',
+            'cnae_code_id',
+            'currency',
+            'yearly_revenue',
+            'address',
+            'total_assets',
+        ];
     }
 }

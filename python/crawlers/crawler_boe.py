@@ -2,23 +2,17 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import os
-import random
-import re
 import sys
-import time
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from enum import Enum
 from pathlib import Path
 from urllib.parse import urljoin
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
+import requests
 
 try:
     from dotenv import load_dotenv
@@ -32,104 +26,43 @@ PYTHON_SRC = PROJECT_ROOT / "python" / "src"
 if str(PYTHON_SRC) not in sys.path:
     sys.path.insert(0, str(PYTHON_SRC))
 
-from ingesil_crawlers.artifacts import ArtifactWriter  # noqa: E402
-from ingesil_crawlers.fsm import FSMConfig, FSMRunner  # noqa: E402
 from ingesil_crawlers.logging_utils import build_logger  # noqa: E402
 
 
-class BoeState(Enum):
-    HOME = "HOME"
-    PREPARE_SEARCH = "PREPARE_SEARCH"
-    PARSE_RESULTS_PAGE = "PARSE_RESULTS_PAGE"
-    PROCESS_RESULT_ITEM = "PROCESS_RESULT_ITEM"
-    OPEN_NOTICE = "OPEN_NOTICE"
-    OPEN_NEXT_PAGE = "OPEN_NEXT_PAGE"
-    DONE = "DONE"
+BOE_SITE_BASE_URL = "https://www.boe.es"
+BOE_SUMMARY_API_URL_TEMPLATE = "https://www.boe.es/datosabiertos/api/boe/sumario/{stamp}"
 
 
-@dataclass
-class CrawlerContext:
-    logger: logging.Logger
-    driver: WebDriver
-    artifacts: ArtifactWriter
-    slug: str
-    source_id: int
-    base_url: str
-    timeout_seconds: int
-    from_date: date
-    to_date: date
-    db_conn: object
-    pending_results: list[dict[str, object]]
-    current_result: dict[str, object] | None = None
-    next_page_url: str | None = None
+@dataclass(slots=True)
+class SummaryNotice:
+    identifier: str
+    title: str
+    issue_date: date
+    daily_journal_description: str
+    section: str
+    department: str
+    epigraph: str
+    html_url: str
+    pdf_url: str
+    xml_url: str
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Ingesil crawler for BOE source")
     parser.add_argument("--slug", default="boe")
     parser.add_argument("--run-id", default=datetime.now().strftime("%Y%m%d_%H%M%S"))
-    parser.add_argument("--base-url", default=os.getenv("CRAWLER_BOE_BASE_URL"))
+    parser.add_argument(
+        "--base-url",
+        default=os.getenv("CRAWLER_BOE_SUMMARY_API_URL_TEMPLATE", BOE_SUMMARY_API_URL_TEMPLATE),
+        help="BOE open-data summary API URL template. Use {stamp} for YYYYMMDD.",
+    )
     parser.add_argument("--timeout", type=int, default=int(os.getenv("CRAWLER_TIMEOUT_SECONDS", "20")))
     parser.add_argument("--day", default=None, help="Crawl only one day (YYYY-MM-DD).")
     parser.add_argument("--from-date", default=None, help="Crawl window start date (YYYY-MM-DD).")
     parser.add_argument("--to-date", default=None, help="Crawl window end date (YYYY-MM-DD).")
-    parser.add_argument("--headless", action="store_true", help="Run Chrome headless")
-    parser.add_argument("--headed", action="store_true", help="Force headed mode")
+    parser.add_argument("--headless", action="store_true", help="Ignored for BOE API crawler; kept for CLI compatibility")
+    parser.add_argument("--headed", action="store_true", help="Ignored for BOE API crawler; kept for CLI compatibility")
     return parser.parse_args()
-
-
-def resolve_headless(args: argparse.Namespace) -> bool:
-    env_default = os.getenv("CRAWLER_HEADLESS", "0").strip().lower() in {"1", "true", "yes", "on"}
-    if args.headed:
-        return False
-    if args.headless:
-        return True
-    return env_default
-
-
-def build_driver(headless: bool) -> WebDriver:
-    options = ChromeOptions()
-    options.add_argument("--window-size=1600,1200")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--remote-debugging-port=0")
-    chrome_binary = os.getenv("CRAWLER_CHROME_BINARY", "/usr/bin/google-chrome")
-    if os.path.isfile(chrome_binary):
-        options.binary_location = chrome_binary
-    user_data_dir = Path(os.getenv("CRAWLER_CHROME_USER_DATA_DIR", "/tmp/ingesil-chrome"))
-    user_data_dir.mkdir(parents=True, exist_ok=True)
-    options.add_argument(f"--user-data-dir={user_data_dir}")
-    if headless:
-        options.add_argument("--headless=new")
-    return webdriver.Chrome(options=options)
-
-
-def wait_dom_ready(driver: WebDriver, timeout_seconds: int) -> None:
-    WebDriverWait(driver, timeout_seconds).until(
-        lambda d: d.execute_script("return document.readyState") == "complete"
-    )
-
-
-def _set_date_input(driver: WebDriver, element, value: str) -> None:
-    # Native send_keys can be flaky on date inputs in headless mode.
-    driver.execute_script(
-        """
-        const el = arguments[0];
-        const val = arguments[1];
-        el.focus();
-        el.value = val;
-        el.dispatchEvent(new Event('input', { bubbles: true }));
-        el.dispatchEvent(new Event('change', { bubbles: true }));
-        """,
-        element,
-        value,
-    )
-
-
-def parse_eu_date(value: str) -> date:
-    return datetime.strptime(value.strip(), "%d/%m/%Y").date()
 
 
 def parse_iso_date(value: str, *, flag: str) -> date:
@@ -139,7 +72,7 @@ def parse_iso_date(value: str, *, flag: str) -> date:
         raise RuntimeError(f"Invalid {flag} value {value!r}. Expected YYYY-MM-DD.") from exc
 
 
-def read_source_data_from_db(slug: str) -> tuple[int, date, str]:
+def read_source_data_from_db(slug: str) -> tuple[int, date]:
     try:
         import psycopg
     except ImportError as exc:  # pragma: no cover
@@ -153,7 +86,7 @@ def read_source_data_from_db(slug: str) -> tuple[int, date, str]:
         password=os.getenv("DB_PASSWORD", ""),
     ) as conn:
         with conn.cursor() as cur:
-            cur.execute("SELECT id, start_at, base_url FROM sources WHERE slug = %s LIMIT 1", (slug,))
+            cur.execute("SELECT id, start_at FROM sources WHERE slug = %s LIMIT 1", (slug,))
             row = cur.fetchone()
 
     if row is None:
@@ -163,8 +96,7 @@ def read_source_data_from_db(slug: str) -> tuple[int, date, str]:
 
     source_id = int(row[0])
     start_at = row[1] if isinstance(row[1], date) else datetime.strptime(str(row[1]), "%Y-%m-%d").date()
-    base_url = str(row[2] or "").strip()
-    return source_id, start_at, base_url
+    return source_id, start_at
 
 
 def resolve_crawl_range(
@@ -220,80 +152,332 @@ def resolve_crawl_range(
     return from_date, to_date
 
 
-def extract_next_page_url(driver: WebDriver) -> str | None:
-    links = driver.find_elements(By.XPATH, "//li[a/span[contains(@class, 'pagSig')]]/a")
-    if not links:
-        return None
-    href = (links[0].get_attribute("href") or "").strip()
-    if not href:
-        return None
-    return urljoin(driver.current_url, href)
+def normalize_space(value: str | None) -> str:
+    return " ".join((value or "").split()).strip()
 
 
-def extract_results_from_page(context: CrawlerContext) -> list[dict[str, object]]:
-    rows: list[dict[str, object]] = []
-    result_items = context.driver.find_elements(By.CSS_SELECTOR, "li.resultado-busqueda")
-    context.logger.info("Results on current page: %d", len(result_items))
+def ensure_list(value: dict | list | None) -> list:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return value
+    return [value]
 
-    for item in result_items:
-        line_dem = item.find_elements(By.CSS_SELECTOR, "p.linea-dem")
-        line_pub = item.find_elements(By.CSS_SELECTOR, "p.linea-pub")
-        title_nodes = item.find_elements(
-            By.XPATH,
-            "./p[not(contains(@class,'linea-dem')) and not(contains(@class,'linea-pub'))][1]",
+
+def extract_text_value(value: str | dict | None) -> str:
+    if isinstance(value, str):
+        return value.strip()
+    if isinstance(value, dict):
+        for key in ("texto", "@texto"):
+            candidate = value.get(key)
+            if isinstance(candidate, str):
+                return candidate.strip()
+    return ""
+
+
+def make_absolute_url(value: str) -> str:
+    if not value:
+        return ""
+    return urljoin(BOE_SITE_BASE_URL, value)
+
+
+def resolve_summary_api_url(url_template: str, target_date: date, logger: logging.Logger) -> str:
+    if "buscar/boe.php" in url_template:
+        logger.warning(
+            "Ignoring legacy BOE search URL %s and using official summary API template instead.",
+            url_template,
         )
-        link_nodes = item.find_elements(By.CSS_SELECTOR, "a.resultado-busqueda-link-defecto")
+        url_template = BOE_SUMMARY_API_URL_TEMPLATE
 
-        if not line_pub or not title_nodes or not link_nodes:
-            continue
+    stamp = target_date.strftime("%Y%m%d")
+    if "{stamp}" in url_template:
+        return url_template.format(stamp=stamp)
 
-        department = (line_dem[0].text if line_dem else "").strip()
-        pub_text = (line_pub[0].text or "").strip()
-        title = (title_nodes[0].text or "").strip()
-        href = (link_nodes[0].get_attribute("href") or "").strip()
-        if not title or not href:
-            continue
+    return f"{url_template.rstrip('/')}/{stamp}"
 
-        match = re.search(r"(BOE\s+\d+\s+de\s+\d{2}/\d{2}/\d{4})\s*-\s*(.+)$", pub_text)
-        if not match:
-            context.logger.warning("Skipping result: could not parse linea-pub=%r", pub_text)
-            continue
 
-        daily_journal_description = match.group(1).strip()
-        category = match.group(2).strip()
-        date_match = re.search(r"(\d{2}/\d{2}/\d{4})", daily_journal_description)
-        if not date_match:
-            context.logger.warning("Skipping result: could not parse issue date from=%r", daily_journal_description)
-            continue
+def build_daily_journal_description(diario: dict, issue_date: date) -> str:
+    issue_date_label = issue_date.strftime("%d/%m/%Y")
+    number = normalize_space(str(diario.get("numero", "")))
+    if number:
+        return f"BOE {number} de {issue_date_label}"
+    return f"BOE de {issue_date_label}"
 
-        issue_date = parse_eu_date(date_match.group(1))
-        if issue_date < context.from_date or issue_date > context.to_date:
-            continue
 
-        detail_url = urljoin(context.driver.current_url, href)
-        rows.append(
-            {
-                "department": department,
-                "daily_journal_description": daily_journal_description,
-                "issue_date": issue_date,
-                "category": category,
-                "title": title,
-                "detail_url": detail_url,
-            }
+def fetch_day_summary(
+    session: requests.Session,
+    url_template: str,
+    target_date: date,
+    timeout_seconds: int,
+    logger: logging.Logger,
+) -> dict | None:
+    url = resolve_summary_api_url(url_template, target_date, logger)
+    response = session.get(
+        url,
+        headers={"Accept": "application/json", "User-Agent": "ingesil-boe-crawler/1.0"},
+        timeout=timeout_seconds,
+    )
+    if response.status_code == 404:
+        logger.info("BOE summary not available for %s (404). Skipping day.", target_date.isoformat())
+        return None
+
+    response.raise_for_status()
+    payload = response.json()
+    status_code = str(payload.get("status", {}).get("code", ""))
+    if status_code and status_code != "200":
+        if status_code == "404":
+            logger.info("BOE summary reports status 404 for %s. Skipping day.", target_date.isoformat())
+            return None
+        raise RuntimeError(f"BOE summary API returned unexpected status {status_code} for {target_date.isoformat()}")
+
+    return payload
+
+
+def extract_summary_notices(payload: dict, target_date: date) -> list[SummaryNotice]:
+    sumario = payload.get("data", {}).get("sumario", {})
+    notices: list[SummaryNotice] = []
+
+    for diario in ensure_list(sumario.get("diario")):
+        description = build_daily_journal_description(diario, target_date)
+        for section in ensure_list(diario.get("seccion")):
+            section_name = normalize_space(section.get("nombre"))
+            notices.extend(
+                collect_summary_notices(
+                    node=section,
+                    issue_date=target_date,
+                    daily_journal_description=description,
+                    section_name=section_name,
+                    department_name="",
+                    epigraph_name="",
+                )
+            )
+
+    deduped: dict[str, SummaryNotice] = {}
+    for notice in notices:
+        deduped.setdefault(notice.identifier, notice)
+    return list(deduped.values())
+
+
+def collect_summary_notices(
+    *,
+    node: dict | list | None,
+    issue_date: date,
+    daily_journal_description: str,
+    section_name: str,
+    department_name: str,
+    epigraph_name: str,
+) -> list[SummaryNotice]:
+    notices: list[SummaryNotice] = []
+
+    if isinstance(node, list):
+        for item in node:
+            notices.extend(
+                collect_summary_notices(
+                    node=item,
+                    issue_date=issue_date,
+                    daily_journal_description=daily_journal_description,
+                    section_name=section_name,
+                    department_name=department_name,
+                    epigraph_name=epigraph_name,
+                )
+            )
+        return notices
+
+    if not isinstance(node, dict):
+        return notices
+
+    for item in ensure_list(node.get("item")):
+        summary_notice = summary_notice_from_item(
+            item=item,
+            issue_date=issue_date,
+            daily_journal_description=daily_journal_description,
+            section_name=section_name,
+            department_name=department_name,
+            epigraph_name=epigraph_name,
+        )
+        if summary_notice is not None:
+            notices.append(summary_notice)
+
+    for department in ensure_list(node.get("departamento")):
+        notices.extend(
+            collect_summary_notices(
+                node=department,
+                issue_date=issue_date,
+                daily_journal_description=daily_journal_description,
+                section_name=section_name,
+                department_name=normalize_space(department.get("nombre")) or department_name,
+                epigraph_name="",
+            )
         )
 
-    context.logger.info("Parsed %d valid results in date window on this page.", len(rows))
-    return rows
+    for epigraph in ensure_list(node.get("epigrafe")):
+        notices.extend(
+            collect_summary_notices(
+                node=epigraph,
+                issue_date=issue_date,
+                daily_journal_description=daily_journal_description,
+                section_name=section_name,
+                department_name=department_name,
+                epigraph_name=normalize_space(epigraph.get("nombre")) or epigraph_name,
+            )
+        )
+
+    for apartado in ensure_list(node.get("apartado")):
+        notices.extend(
+            collect_summary_notices(
+                node=apartado,
+                issue_date=issue_date,
+                daily_journal_description=daily_journal_description,
+                section_name=section_name,
+                department_name=department_name,
+                epigraph_name=normalize_space(apartado.get("nombre")) or epigraph_name,
+            )
+        )
+
+    return notices
+
+
+def summary_notice_from_item(
+    *,
+    item: dict,
+    issue_date: date,
+    daily_journal_description: str,
+    section_name: str,
+    department_name: str,
+    epigraph_name: str,
+) -> SummaryNotice | None:
+    title = normalize_space(item.get("titulo"))
+    identifier = normalize_space(item.get("identificador"))
+    html_url = make_absolute_url(extract_text_value(item.get("url_html")))
+    pdf_url = make_absolute_url(extract_text_value(item.get("url_pdf")))
+    xml_url = make_absolute_url(extract_text_value(item.get("url_xml")))
+
+    if not title or not identifier:
+        return None
+
+    return SummaryNotice(
+        identifier=identifier,
+        title=title,
+        issue_date=issue_date,
+        daily_journal_description=daily_journal_description,
+        section=section_name,
+        department=department_name,
+        epigraph=epigraph_name,
+        html_url=html_url,
+        pdf_url=pdf_url,
+        xml_url=xml_url,
+    )
+
+
+def extract_text_values(root: ET.Element, tag_name: str) -> list[str]:
+    values: list[str] = []
+    for element in root.iter():
+        if element.tag.lower() != tag_name.lower():
+            continue
+        text = normalize_space(" ".join(part for part in element.itertext()))
+        if text:
+            values.append(text)
+    return values
+
+
+def fetch_notice_detail(
+    session: requests.Session,
+    notice: SummaryNotice,
+    timeout_seconds: int,
+) -> dict[str, str]:
+    if not notice.xml_url:
+        return {
+            "title": notice.title,
+            "category": notice.section,
+            "department": notice.department,
+            "url": notice.html_url or notice.pdf_url,
+            "content": "",
+            "extra_info": build_extra_info(
+                identifier=notice.identifier,
+                range_label="",
+                epigraph=notice.epigraph,
+                materias=[],
+                alerts=[],
+            ),
+        }
+
+    response = session.get(
+        notice.xml_url,
+        headers={"User-Agent": "ingesil-boe-crawler/1.0"},
+        timeout=timeout_seconds,
+    )
+    response.raise_for_status()
+    root = ET.fromstring(response.text)
+
+    title = normalize_space(root.findtext("./metadatos/titulo")) or notice.title
+    department = normalize_space(root.findtext("./metadatos/departamento")) or notice.department
+    html_url = make_absolute_url(normalize_space(root.findtext("./metadatos/url_html"))) or notice.html_url
+    identifier = normalize_space(root.findtext("./metadatos/identificador")) or notice.identifier
+    range_label = normalize_space(root.findtext("./metadatos/rango"))
+    materias = extract_text_values(root, "materia")
+    alerts = extract_text_values(root, "alerta")
+
+    paragraphs: list[str] = []
+    for paragraph in root.findall(".//texto//p"):
+        text = normalize_space(" ".join(paragraph.itertext()))
+        if text:
+            paragraphs.append(text)
+
+    content = "\n\n".join(paragraphs).strip()
+    extra_info = build_extra_info(
+        identifier=identifier,
+        range_label=range_label,
+        epigraph=notice.epigraph,
+        materias=materias,
+        alerts=alerts,
+    )
+
+    return {
+        "title": title,
+        "category": notice.section,
+        "department": department,
+        "url": html_url or notice.pdf_url or notice.xml_url,
+        "content": content,
+        "extra_info": extra_info,
+    }
+
+
+def build_extra_info(
+    *,
+    identifier: str,
+    range_label: str,
+    epigraph: str,
+    materias: list[str],
+    alerts: list[str],
+) -> str:
+    parts: list[str] = []
+    if identifier:
+        parts.append(f"Identificador: {identifier}")
+    if range_label:
+        parts.append(f"Rango: {range_label}")
+    if epigraph:
+        parts.append(f"Epígrafe: {epigraph}")
+    if materias:
+        parts.append("Materias: " + "; ".join(materias))
+    if alerts:
+        parts.append("Alertas: " + "; ".join(alerts))
+    return "\n".join(parts).strip()
+
+
+def write_summary_payload(run_dir: Path, target_date: date, payload: dict) -> None:
+    output_path = run_dir / f"summary_{target_date.isoformat()}.json"
+    output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def upsert_daily_journal(
-    context: CrawlerContext,
+    db_conn: object,
+    source_id: int,
     *,
     issue_date: date,
     description: str,
 ) -> int:
     daily_journal_url = f"https://www.boe.es/boe/dias/{issue_date:%Y/%m/%d}/"
-    cur = context.db_conn.cursor()
+    cur = db_conn.cursor()
     try:
         cur.execute(
             """
@@ -306,70 +490,20 @@ def upsert_daily_journal(
                 updated_at = NOW()
             RETURNING id
             """,
-            (context.source_id, issue_date, daily_journal_url, description),
+            (source_id, issue_date, daily_journal_url, description),
         )
         row = cur.fetchone()
     finally:
         cur.close()
 
-    context.db_conn.commit()
+    db_conn.commit()
     if row is None:
         raise RuntimeError("Failed to upsert daily_journal and return id")
     return int(row[0])
 
 
-def extract_notice_detail_from_doc_page(context: CrawlerContext) -> dict[str, str]:
-    title = ""
-    title_elements = context.driver.find_elements(By.CSS_SELECTOR, "h3.documento-tit")
-    if title_elements:
-        title = (title_elements[0].text or "").strip()
-    if not title:
-        title = (context.driver.title or "").strip()
-
-    metadata: dict[str, str] = {}
-    dt_elements = context.driver.find_elements(By.CSS_SELECTOR, "div.metadatos dl dt")
-    for dt in dt_elements:
-        label = (dt.text or "").strip().rstrip(":")
-        if not label:
-            continue
-        dd_candidates = dt.find_elements(By.XPATH, "following-sibling::dd[1]")
-        if not dd_candidates:
-            continue
-        metadata[label] = (dd_candidates[0].text or "").strip()
-
-    category = metadata.get("Sección", "").strip()
-    department = metadata.get("Departamento", "").strip()
-
-    eli_url = ""
-    eli_links = context.driver.find_elements(By.XPATH, "//dt[contains(normalize-space(.), 'Permalink ELI')]/following-sibling::dd[1]//a")
-    if eli_links:
-        eli_url = (eli_links[0].get_attribute("href") or "").strip()
-
-    content_parts: list[str] = []
-    text_container = context.driver.find_elements(By.CSS_SELECTOR, "#textoxslt")
-    if text_container:
-        nodes = text_container[0].find_elements(By.XPATH, ".//*[self::p or self::h5][normalize-space()]")
-        for node in nodes:
-            text = (node.text or "").strip()
-            if not text:
-                continue
-            if re.search(r"\.pdf$", text, flags=re.IGNORECASE):
-                continue
-            content_parts.append(text)
-
-    content = "\n\n".join(content_parts).strip()
-    return {
-        "title": title,
-        "category": category,
-        "department": department,
-        "url": eli_url or context.driver.current_url,
-        "content": content,
-        "extra_info": "",
-    }
-
-
 def upsert_notice(
-    context: CrawlerContext,
+    db_conn: object,
     *,
     daily_journal_id: int,
     title: str,
@@ -379,7 +513,7 @@ def upsert_notice(
     content: str,
     extra_info: str,
 ) -> None:
-    cur = context.db_conn.cursor()
+    cur = db_conn.cursor()
     try:
         existing_id: int | None = None
         if url:
@@ -440,227 +574,74 @@ def upsert_notice(
     finally:
         cur.close()
 
-    context.db_conn.commit()
+    db_conn.commit()
 
 
-def state_home(context: CrawlerContext) -> BoeState:
-    context.logger.info("FSM state=%s opening BOE search page: %s", BoeState.HOME.value, context.base_url)
-    context.driver.get(context.base_url)
-    wait_dom_ready(context.driver, context.timeout_seconds)
-    WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: len(d.find_elements(By.ID, "desdeFP")) > 0 and len(d.find_elements(By.ID, "hastaFP")) > 0
-    )
-    created = context.artifacts.capture(context.driver, state=BoeState.HOME.value, note="search_page_opened")
-    context.logger.info("Artifacts saved: %s", created)
-    return BoeState.PREPARE_SEARCH
+def process_day(
+    *,
+    session: requests.Session,
+    db_conn: object,
+    logger: logging.Logger,
+    run_dir: Path,
+    source_id: int,
+    target_date: date,
+    url_template: str,
+    timeout_seconds: int,
+) -> int:
+    logger.info("Processing BOE day %s via open-data API.", target_date.isoformat())
+    payload = fetch_day_summary(session, url_template, target_date, timeout_seconds, logger)
+    if payload is None:
+        return 0
 
+    write_summary_payload(run_dir, target_date, payload)
+    notices = extract_summary_notices(payload, target_date)
+    logger.info("Summary API returned %d BOE notices for %s.", len(notices), target_date.isoformat())
 
-def state_prepare_search(context: CrawlerContext) -> BoeState:
-    context.logger.info(
-        "FSM state=%s setting BOE date range from=%s to=%s",
-        BoeState.PREPARE_SEARCH.value,
-        context.from_date.isoformat(),
-        context.to_date.isoformat(),
-    )
-
-    from_input = context.driver.find_element(By.ID, "desdeFP")
-    to_input = context.driver.find_element(By.ID, "hastaFP")
-    from_value = context.from_date.isoformat()
-    to_value = context.to_date.isoformat()
-    _set_date_input(context.driver, from_input, from_value)
-    _set_date_input(context.driver, to_input, to_value)
-    context.logger.info(
-        "Date inputs set: desdeFP=%s hastaFP=%s",
-        from_input.get_attribute("value"),
-        to_input.get_attribute("value"),
-    )
-
-    submit = context.driver.find_element(
-        By.XPATH,
-        "//div[contains(@class,'bloqueBotones')]//input[@type='submit' and @value='Buscar']",
-    )
-    try:
-        submit.click()
-    except Exception:
-        context.logger.warning("Standard submit click failed, retrying via JS click.")
-        context.driver.execute_script("arguments[0].click();", submit)
-
-    before_url = context.driver.current_url
-    wait_dom_ready(context.driver, context.timeout_seconds)
-    WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: (
-            d.current_url != before_url
-            or "accion=Buscar" in d.current_url
-            or "id_busqueda=" in d.current_url
-            or len(d.find_elements(By.CSS_SELECTOR, "li.resultado-busqueda")) > 0
-            or len(d.find_elements(By.CSS_SELECTOR, ".paginacion, .paginacion-mini, nav.paginacion")) > 0
-            or "No se han encontrado" in d.page_source
-            or "No se ha encontrado" in d.page_source
+    processed_count = 0
+    for notice in notices:
+        daily_journal_id = upsert_daily_journal(
+            db_conn,
+            source_id,
+            issue_date=notice.issue_date,
+            description=notice.daily_journal_description,
         )
-    )
-
-    context.logger.info("Search response URL: %s", context.driver.current_url)
-
-    created = context.artifacts.capture(context.driver, state=BoeState.PREPARE_SEARCH.value, note="search_submitted")
-    context.logger.info("Search submitted. Artifacts saved: %s", created)
-    return BoeState.PARSE_RESULTS_PAGE
-
-
-def state_parse_results_page(context: CrawlerContext) -> BoeState:
-    context.logger.info("FSM state=%s parsing result page URL=%s", BoeState.PARSE_RESULTS_PAGE.value, context.driver.current_url)
-    context.pending_results = extract_results_from_page(context)
-    context.next_page_url = extract_next_page_url(context.driver)
-    context.logger.info(
-        "Current page parse complete: pending_results=%d next_page=%s",
-        len(context.pending_results),
-        context.next_page_url or "<none>",
-    )
-    created = context.artifacts.capture(context.driver, state=BoeState.PARSE_RESULTS_PAGE.value, note="results_page_parsed")
-    context.logger.info("Artifacts saved: %s", created)
-    return BoeState.PROCESS_RESULT_ITEM
-
-
-def state_process_result_item(context: CrawlerContext) -> BoeState:
-    if context.pending_results:
-        context.current_result = context.pending_results.pop(0)
-        context.logger.info(
-            "FSM state=%s picked result: issue_date=%s category=%s department=%s title=%s",
-            BoeState.PROCESS_RESULT_ITEM.value,
-            context.current_result["issue_date"],
-            context.current_result["category"],
-            context.current_result["department"],
-            context.current_result["title"],
+        detail = fetch_notice_detail(session, notice, timeout_seconds)
+        upsert_notice(
+            db_conn,
+            daily_journal_id=daily_journal_id,
+            title=detail["title"],
+            category=detail["category"],
+            department=detail["department"],
+            url=detail["url"],
+            content=detail["content"],
+            extra_info=detail["extra_info"],
         )
-        return BoeState.OPEN_NOTICE
+        processed_count += 1
+        logger.info(
+            "Upserted BOE notice identifier=%s journal_id=%s title=%s content_len=%d",
+            notice.identifier,
+            daily_journal_id,
+            detail["title"],
+            len(detail["content"]),
+        )
 
-    if context.next_page_url:
-        context.logger.info("No more results on current page. Moving to next page.")
-        return BoeState.OPEN_NEXT_PAGE
-
-    context.logger.info("No pending results and no next page. FSM done.")
-    return BoeState.DONE
-
-
-def state_open_notice(context: CrawlerContext) -> BoeState:
-    if context.current_result is None:
-        return BoeState.PROCESS_RESULT_ITEM
-
-    issue_date = context.current_result["issue_date"]
-    if not isinstance(issue_date, date):
-        raise RuntimeError(f"Invalid issue_date in current result: {issue_date!r}")
-
-    daily_journal_id = upsert_daily_journal(
-        context,
-        issue_date=issue_date,
-        description=str(context.current_result["daily_journal_description"]),
-    )
-    context.logger.info(
-        "Upserted daily_journal id=%s issue_date=%s description=%s",
-        daily_journal_id,
-        issue_date.isoformat(),
-        context.current_result["daily_journal_description"],
-    )
-
-    detail_url = str(context.current_result["detail_url"])
-    context.logger.info("Opening BOE notice detail URL=%s", detail_url)
-    context.driver.get(detail_url)
-    wait_dom_ready(context.driver, context.timeout_seconds)
-    WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: len(d.find_elements(By.CSS_SELECTOR, "h3.documento-tit")) > 0
-    )
-
-    detail = extract_notice_detail_from_doc_page(context)
-    title = detail["title"] or str(context.current_result["title"])
-    category = detail["category"] or str(context.current_result["category"])
-    department = detail["department"] or str(context.current_result["department"])
-    url = detail["url"] or detail_url
-    content = detail["content"]
-
-    upsert_notice(
-        context,
-        daily_journal_id=daily_journal_id,
-        title=title,
-        category=category,
-        department=department,
-        url=url,
-        content=content,
-        extra_info="",
-    )
-    context.logger.info(
-        "Upserted notice daily_journal_id=%s title=%s category=%s department=%s url=%s content_len=%d",
-        daily_journal_id,
-        title,
-        category,
-        department,
-        url,
-        len(content),
-    )
-
-    created = context.artifacts.capture(context.driver, state=BoeState.OPEN_NOTICE.value, note=f"notice_{daily_journal_id}")
-    context.logger.info("Artifacts saved: %s", created)
-    context.current_result = None
-    return BoeState.PROCESS_RESULT_ITEM
-
-
-def state_open_next_page(context: CrawlerContext) -> BoeState:
-    if not context.next_page_url:
-        return BoeState.DONE
-
-    context.logger.info("FSM state=%s opening next results page: %s", BoeState.OPEN_NEXT_PAGE.value, context.next_page_url)
-    context.driver.get(context.next_page_url)
-    wait_dom_ready(context.driver, context.timeout_seconds)
-    WebDriverWait(context.driver, context.timeout_seconds).until(
-        lambda d: len(d.find_elements(By.CSS_SELECTOR, "li.resultado-busqueda")) > 0 or "No se han encontrado" in d.page_source
-    )
-    created = context.artifacts.capture(context.driver, state=BoeState.OPEN_NEXT_PAGE.value, note="next_page_opened")
-    context.logger.info("Artifacts saved: %s", created)
-    context.next_page_url = None
-    return BoeState.PARSE_RESULTS_PAGE
-
-
-def simulate_human_transition(context: CrawlerContext, from_state: BoeState, to_state: BoeState) -> None:
-    if to_state == BoeState.DONE:
-        context.logger.info("Transition %s -> %s (final), skipping human pacing.", from_state.value, to_state.value)
-        return
-
-    context.logger.info("Transition %s -> %s: applying human-like pacing.", from_state.value, to_state.value)
-    first_pause = random.uniform(0.4, 1.2)
-    time.sleep(first_pause)
-    context.logger.info("Human pacing: pause %.2fs", first_pause)
-
-    try:
-        viewport_height = int(context.driver.execute_script("return window.innerHeight || 900;"))
-    except Exception:
-        viewport_height = 900
-
-    down_px = random.randint(max(80, int(viewport_height * 0.10)), max(180, int(viewport_height * 0.28)))
-    up_px = random.randint(max(30, int(viewport_height * 0.05)), max(120, int(viewport_height * 0.16)))
-    context.driver.execute_script("window.scrollBy(0, arguments[0]);", down_px)
-    context.logger.info("Human pacing: scrolled down %dpx", down_px)
-    time.sleep(random.uniform(0.2, 0.7))
-    context.driver.execute_script("window.scrollBy(0, arguments[0]);", -up_px)
-    context.logger.info("Human pacing: scrolled up %dpx", up_px)
-
-    second_pause = random.uniform(0.3, 0.9)
-    time.sleep(second_pause)
-    context.logger.info("Human pacing: pause %.2fs", second_pause)
+    return processed_count
 
 
 def main() -> int:
     load_dotenv(PROJECT_ROOT / ".env", override=False)
     args = parse_args()
-    headless = resolve_headless(args)
 
     run_dir = PROJECT_ROOT / "storage" / "crawlers" / args.slug / args.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
     logger = build_logger("crawler.boe", run_dir / "crawler.log")
-    logger.info("Starting crawler for slug=%s", args.slug)
-    logger.info("Mode: %s", "headless" if headless else "headed")
+    logger.info("Starting BOE crawler for slug=%s", args.slug)
     logger.info("Run directory: %s", run_dir)
+    if args.headless or args.headed:
+        logger.info("Browser mode flags were provided, but BOE now uses the official open-data API and ignores them.")
 
     db_conn = None
-    driver: WebDriver | None = None
     try:
         try:
             import psycopg
@@ -675,8 +656,7 @@ def main() -> int:
             password=os.getenv("DB_PASSWORD", ""),
         )
 
-        source_id, source_start_at, source_base_url = read_source_data_from_db(args.slug)
-        base_url = args.base_url or source_base_url or "https://www.boe.es/buscar/boe.php"
+        source_id, source_start_at = read_source_data_from_db(args.slug)
         from_date, to_date = resolve_crawl_range(
             logger,
             db_conn,
@@ -688,53 +668,31 @@ def main() -> int:
         )
 
         if from_date > to_date:
-            logger.info("Nothing to crawl for BOE: from_date=%s is after today=%s", from_date.isoformat(), to_date.isoformat())
+            logger.info("Nothing to crawl for BOE: from_date=%s is after to_date=%s", from_date.isoformat(), to_date.isoformat())
             return 0
 
-        driver = build_driver(headless=headless)
-        artifacts = ArtifactWriter(run_dir=run_dir)
-        context = CrawlerContext(
-            logger=logger,
-            driver=driver,
-            artifacts=artifacts,
-            slug=args.slug,
-            source_id=source_id,
-            base_url=base_url,
-            timeout_seconds=args.timeout,
-            from_date=from_date,
-            to_date=to_date,
-            db_conn=db_conn,
-            pending_results=[],
-        )
+        session = requests.Session()
+        total_processed = 0
+        current_day = from_date
+        while current_day <= to_date:
+            total_processed += process_day(
+                session=session,
+                db_conn=db_conn,
+                logger=logger,
+                run_dir=run_dir,
+                source_id=source_id,
+                target_date=current_day,
+                url_template=args.base_url,
+                timeout_seconds=args.timeout,
+            )
+            current_day += timedelta(days=1)
 
-        fsm = FSMRunner(
-            initial_state=BoeState.HOME,
-            terminal_state=BoeState.DONE,
-            handlers={
-                BoeState.HOME: state_home,
-                BoeState.PREPARE_SEARCH: state_prepare_search,
-                BoeState.PARSE_RESULTS_PAGE: state_parse_results_page,
-                BoeState.PROCESS_RESULT_ITEM: state_process_result_item,
-                BoeState.OPEN_NOTICE: state_open_notice,
-                BoeState.OPEN_NEXT_PAGE: state_open_next_page,
-            },
-            on_transition=simulate_human_transition,
-            config=FSMConfig(max_steps=20000),
-        )
-        final_state = fsm.run(context)
-        logger.info("Crawler finished with final state=%s", final_state.value)
+        logger.info("BOE crawler finished. Total processed notices=%d", total_processed)
         return 0
     except Exception as exc:  # pragma: no cover
         logger.exception("Crawler failed: %s: %r", type(exc).__name__, exc)
-        if driver is not None:
-            try:
-                ArtifactWriter(run_dir=run_dir).capture(driver, state="ERROR", note="unhandled_exception")
-            except Exception:
-                logger.exception("Failed to write error artifacts")
         return 1
     finally:
-        if driver is not None:
-            driver.quit()
         if db_conn is not None:
             db_conn.close()
 

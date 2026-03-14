@@ -17,11 +17,16 @@ class SourceResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 1;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.content_library');
     }
 
     public static function canViewAny(): bool

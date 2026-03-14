@@ -6,9 +6,24 @@ return [
         'yes' => 'Sí',
         'no' => 'No',
     ],
+    'auth' => [
+        'confirm_sign_in' => 'Confirmar acceso',
+        'sign_out' => 'Cerrar sesión',
+        'two_factor_code_prompt' => 'Introduce el código de 6 dígitos de la aplicación autenticadora',
+    ],
     'roles' => [
-        'admin' => 'Administrador',
-        'regular' => 'Usuario',
+        'admin' => 'Administrador de plataforma',
+        'company_admin' => 'Administrador de empresa',
+        'regular' => 'Usuario regular',
+    ],
+    'navigation' => [
+        'groups' => [
+            'workspace' => 'Espacio de trabajo',
+            'customer_operations' => 'Operaciones de clientes',
+            'regulatory_analysis' => 'Análisis normativo',
+            'content_library' => 'Biblioteca documental',
+            'catalog' => 'Catálogo',
+        ],
     ],
     'locales' => [
         'en' => 'Inglés',
@@ -33,6 +48,10 @@ return [
         'navigation' => 'Usuarios',
         'model_singular' => 'usuario',
         'model_plural' => 'usuarios',
+        'sections' => [
+            'account' => 'Cuenta',
+            'notifications' => 'Notificaciones por correo',
+        ],
         'actions' => [
             'force_reset_password' => 'Restablecer contraseña y enviar enlace',
             'force_reset_password_success_title' => 'Restablecimiento iniciado',
@@ -49,18 +68,37 @@ return [
             'role' => 'Perfil',
             'locale' => 'Idioma',
             'companies' => 'Empresas',
+            'notice_digest_frequency' => 'Frecuencia de correo',
+            'notify_if_pending_tasks' => 'Enviar si hay tareas pendientes de revisión',
+            'notify_if_new_relevant_notices' => 'Enviar si llegan avisos nuevos relevantes',
+            'last_notice_digest_sent_at' => 'Último digest enviado el',
             'created_at' => 'Creado el',
+        ],
+    ],
+    'email_notifications' => [
+        'navigation' => 'Notificaciones por correo',
+        'title' => 'Notificaciones por correo',
+        'sections' => [
+            'preferences' => 'Preferencias del digest',
+            'preferences_description' => 'Elige con qué frecuencia recibes correos resumen y cuándo deben enviarse.',
+        ],
+        'actions' => [
+            'save' => 'Guardar',
+        ],
+        'messages' => [
+            'saved' => 'Configuración de notificaciones actualizada.',
         ],
     ],
     'companies' => [
         'navigation' => 'Empresas',
+        'navigation_my' => 'Mis empresas',
         'model_singular' => 'empresa',
         'model_plural' => 'empresas',
         'sections' => [
             'general' => 'Información general',
             'spain' => 'Datos específicos de España',
             'financials' => 'Datos financieros',
-            'regulatory_scopes' => 'Alcances regulatorios',
+            'scope_subscriptions' => 'Suscripciones de alcance',
             'assignments' => 'Asignación de usuarios',
         ],
         'fields' => [
@@ -75,6 +113,9 @@ return [
             'total_assets' => 'Activo total',
             'users' => 'Usuarios',
             'scopes' => 'Alcances',
+            'scope' => 'Alcance',
+            'locale' => 'Idioma',
+            'scope_subscriptions' => 'Suscripciones de alcance',
         ],
     ],
     'features' => [
@@ -438,18 +479,23 @@ return [
     ],
     'company_notice_analyses' => [
         'navigation' => 'Análisis por empresa',
+        'navigation_customer' => 'Avisos de cumplimiento',
         'model_singular' => 'análisis por empresa',
         'model_plural' => 'análisis por empresa',
         'sections' => [
             'analysis' => 'Evaluación IA',
             'company_review' => 'Revisión de la empresa',
         ],
+        'actions' => [
+            'pending_review' => 'Avisos pendientes',
+        ],
         'filters' => [
             'company' => 'Empresa',
             'scope' => 'Ámbito',
             'source' => 'Fuente',
+            'locale' => 'Idioma',
             'decision' => 'Decisión',
-            'confirmed_relevant' => 'Confirmado como relevante',
+            'confirmed_relevant' => 'Estado de revisión',
             'compliance' => 'Cumplimiento',
             'run' => 'Ejecución',
         ],
@@ -458,6 +504,7 @@ return [
             'company' => 'Empresa',
             'issue_date' => 'Fecha de edición',
             'scope' => 'Ámbito',
+            'locale' => 'Idioma',
             'source' => 'Fuente',
             'notice' => 'Aviso',
             'decision' => 'Decisión',
@@ -475,6 +522,27 @@ return [
             'relevant' => 'Relevante',
             'not_relevant' => 'No relevante',
         ],
+        'review_statuses' => [
+            'pending_review' => 'Pendiente de revisión',
+        ],
+    ],
+    'company_notice_analysis_events' => [
+        'heading' => 'Historial de cambios',
+        'fields' => [
+            'created_at' => 'Cambiado el',
+            'event_type' => 'Tipo',
+            'user' => 'Usuario',
+            'changes' => 'Cambios',
+        ],
+        'types' => [
+            'ai_processed' => 'Procesado por IA',
+            'user_updated' => 'Actualizado por usuario',
+        ],
+        'values' => [
+            'empty' => 'Vacío',
+        ],
+        'empty_heading' => 'Todavía no hay cambios registrados',
+        'empty_description' => 'Los cambios de IA y de usuario aparecerán aquí con el tiempo.',
     ],
     'smart_search' => [
         'navigation' => 'Búsqueda inteligente',
@@ -514,14 +582,105 @@ return [
             'answer_error_title' => 'No se pudo generar la respuesta',
         ],
     ],
+    'activity_log' => [
+        'navigation' => 'Registro de actividad',
+        'fields' => [
+            'created_at' => 'Creado el',
+            'causer' => 'Usuario',
+            'event' => 'Evento',
+            'subject' => 'Tipo de registro',
+            'subject_record' => 'Registro',
+            'changes' => 'Cambios',
+        ],
+        'filters' => [
+            'causer' => 'Usuario',
+            'event' => 'Evento',
+            'subject' => 'Tipo de registro',
+            'date_range' => 'Rango de fechas',
+            'from' => 'Desde',
+            'to' => 'Hasta',
+        ],
+        'events' => [
+            'created' => 'Creado',
+            'updated' => 'Actualizado',
+            'deleted' => 'Eliminado',
+        ],
+        'sections' => [
+            'details' => 'Detalles de la actividad',
+        ],
+        'actions' => [
+            'back' => 'Volver al registro',
+        ],
+        'values' => [
+            'system' => 'Sistema',
+            'empty' => 'Vacío',
+        ],
+    ],
+    'notice_digests' => [
+        'navigation_runs' => 'Ejecuciones de digest',
+        'frequencies' => [
+            'daily' => 'Diario',
+            'weekly' => 'Semanal',
+            'monthly' => 'Mensual',
+            'never' => 'Nunca',
+        ],
+        'sections' => [
+            'run' => 'Ejecución del digest',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'user' => 'Usuario',
+            'frequency' => 'Frecuencia',
+            'locale' => 'Idioma',
+            'status' => 'Estado',
+            'window_started_at' => 'Inicio de ventana',
+            'window_ended_at' => 'Fin de ventana',
+            'pending_tasks_count' => 'Pendientes',
+            'new_relevant_count' => 'Nuevos relevantes',
+            'completed_count' => 'Completados',
+            'sent_at' => 'Enviado el',
+            'error_message' => 'Error',
+        ],
+        'filters' => [
+            'user' => 'Usuario',
+            'frequency' => 'Frecuencia',
+            'status' => 'Estado',
+        ],
+        'statuses' => [
+            'queued' => 'En cola',
+            'sent' => 'Enviado',
+            'skipped' => 'Omitido',
+            'failed' => 'Fallido',
+        ],
+        'actions' => [
+            'back' => 'Volver a ejecuciones',
+        ],
+        'email' => [
+            'subject' => 'Digest de cumplimiento — :pending pendientes, :new nuevos',
+            'heading' => 'Digest de cumplimiento',
+            'intro' => 'Resumen de tus empresas suscritas: :pending pendientes de revisión, :new avisos nuevos relevantes, :completed elementos completados.',
+            'sections' => [
+                'pending' => 'Pendientes de revisión',
+                'new_relevant' => 'Nuevos avisos relevantes',
+                'completed' => 'Completados recientemente',
+            ],
+            'labels' => [
+                'scope' => 'Ámbito',
+                'issue_date' => 'Fecha de edición',
+                'due_date' => 'Fecha límite',
+                'open_notice' => 'Abrir aviso',
+            ],
+            'outro' => 'Este correo solo incluye empresas a las que tienes acceso y se envía en tu idioma preferido.',
+        ],
+    ],
     'dashboard' => [
         'library' => [
             'heading' => 'Biblioteca regulatoria',
             'description' => 'Volumen principal de publicación en los diarios oficiales monitorizados.',
             'stats' => [
-                'sources' => [
-                    'label' => 'Fuentes',
-                    'description' => 'Diarios oficiales monitorizados',
+                'recent_notices' => [
+                    'label' => 'Avisos (30d)',
+                    'description' => 'Nuevas publicaciones indexadas en los últimos 30 días',
                 ],
                 'daily_journals' => [
                     'label' => 'Diarios',
@@ -585,6 +744,63 @@ return [
             ],
             'empty_heading' => 'Todavía no hay avisos',
             'empty_description' => 'Las publicaciones recientes aparecerán aquí cuando los crawlers llenen la biblioteca.',
+        ],
+        'customer_subscriptions' => [
+            'heading' => 'Cobertura de suscripciones',
+            'description' => 'Empresas activas, suscripciones contratadas, ámbitos cubiertos e idiomas habilitados.',
+            'stats' => [
+                'companies' => [
+                    'label' => 'Mis empresas',
+                    'description' => 'Empresas a las que tienes acceso',
+                ],
+                'subscriptions' => [
+                    'label' => 'Suscripciones',
+                    'description' => 'Pares ámbito-idioma activos',
+                ],
+                'scopes' => [
+                    'label' => 'Ámbitos suscritos',
+                    'description' => 'Servicios contratados distintos',
+                ],
+                'languages' => [
+                    'label' => 'Idiomas',
+                    'description' => 'Idiomas cubiertos por las suscripciones',
+                ],
+            ],
+        ],
+        'customer_compliance' => [
+            'heading' => 'Carga de cumplimiento',
+            'description' => 'Qué es relevante ahora, qué está pendiente de revisión, qué vence pronto y qué ya cumple.',
+            'stats' => [
+                'relevant' => [
+                    'label' => 'Avisos relevantes',
+                    'description' => 'Elementos relevantes para la empresa',
+                ],
+                'pending_review' => [
+                    'label' => 'Pendientes de revisión',
+                    'description' => 'Avisos relevantes aún no confirmados',
+                ],
+                'due_soon' => [
+                    'label' => 'Vencen en 30 días',
+                    'description' => 'Próximos plazos de cumplimiento',
+                ],
+                'compliant' => [
+                    'label' => 'Ya cumplen',
+                    'description' => 'Elementos marcados como cumplidos',
+                ],
+            ],
+        ],
+        'customer_notices' => [
+            'heading' => 'Últimos avisos relevantes',
+            'columns' => [
+                'company' => 'Empresa',
+                'issue_date' => 'Fecha de edición',
+                'scope' => 'Ámbito',
+                'notice' => 'Aviso',
+                'compliance_due_at' => 'Fecha límite de cumplimiento',
+                'compliance' => 'Cumplimiento',
+            ],
+            'empty_heading' => 'Todavía no hay avisos relevantes',
+            'empty_description' => 'Los avisos relevantes de empresa aparecerán aquí cuando finalicen los análisis.',
         ],
     ],
 ];

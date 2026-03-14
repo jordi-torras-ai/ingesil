@@ -22,11 +22,68 @@ RUN_MIGRATIONS="${RUN_MIGRATIONS:-1}"
 RUN_SEEDERS="${RUN_SEEDERS:-1}"
 # Keep existing data by default; set MIGRATE_FRESH=1 when you explicitly want a full reset.
 MIGRATE_FRESH="${MIGRATE_FRESH:-0}"
-CLEAR_FAILED_JOBS="${CLEAR_FAILED_JOBS:-0}"
 
 QUEUE_PIDS=()
 WEB_PID=""
 IS_CLEANED_UP=0
+
+print_queue_snapshot() {
+  local label="$1"
+  echo "$label"
+  php artisan tinker --execute="
+\$pending = DB::table('jobs')
+  ->selectRaw('queue, count(*) as total')
+  ->groupBy('queue')
+  ->orderBy('queue')
+  ->get()
+  ->map(fn (\$row) => ['queue' => \$row->queue, 'total' => (int) \$row->total])
+  ->all();
+
+\$failed = DB::table('failed_jobs')
+  ->selectRaw('count(*) as total')
+  ->first();
+
+\$pendingNames = DB::table('jobs')
+  ->orderBy('id')
+  ->limit(10)
+  ->get(['id', 'queue', 'payload'])
+  ->map(fn (\$row) => [
+    'id' => \$row->id,
+    'queue' => \$row->queue,
+    'job' => data_get(json_decode(\$row->payload, true), 'displayName'),
+  ])
+  ->all();
+
+\$failedNames = DB::table('failed_jobs')
+  ->orderByDesc('id')
+  ->limit(10)
+  ->get(['id', 'failed_at', 'payload'])
+  ->map(fn (\$row) => [
+    'id' => \$row->id,
+    'failed_at' => \$row->failed_at,
+    'job' => data_get(json_decode(\$row->payload, true), 'displayName'),
+  ])
+  ->all();
+
+dump([
+  'pending_by_queue' => \$pending,
+  'pending_examples' => \$pendingNames,
+  'failed_total' => (int) (\$failed->total ?? 0),
+  'failed_examples' => \$failedNames,
+]);
+"
+}
+
+flush_queue_state() {
+  local phase="$1"
+  echo
+  echo "Queue cleanup ($phase)..."
+  print_queue_snapshot "Queue state before cleanup:"
+  php artisan queue:restart || true
+  php artisan queue:clear --force || true
+  php artisan queue:flush || true
+  print_queue_snapshot "Queue state after cleanup:"
+}
 
 cleanup() {
   if [[ "$IS_CLEANED_UP" -eq 1 ]]; then
@@ -38,18 +95,22 @@ cleanup() {
   echo "Stopping background processes..."
 
   if [[ -n "$WEB_PID" ]] && kill -0 "$WEB_PID" 2>/dev/null; then
+    echo "Stopping web server PID $WEB_PID"
     kill -TERM "$WEB_PID" 2>/dev/null || true
   fi
 
   if ((${#QUEUE_PIDS[@]})); then
     for pid in "${QUEUE_PIDS[@]}"; do
       if kill -0 "$pid" 2>/dev/null; then
+        echo "Stopping queue worker PID $pid"
         kill -TERM "$pid" 2>/dev/null || true
       fi
     done
   fi
 
   wait 2>/dev/null || true
+
+  flush_queue_state "shutdown"
 }
 
 trap cleanup INT TERM EXIT
@@ -73,13 +134,7 @@ elif [[ "$RUN_SEEDERS" -eq 1 ]]; then
   php artisan db:seed --force
 fi
 
-echo "Resetting queue state..."
-php artisan queue:restart || true
-php artisan queue:clear --force || true
-
-if [[ "$CLEAR_FAILED_JOBS" -eq 1 ]]; then
-  php artisan queue:flush --force || true
-fi
+flush_queue_state "startup"
 
 echo "Starting $QUEUE_WORKERS queue worker(s) for queue(s): $QUEUE_NAMES"
 for _ in $(seq 1 "$QUEUE_WORKERS"); do

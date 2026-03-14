@@ -14,6 +14,11 @@ class AnalysisOutcomeChart extends ChartWidget
 
     protected int | string | array $columnSpan = 1;
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
     protected static ?string $maxHeight = '320px';
 
     public function getHeading(): ?string

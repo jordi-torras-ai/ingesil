@@ -4,9 +4,11 @@ namespace App\Console\Commands;
 
 use App\Models\Company;
 use App\Models\CompanyFeatureAnswer;
+use App\Models\CompanyScopeSubscription;
 use App\Models\Feature;
 use App\Models\FeatureOption;
 use App\Models\Scope;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -19,6 +21,7 @@ class ImportCompanyFeatureAnswersCommand extends Command
         {scope : Scope code}
         {file : TSV/CSV file with feature label and answer columns}
         {--locale=es : Locale used to match feature and option labels}
+        {--subscription-locale=en : Locale to use when creating the company scope subscription if missing}
         {--dry-run : Parse and validate without writing data}';
 
     protected $description = 'Import company feature answers for one scope from a TSV/CSV file.';
@@ -29,6 +32,10 @@ class ImportCompanyFeatureAnswersCommand extends Command
             $company = $this->resolveCompany((string) $this->argument('company'));
             $scope = $this->resolveScope((string) $this->argument('scope'));
             $locale = trim(Str::lower((string) $this->option('locale'))) ?: 'es';
+            $subscriptionLocale = trim(Str::lower((string) $this->option('subscription-locale'))) ?: 'en';
+            if (! in_array($subscriptionLocale, User::supportedLocales(), true)) {
+                throw new RuntimeException("Unsupported subscription locale: {$subscriptionLocale}");
+            }
             $path = $this->resolveFilePath((string) $this->argument('file'));
             $rows = $this->parseRows($path);
             $features = $this->featuresByNormalizedLabel($scope, $locale);
@@ -89,7 +96,11 @@ class ImportCompanyFeatureAnswersCommand extends Command
                 return self::SUCCESS;
             }
 
-            $company->scopes()->syncWithoutDetaching([$scope->id]);
+            CompanyScopeSubscription::query()->firstOrCreate([
+                'company_id' => $company->id,
+                'scope_id' => $scope->id,
+                'locale' => $subscriptionLocale,
+            ]);
 
             foreach ($results as $result) {
                 /** @var Feature $feature */

@@ -6,9 +6,24 @@ return [
         'yes' => 'Yes',
         'no' => 'No',
     ],
+    'auth' => [
+        'confirm_sign_in' => 'Confirm sign in',
+        'sign_out' => 'Sign out',
+        'two_factor_code_prompt' => 'Enter the 6-digit code from the authenticator app',
+    ],
     'roles' => [
-        'admin' => 'Admin',
-        'regular' => 'Regular',
+        'admin' => 'Platform admin',
+        'company_admin' => 'Company admin',
+        'regular' => 'Regular user',
+    ],
+    'navigation' => [
+        'groups' => [
+            'workspace' => 'Workspace',
+            'customer_operations' => 'Customer operations',
+            'regulatory_analysis' => 'Regulatory analysis',
+            'content_library' => 'Content library',
+            'catalog' => 'Catalog',
+        ],
     ],
     'locales' => [
         'en' => 'English',
@@ -33,6 +48,10 @@ return [
         'navigation' => 'Users',
         'model_singular' => 'user',
         'model_plural' => 'users',
+        'sections' => [
+            'account' => 'Account',
+            'notifications' => 'Email notifications',
+        ],
         'actions' => [
             'force_reset_password' => 'Reset password and email link',
             'force_reset_password_success_title' => 'Password reset started',
@@ -49,18 +68,37 @@ return [
             'role' => 'Profile',
             'locale' => 'Language',
             'companies' => 'Companies',
+            'notice_digest_frequency' => 'Email frequency',
+            'notify_if_pending_tasks' => 'Send if pending review tasks exist',
+            'notify_if_new_relevant_notices' => 'Send if new relevant notices arrive',
+            'last_notice_digest_sent_at' => 'Last digest sent at',
             'created_at' => 'Created at',
+        ],
+    ],
+    'email_notifications' => [
+        'navigation' => 'Email notifications',
+        'title' => 'Email notifications',
+        'sections' => [
+            'preferences' => 'Digest preferences',
+            'preferences_description' => 'Choose how often you receive notice digest emails and when they should be sent.',
+        ],
+        'actions' => [
+            'save' => 'Save',
+        ],
+        'messages' => [
+            'saved' => 'Email notification settings updated.',
         ],
     ],
     'companies' => [
         'navigation' => 'Companies',
+        'navigation_my' => 'My Companies',
         'model_singular' => 'company',
         'model_plural' => 'companies',
         'sections' => [
             'general' => 'General Information',
             'spain' => 'Spain-specific data',
             'financials' => 'Financials',
-            'regulatory_scopes' => 'Regulatory scopes',
+            'scope_subscriptions' => 'Scope subscriptions',
             'assignments' => 'User assignments',
         ],
         'fields' => [
@@ -75,6 +113,9 @@ return [
             'total_assets' => 'Total assets',
             'users' => 'Users',
             'scopes' => 'Scopes',
+            'scope' => 'Scope',
+            'locale' => 'Language',
+            'scope_subscriptions' => 'Scope subscriptions',
         ],
     ],
     'features' => [
@@ -438,18 +479,23 @@ return [
     ],
     'company_notice_analyses' => [
         'navigation' => 'Company analyses',
+        'navigation_customer' => 'Compliance notices',
         'model_singular' => 'company analysis',
         'model_plural' => 'company analyses',
         'sections' => [
             'analysis' => 'AI assessment',
             'company_review' => 'Company review',
         ],
+        'actions' => [
+            'pending_review' => 'Pending notices',
+        ],
         'filters' => [
             'company' => 'Company',
             'scope' => 'Scope',
             'source' => 'Source',
+            'locale' => 'Language',
             'decision' => 'Decision',
-            'confirmed_relevant' => 'Confirmed relevant',
+            'confirmed_relevant' => 'Review status',
             'compliance' => 'Compliance',
             'run' => 'Run',
         ],
@@ -458,6 +504,7 @@ return [
             'company' => 'Company',
             'issue_date' => 'Issue date',
             'scope' => 'Scope',
+            'locale' => 'Language',
             'source' => 'Source',
             'notice' => 'Notice',
             'decision' => 'Decision',
@@ -475,6 +522,27 @@ return [
             'relevant' => 'Relevant',
             'not_relevant' => 'Not relevant',
         ],
+        'review_statuses' => [
+            'pending_review' => 'Pending review',
+        ],
+    ],
+    'company_notice_analysis_events' => [
+        'heading' => 'Change history',
+        'fields' => [
+            'created_at' => 'Changed at',
+            'event_type' => 'Type',
+            'user' => 'User',
+            'changes' => 'Changes',
+        ],
+        'types' => [
+            'ai_processed' => 'AI processed',
+            'user_updated' => 'User updated',
+        ],
+        'values' => [
+            'empty' => 'Empty',
+        ],
+        'empty_heading' => 'No changes recorded yet',
+        'empty_description' => 'Recorded AI and user changes will appear here over time.',
     ],
     'smart_search' => [
         'navigation' => 'Smart Search',
@@ -514,14 +582,105 @@ return [
             'answer_error_title' => 'Unable to generate answer',
         ],
     ],
+    'activity_log' => [
+        'navigation' => 'Activity log',
+        'fields' => [
+            'created_at' => 'Created at',
+            'causer' => 'User',
+            'event' => 'Event',
+            'subject' => 'Subject type',
+            'subject_record' => 'Record',
+            'changes' => 'Changes',
+        ],
+        'filters' => [
+            'causer' => 'User',
+            'event' => 'Event',
+            'subject' => 'Subject type',
+            'date_range' => 'Date range',
+            'from' => 'From',
+            'to' => 'To',
+        ],
+        'events' => [
+            'created' => 'Created',
+            'updated' => 'Updated',
+            'deleted' => 'Deleted',
+        ],
+        'sections' => [
+            'details' => 'Activity details',
+        ],
+        'actions' => [
+            'back' => 'Back to log',
+        ],
+        'values' => [
+            'system' => 'System',
+            'empty' => 'Empty',
+        ],
+    ],
+    'notice_digests' => [
+        'navigation_runs' => 'Email digest runs',
+        'frequencies' => [
+            'daily' => 'Daily',
+            'weekly' => 'Weekly',
+            'monthly' => 'Monthly',
+            'never' => 'Never',
+        ],
+        'sections' => [
+            'run' => 'Digest run',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'user' => 'User',
+            'frequency' => 'Frequency',
+            'locale' => 'Language',
+            'status' => 'Status',
+            'window_started_at' => 'Window start',
+            'window_ended_at' => 'Window end',
+            'pending_tasks_count' => 'Pending',
+            'new_relevant_count' => 'New relevant',
+            'completed_count' => 'Completed',
+            'sent_at' => 'Sent at',
+            'error_message' => 'Error',
+        ],
+        'filters' => [
+            'user' => 'User',
+            'frequency' => 'Frequency',
+            'status' => 'Status',
+        ],
+        'statuses' => [
+            'queued' => 'Queued',
+            'sent' => 'Sent',
+            'skipped' => 'Skipped',
+            'failed' => 'Failed',
+        ],
+        'actions' => [
+            'back' => 'Back to runs',
+        ],
+        'email' => [
+            'subject' => 'Compliance digest — :pending pending, :new new',
+            'heading' => 'Compliance digest',
+            'intro' => 'Summary for your subscribed companies: :pending pending review, :new new relevant notices, :completed completed items.',
+            'sections' => [
+                'pending' => 'Pending review',
+                'new_relevant' => 'New relevant notices',
+                'completed' => 'Completed recently',
+            ],
+            'labels' => [
+                'scope' => 'Scope',
+                'issue_date' => 'Issue date',
+                'due_date' => 'Due date',
+                'open_notice' => 'Open notice',
+            ],
+            'outro' => 'This email only includes companies you can access and is sent in your preferred language.',
+        ],
+    ],
     'dashboard' => [
         'library' => [
             'heading' => 'Regulatory library',
             'description' => 'Core publishing volume across the monitored official journals.',
             'stats' => [
-                'sources' => [
-                    'label' => 'Sources',
-                    'description' => 'Tracked official journals',
+                'recent_notices' => [
+                    'label' => 'Notices (30d)',
+                    'description' => 'New indexed publications in the last 30 days',
                 ],
                 'daily_journals' => [
                     'label' => 'Daily journals',
@@ -585,6 +744,63 @@ return [
             ],
             'empty_heading' => 'No notices yet',
             'empty_description' => 'Recent published notices will appear here once crawlers populate the library.',
+        ],
+        'customer_subscriptions' => [
+            'heading' => 'Your subscription footprint',
+            'description' => 'Active companies, purchased subscriptions, covered scopes, and enabled languages.',
+            'stats' => [
+                'companies' => [
+                    'label' => 'My companies',
+                    'description' => 'Companies you can access',
+                ],
+                'subscriptions' => [
+                    'label' => 'Subscriptions',
+                    'description' => 'Active scope-language pairs',
+                ],
+                'scopes' => [
+                    'label' => 'Subscribed scopes',
+                    'description' => 'Unique subscribed services',
+                ],
+                'languages' => [
+                    'label' => 'Languages',
+                    'description' => 'Languages covered by subscriptions',
+                ],
+            ],
+        ],
+        'customer_compliance' => [
+            'heading' => 'Compliance workload',
+            'description' => 'What is currently relevant, pending review, due soon, and already compliant.',
+            'stats' => [
+                'relevant' => [
+                    'label' => 'Relevant notices',
+                    'description' => 'Company-specific relevant items',
+                ],
+                'pending_review' => [
+                    'label' => 'Pending review',
+                    'description' => 'Relevant notices not confirmed yet',
+                ],
+                'due_soon' => [
+                    'label' => 'Due in 30 days',
+                    'description' => 'Upcoming compliance deadlines',
+                ],
+                'compliant' => [
+                    'label' => 'Already compliant',
+                    'description' => 'Items marked as compliant',
+                ],
+            ],
+        ],
+        'customer_notices' => [
+            'heading' => 'Latest relevant notices',
+            'columns' => [
+                'company' => 'Company',
+                'issue_date' => 'Issue date',
+                'scope' => 'Scope',
+                'notice' => 'Notice',
+                'compliance_due_at' => 'Compliance due date',
+                'compliance' => 'Compliance',
+            ],
+            'empty_heading' => 'No relevant notices yet',
+            'empty_description' => 'Relevant company notices will appear here once analyses complete.',
         ],
     ],
 ];

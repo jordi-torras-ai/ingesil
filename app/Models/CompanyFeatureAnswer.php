@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAdminActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class CompanyFeatureAnswer extends Model
 {
     use HasFactory;
+    use LogsAdminActivity;
 
     protected $fillable = [
         'company_id',
@@ -82,5 +84,16 @@ class CompanyFeatureAnswer extends Model
             Feature::DATA_TYPE_SINGLE_CHOICE => $this->featureOption?->label($locale) ?? '—',
             default => trim((string) $this->value_text) !== '' ? (string) $this->value_text : '—',
         };
+    }
+
+    protected function activityLogAttributes(): array
+    {
+        return [
+            'company_id',
+            'feature_id',
+            'feature_option_id',
+            'value_boolean',
+            'value_text',
+        ];
     }
 }

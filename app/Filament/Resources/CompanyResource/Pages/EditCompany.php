@@ -13,7 +13,8 @@ class EditCompany extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn (): bool => static::getResource()::canDelete($this->record)),
         ];
     }
 }

@@ -15,6 +15,11 @@ class RecentNoticesTable extends TableWidget
 
     protected int | string | array $columnSpan = 'full';
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
     protected function getTableHeading(): string
     {
         return __('app.dashboard.latest_notices.heading');

@@ -22,18 +22,21 @@ class CompanyNoticeAnalysisRunResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 3;
 
     public static function shouldRegisterNavigation(): bool
     {
-        $user = auth()->user();
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
 
-        return (bool) ($user && ($user->isAdmin() || $user->companies()->exists()));
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.customer_operations');
     }
 
     public static function canViewAny(): bool
     {
-        return static::shouldRegisterNavigation();
+        return auth()->user()?->isPlatformAdmin() ?? false;
     }
 
     public static function canCreate(): bool
@@ -54,7 +57,7 @@ class CompanyNoticeAnalysisRunResource extends Resource
             return false;
         }
 
-        return $user->isAdmin() || $record->company?->users()->whereKey($user->id)->exists();
+        return $user->isPlatformAdmin();
     }
 
     public static function canDelete(Model $record): bool
@@ -106,9 +109,10 @@ class CompanyNoticeAnalysisRunResource extends Resource
                     ->badge()
                     ->formatStateUsing(fn (?string $state, CompanyNoticeAnalysisRun $record): string => $record->noticeAnalysisRun?->scope?->name(app()->getLocale()) ?? (string) $state)
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('noticeAnalysisRun.locale')
+                Tables\Columns\TextColumn::make('locale')
                     ->label(__('app.company_notice_analysis_runs.fields.locale'))
                     ->badge()
+                    ->formatStateUsing(fn (?string $state): string => \App\Models\User::localeOptions()[$state ?? ''] ?? strtoupper((string) $state))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->label(__('app.company_notice_analysis_runs.fields.status'))
@@ -210,13 +214,13 @@ class CompanyNoticeAnalysisRunResource extends Resource
                         ->label(__('app.company_notice_analysis_runs.actions.rerun'))
                         ->icon('heroicon-o-play')
                         ->color('warning')
-                        ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false)
+                        ->visible(fn (): bool => auth()->user()?->isPlatformAdmin() ?? false)
                         ->requiresConfirmation()
                         ->action(function (CompanyNoticeAnalysisRun $record): void {
                             try {
                                 app(CompanyNoticeAnalysisRunner::class)->dispatchCompanyRun(
                                     $record->noticeAnalysisRun()->with('scope.translations')->firstOrFail(),
-                                    $record->company()->firstOrFail(),
+                                    $record->companyScopeSubscription()->firstOrFail(),
                                 );
 
                                 Notification::make()
@@ -246,10 +250,11 @@ class CompanyNoticeAnalysisRunResource extends Resource
     {
         $query = parent::getEloquentQuery()->with([
             'company.users',
+            'companyScopeSubscription.scope.translations',
             'noticeAnalysisRun.scope.translations',
         ]);
 
-        if (auth()->user()?->isAdmin() ?? false) {
+        if (auth()->user()?->isPlatformAdmin() ?? false) {
             return $query;
         }
 
@@ -270,7 +275,7 @@ class CompanyNoticeAnalysisRunResource extends Resource
     {
         $query = Company::query()->orderBy('name');
 
-        if (! (auth()->user()?->isAdmin() ?? false)) {
+        if (! (auth()->user()?->isPlatformAdmin() ?? false)) {
             $query->whereHas('users', fn (Builder $builder): Builder => $builder->whereKey(auth()->id()));
         }
 

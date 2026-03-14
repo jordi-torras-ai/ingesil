@@ -10,6 +10,11 @@ class EditCompanyNoticeAnalysis extends EditRecord
 {
     protected static string $resource = CompanyNoticeAnalysisResource::class;
 
+    protected function getRedirectUrl(): string
+    {
+        return CompanyNoticeAnalysisResource::getUrl('index');
+    }
+
     protected function getHeaderActions(): array
     {
         return [

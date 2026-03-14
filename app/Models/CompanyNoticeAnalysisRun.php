@@ -17,6 +17,8 @@ class CompanyNoticeAnalysisRun extends Model
     protected $fillable = [
         'notice_analysis_run_id',
         'company_id',
+        'company_scope_subscription_id',
+        'locale',
         'status',
         'total_notices',
         'processed_notices',
@@ -47,6 +49,11 @@ class CompanyNoticeAnalysisRun extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function companyScopeSubscription(): BelongsTo
+    {
+        return $this->belongsTo(CompanyScopeSubscription::class);
     }
 
     public function analyses(): HasMany

@@ -11,6 +11,9 @@ use App\Livewire\Profile\UpdatePassword;
 use App\Support\BreezyTranslation;
 use App\Filament\Widgets\AnalysisHealthStats;
 use App\Filament\Widgets\AnalysisOutcomeChart;
+use App\Filament\Widgets\CustomerComplianceStats;
+use App\Filament\Widgets\CustomerRelevantNoticesTable;
+use App\Filament\Widgets\CustomerSubscriptionStats;
 use App\Filament\Widgets\DailyPublicationActivityChart;
 use App\Filament\Widgets\LibraryOverviewStats;
 use App\Filament\Widgets\RecentNoticesTable;
@@ -96,6 +99,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 LibraryOverviewStats::class,
+                CustomerSubscriptionStats::class,
+                CustomerComplianceStats::class,
+                CustomerRelevantNoticesTable::class,
                 AnalysisHealthStats::class,
                 DailyPublicationActivityChart::class,
                 AnalysisOutcomeChart::class,

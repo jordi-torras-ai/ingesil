@@ -2,27 +2,21 @@
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import logging
 import os
-import random
 import re
 import sys
-import time
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
-from enum import Enum
 from pathlib import Path
 from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.parse import quote, urlencode
 from urllib.request import Request, urlopen
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
+import requests
 
 try:
     from dotenv import load_dotenv
@@ -36,22 +30,33 @@ PYTHON_SRC = PROJECT_ROOT / "python" / "src"
 if str(PYTHON_SRC) not in sys.path:
     sys.path.insert(0, str(PYTHON_SRC))
 
-from ingesil_crawlers.artifacts import ArtifactWriter  # noqa: E402
-from ingesil_crawlers.fsm import FSMConfig, FSMRunner  # noqa: E402
 from ingesil_crawlers.logging_utils import build_logger  # noqa: E402
 
 
 DEFAULT_SPARQL_ENDPOINT = "https://publications.europa.eu/webapi/rdf/sparql"
+DEFAULT_OJEU_BASE_URL = "https://eur-lex.europa.eu"
+CORPORATE_BODY_LABELS = {
+    "COM": "EUROPEAN COMMISSION",
+    "EP": "EUROPEAN PARLIAMENT",
+    "CONSIL": "COUNCIL OF THE EUROPEAN UNION",
+    "ECB": "EUROPEAN CENTRAL BANK",
+    "CJUE": "COURT OF JUSTICE OF THE EUROPEAN UNION",
+}
+RESOURCE_TYPE_LABELS = {
+    "DIR": "Directive",
+    "REG": "Regulation",
+    "DEC": "Decision",
+    "RECO": "Recommendation",
+    "OPIN": "Opinion",
+    "COMMUNIC": "Communication",
+    "NOTICE": "Notice",
+    "RES": "Resolution",
+    "CONCL": "Conclusion",
+    "CORRIGENDUM": "Corrigendum",
+}
 
 
-class OjeuState(Enum):
-    FETCH_DAY = "FETCH_DAY"
-    PROCESS_ITEM = "PROCESS_ITEM"
-    OPEN_NOTICE = "OPEN_NOTICE"
-    DONE = "DONE"
-
-
-@dataclass
+@dataclass(slots=True)
 class NoticeItem:
     c_act: str | None
     act: str | None
@@ -60,75 +65,36 @@ class NoticeItem:
     pdf: str | None
 
 
-@dataclass
-class CrawlerContext:
-    logger: logging.Logger
-    driver: WebDriver
-    artifacts: ArtifactWriter
-    slug: str
-    source_id: int
-    base_url: str
-    sparql_endpoint: str
-    timeout_seconds: int
-    limit: int
-    from_date: date
-    to_date: date
-    db_conn: object
-    pending_days: list[date]
-    current_day: date | None = None
-    daily_journal_id: int | None = None
-    pending_items: list[NoticeItem] | None = None
-    current_item: NoticeItem | None = None
+@dataclass(slots=True)
+class ParsedNotice:
+    title: str
+    category: str
+    department: str
+    content: str
+    fetched_url: str
+    extra_info: str
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Ingesil crawler for OJEU (Official Journal of the European Union)")
     parser.add_argument("--slug", default="ojeu")
     parser.add_argument("--run-id", default=datetime.now().strftime("%Y%m%d_%H%M%S"))
-    parser.add_argument("--base-url", default=os.getenv("CRAWLER_OJEU_BASE_URL", "https://eur-lex.europa.eu"))
+    parser.add_argument("--base-url", default=os.getenv("CRAWLER_OJEU_BASE_URL", DEFAULT_OJEU_BASE_URL))
     parser.add_argument("--sparql-endpoint", default=os.getenv("CRAWLER_OJEU_SPARQL_ENDPOINT", DEFAULT_SPARQL_ENDPOINT))
     parser.add_argument("--limit", type=int, default=int(os.getenv("CRAWLER_OJEU_LIMIT", "500")))
     parser.add_argument("--timeout", type=int, default=int(os.getenv("CRAWLER_TIMEOUT_SECONDS", "20")))
     parser.add_argument("--day", default=None, help="Crawl only one day (YYYY-MM-DD).")
     parser.add_argument("--from-date", default=None, help="Crawl window start date (YYYY-MM-DD).")
     parser.add_argument("--to-date", default=None, help="Crawl window end date (YYYY-MM-DD).")
-    parser.add_argument("--headless", action="store_true", help="Run Chrome headless")
-    parser.add_argument("--headed", action="store_true", help="Force headed mode")
+    parser.add_argument("--headless", action="store_true", help="Ignored for OJEU HTTP crawler; kept for CLI compatibility")
+    parser.add_argument("--headed", action="store_true", help="Ignored for OJEU HTTP crawler; kept for CLI compatibility")
     return parser.parse_args()
 
 
-def resolve_headless(args: argparse.Namespace) -> bool:
-    env_default = os.getenv("CRAWLER_HEADLESS", "0").strip().lower() in {"1", "true", "yes", "on"}
-    if args.headed:
-        return False
-    if args.headless:
-        return True
-    return env_default
-
-
-def build_driver(headless: bool) -> WebDriver:
-    options = ChromeOptions()
-    options.add_argument("--window-size=1600,1200")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--remote-debugging-port=0")
-    chrome_binary = os.getenv("CRAWLER_CHROME_BINARY", "/usr/bin/google-chrome")
-    if os.path.isfile(chrome_binary):
-        options.binary_location = chrome_binary
-    user_data_dir = Path(os.getenv("CRAWLER_CHROME_USER_DATA_DIR", "/tmp/ingesil-chrome"))
-    user_data_dir.mkdir(parents=True, exist_ok=True)
-    options.add_argument(f"--user-data-dir={user_data_dir}")
-    if headless:
-        options.add_argument("--headless=new")
-    return webdriver.Chrome(options=options)
-
-
-def wait_dom_ready(driver: WebDriver, timeout_seconds: int) -> None:
-    WebDriverWait(driver, timeout_seconds).until(
-        lambda d: d.execute_script("return document.readyState") == "complete"
-    )
+def build_session() -> requests.Session:
+    session = requests.Session()
+    session.headers.update({"User-Agent": "ingesil-ojeu-crawler/1.0"})
+    return session
 
 
 def parse_iso_date(value: str, *, flag: str) -> date:
@@ -322,8 +288,8 @@ def build_detail_url_candidates(base_url: str, item: NoticeItem) -> list[str]:
         celex_q = quote(celex, safe="")
         candidates.extend(
             [
-                f"{base_url.rstrip('/')}/legal-content/EN/TXT/HTML/?uri=CELEX:{celex_q}",
                 f"{base_url.rstrip('/')}/legal-content/EN/TXT/?uri=CELEX:{celex_q}",
+                f"{base_url.rstrip('/')}/legal-content/EN/TXT/HTML/?uri=CELEX:{celex_q}",
                 f"{base_url.rstrip('/')}/legal-content/EN/TXT/PDF/?uri=CELEX:{celex_q}",
             ]
         )
@@ -405,8 +371,8 @@ def build_useful_urls(base_url: str, item: NoticeItem, triples: list[dict[str, s
         celex_q = quote(celex, safe="")
         urls.extend(
             [
-                f"{base_url.rstrip('/')}/legal-content/EN/TXT/HTML/?uri=CELEX:{celex_q}",
                 f"{base_url.rstrip('/')}/legal-content/EN/TXT/?uri=CELEX:{celex_q}",
+                f"{base_url.rstrip('/')}/legal-content/EN/TXT/HTML/?uri=CELEX:{celex_q}",
                 f"{base_url.rstrip('/')}/legal-content/EN/TXT/PDF/?uri=CELEX:{celex_q}",
             ]
         )
@@ -430,7 +396,7 @@ def canonical_notice_url(base_url: str, item: NoticeItem, triples: list[dict[str
     celex = (item.celex or "").strip()
     if celex:
         celex_q = quote(celex, safe="")
-        return f"{base_url.rstrip('/')}/legal-content/EN/TXT/HTML/?uri=CELEX:{celex_q}"
+        return f"{base_url.rstrip('/')}/legal-content/EN/TXT/?uri=CELEX:{celex_q}"
 
     for eli in extract_eli_uris(triples):
         eurlex = eli_to_eurlex(eli)
@@ -444,37 +410,13 @@ def canonical_notice_url(base_url: str, item: NoticeItem, triples: list[dict[str
     return ""
 
 
-def is_waf_challenge(html: str) -> bool:
-    sample = (html or "")[:20000].lower()
+def is_waf_challenge(html_text: str) -> bool:
+    sample = (html_text or "")[:20000].lower()
     return (
         "awswafintegration" in sample
         or "challenge.js" in sample
         or "verify that you're not a robot" in sample
     )
-
-
-def maybe_accept_cookies(driver: WebDriver, logger: logging.Logger) -> None:
-    xpaths = [
-        "//button[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'accept')]",
-        "//button[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'agree')]",
-        "//a[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'accept')]",
-    ]
-    for xpath in xpaths:
-        try:
-            nodes = driver.find_elements(By.XPATH, xpath)
-        except Exception:
-            continue
-        for node in nodes[:3]:
-            try:
-                text = (node.text or "").strip()
-                if not text:
-                    continue
-                node.click()
-                logger.info("Cookie consent clicked: %r", text)
-                time.sleep(0.4)
-                return
-            except Exception:
-                continue
 
 
 def normalize_text(text: str) -> str:
@@ -493,99 +435,70 @@ def normalize_text(text: str) -> str:
     return "\n".join(out).strip()
 
 
-def extract_title(driver: WebDriver, fallback: str = "") -> str:
-    main_title_nodes = driver.find_elements(By.CSS_SELECTOR, ".eli-main-title .oj-doc-ti, #tit_1 .oj-doc-ti")
-    if main_title_nodes:
-        parts: list[str] = []
-        for node in main_title_nodes[:8]:
-            value = (node.text or "").strip()
-            if value:
-                parts.append(value)
-        if parts:
-            return " ".join(parts).strip()
+def clean_html_text(value: str) -> str:
+    text = re.sub(r"(?is)<script\b[^>]*>.*?</script>", " ", value)
+    text = re.sub(r"(?is)<style\b[^>]*>.*?</style>", " ", text)
+    text = re.sub(r"(?i)<br\s*/?>", "\n", text)
+    text = re.sub(r"(?i)</(p|div|li|tr|h[1-6]|table|section|article)>", "\n", text)
+    text = re.sub(r"(?i)<li[^>]*>", "- ", text)
+    text = re.sub(r"(?i)</(td|th)>", " | ", text)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = html.unescape(text)
+    text = text.replace("\xa0", " ")
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r" *\n *", "\n", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    return normalize_text(text)
 
-    for selector in ["h1", "header h1", "h1.title", "h1.document-title"]:
-        nodes = driver.find_elements(By.CSS_SELECTOR, selector)
-        if nodes:
-            value = (nodes[0].text or "").strip()
+
+def extract_first_match(patterns: list[str], html_text: str) -> str:
+    for pattern in patterns:
+        match = re.search(pattern, html_text, flags=re.IGNORECASE | re.DOTALL)
+        if match:
+            value = clean_html_text(match.group(1))
             if value:
                 return value
+    return ""
 
-    meta_nodes = driver.find_elements(By.CSS_SELECTOR, "meta[property='og:title']")
-    if meta_nodes:
-        value = (meta_nodes[0].get_attribute("content") or "").strip()
-        if value:
-            return value
 
-    title = (driver.title or "").strip()
+def extract_title(html_text: str, fallback: str = "") -> str:
+    title = extract_first_match(
+        [
+            r'<div[^>]+class="[^"]*eli-main-title[^"]*"[^>]*>(.*?)</div>',
+            r'<meta[^>]+name="WT\.z_docTitle"[^>]+content="([^"]+)"',
+            r'<title>(.*?)</title>',
+        ],
+        html_text,
+    )
     if title and not re.search(r"\.(xml|fmx)$", title, flags=re.IGNORECASE):
         return title
     return fallback or title
 
 
-def extract_metadata(driver: WebDriver) -> dict[str, str]:
-    metadata: dict[str, str] = {}
-
-    dt_elements = driver.find_elements(By.XPATH, "//dl//dt[normalize-space()]")
-    for dt in dt_elements:
-        label = (dt.text or "").strip().rstrip(":")
-        if not label:
-            continue
-        dd_candidates = dt.find_elements(By.XPATH, "following-sibling::dd[1]")
-        if not dd_candidates:
-            continue
-        value = (dd_candidates[0].text or "").strip()
-        if value:
-            metadata[label] = value
-
-    rows = driver.find_elements(By.XPATH, "//table//tr[th and td]")
-    for row in rows:
-        th_nodes = row.find_elements(By.XPATH, "./th[1]")
-        td_nodes = row.find_elements(By.XPATH, "./td[1]")
-        if not th_nodes or not td_nodes:
-            continue
-        label = (th_nodes[0].text or "").strip().rstrip(":")
-        value = (td_nodes[0].text or "").strip()
-        if label and value and label not in metadata:
-            metadata[label] = value
-
-    return metadata
-
-
-def pick_metadata_value(metadata: dict[str, str], *, patterns: list[str]) -> str:
-    normalized: dict[str, str] = {}
-    for key, value in metadata.items():
-        norm_key = " ".join(key.strip().lower().split())
-        normalized[norm_key] = value
-
-    for pattern in patterns:
-        regex = re.compile(pattern, flags=re.IGNORECASE)
-        for key, value in normalized.items():
-            if regex.search(key) and value.strip():
-                return value.strip()
-
-    return ""
-
-
-ACT_TYPE_PATTERNS: list[tuple[str, re.Pattern[str]]] = [
-    ("Directive", re.compile(r"\bDIRECTIVE\b", flags=re.IGNORECASE)),
-    ("Regulation", re.compile(r"\bREGULATION\b", flags=re.IGNORECASE)),
-    ("Decision", re.compile(r"\bDECISION\b", flags=re.IGNORECASE)),
-    ("Recommendation", re.compile(r"\bRECOMMENDATION\b", flags=re.IGNORECASE)),
-    ("Opinion", re.compile(r"\bOPINION\b", flags=re.IGNORECASE)),
-    ("Communication", re.compile(r"\bCOMMUNICATION\b", flags=re.IGNORECASE)),
-    ("Notice", re.compile(r"\bNOTICE\b", flags=re.IGNORECASE)),
-    ("Resolution", re.compile(r"\bRESOLUTION\b", flags=re.IGNORECASE)),
-    ("Conclusion", re.compile(r"\bCONCLUSIONS?\b", flags=re.IGNORECASE)),
-]
+def extract_meta_values(html_text: str, *, attribute: str, key: str) -> list[str]:
+    pattern = rf'<meta[^>]+{attribute}="{re.escape(key)}"[^>]+(?:content|resource)="([^"]+)"'
+    return [html.unescape(value).strip() for value in re.findall(pattern, html_text, flags=re.IGNORECASE)]
 
 
 def extract_act_type(text: str) -> str:
     candidate = " ".join((text or "").split())
     if not candidate:
         return ""
+
+    act_type_patterns: list[tuple[str, re.Pattern[str]]] = [
+        ("Directive", re.compile(r"\bDIRECTIVE\b", flags=re.IGNORECASE)),
+        ("Regulation", re.compile(r"\bREGULATION\b", flags=re.IGNORECASE)),
+        ("Decision", re.compile(r"\bDECISION\b", flags=re.IGNORECASE)),
+        ("Recommendation", re.compile(r"\bRECOMMENDATION\b", flags=re.IGNORECASE)),
+        ("Opinion", re.compile(r"\bOPINION\b", flags=re.IGNORECASE)),
+        ("Communication", re.compile(r"\bCOMMUNICATION\b", flags=re.IGNORECASE)),
+        ("Notice", re.compile(r"\bNOTICE\b", flags=re.IGNORECASE)),
+        ("Resolution", re.compile(r"\bRESOLUTION\b", flags=re.IGNORECASE)),
+        ("Conclusion", re.compile(r"\bCONCLUSIONS?\b", flags=re.IGNORECASE)),
+        ("Corrigendum", re.compile(r"\bCORRIG(?:ENDUM|É|E)\b", flags=re.IGNORECASE)),
+    ]
     best: tuple[int, int, str] | None = None
-    for priority, (act_type, pattern) in enumerate(ACT_TYPE_PATTERNS):
+    for priority, (act_type, pattern) in enumerate(act_type_patterns):
         match = pattern.search(candidate)
         if not match:
             continue
@@ -595,33 +508,12 @@ def extract_act_type(text: str) -> str:
     return best[2] if best else ""
 
 
-def extract_act_header(driver: WebDriver) -> str:
-    nodes = driver.find_elements(By.CSS_SELECTOR, ".eli-main-title .oj-doc-ti, #tit_1 .oj-doc-ti")
-    if nodes:
-        return (nodes[0].text or "").strip()
-    return ""
-
-
-def extract_ojeu_department(driver: WebDriver) -> str:
-    nodes = driver.find_elements(By.CSS_SELECTOR, "#docHtml p.oj-normal, .eli-container p.oj-normal")
-    for node in nodes[:8]:
-        text = (node.text or "").strip()
-        if not text:
-            continue
-        text = text.strip().rstrip(",").strip()
-        if len(text) < 4:
-            continue
-        if any(token in text.upper() for token in ["COMMISSION", "PARLIAMENT", "COUNCIL", "CENTRAL BANK", "BOARD"]):
-            return text
-    return ""
-
-
 def extract_department_from_title(title: str) -> str:
     candidate = " ".join((title or "").split()).upper()
     if not candidate:
         return ""
     if "EUROPEAN COMMISSION" in candidate or re.search(r"\bCOMMISSION\b", candidate):
-        return "THE EUROPEAN COMMISSION"
+        return "EUROPEAN COMMISSION"
     if "EUROPEAN PARLIAMENT" in candidate:
         return "EUROPEAN PARLIAMENT"
     if re.search(r"\bCOUNCIL\b", candidate):
@@ -631,162 +523,121 @@ def extract_department_from_title(title: str) -> str:
     return ""
 
 
-def extract_main_content(driver: WebDriver) -> str:
-    try:
-        markdown = str(
-            driver.execute_script(
-                r"""
-                function normalizeBlock(text) {
-                  if (!text) return "";
-                  return text.replace(/\r\n/g, "\n").replace(/\u00A0/g, " ").replace(/[ \t]+\n/g, "\n").trim();
-                }
-
-                function escapePipes(text) {
-                  return (text || "").replace(/\|/g, "\\|").trim();
-                }
-
-                function isLayoutTable(table) {
-                  if (!table) return true;
-                  if (table.querySelector("img")) return true;
-                  const rows = Array.from(table.querySelectorAll("tr"));
-                  if (rows.length <= 1) return true;
-                  const cells = Array.from(table.querySelectorAll("td,th"));
-                  if (cells.length === 0) return true;
-                  const text = normalizeBlock(table.innerText);
-                  if ((text || "").length < 30 && cells.length >= 6) return true;
-                  return false;
-                }
-
-                function tableToMarkdown(table) {
-                  if (isLayoutTable(table)) return "";
-                  const rows = Array.from(table.querySelectorAll("tr"));
-                  const parsed = rows
-                    .map((tr) => Array.from(tr.children).filter((c) => ["TD", "TH"].includes(c.tagName)).map((c) => normalizeBlock(c.innerText)))
-                    .filter((cells) => cells.some((c) => c && c.trim()));
-                  if (parsed.length === 0) return "";
-
-                  const colCount = Math.max(...parsed.map((r) => r.length));
-                  const hasTh = table.querySelector("th") !== null;
-
-                  if (!hasTh && colCount === 2) {
-                    let numberish = 0;
-                    for (const row of parsed) {
-                      const a = (row[0] || "").trim();
-                      const looksLikeNumber = /^\(?\d+[.)]?\)?$/.test(a) || /^\([a-z]\)$/.test(a.toLowerCase());
-                      if (looksLikeNumber) numberish += 1;
-                    }
-                    const numberRatio = parsed.length ? (numberish / parsed.length) : 0;
-
-                    if (numberRatio >= 0.6) {
-                      const lines = [];
-                      for (const row of parsed) {
-                        const a = (row[0] || "").trim();
-                        const b = (row[1] || "").trim();
-                        if (!a && !b) continue;
-                        lines.push(`${a} ${b}`.trim());
-                      }
-                      return lines.join("\n");
-                    }
-
-                    // Treat as a generic 2-column table.
-                    const out = [];
-                    out.push("| Col 1 | Col 2 |");
-                    out.push("| --- | --- |");
-                    for (const row of parsed) {
-                      const a = escapePipes((row[0] || "").trim());
-                      const b = escapePipes((row[1] || "").trim());
-                      out.push(`| ${a} | ${b} |`);
-                    }
-                    return out.join("\n");
-                  }
-
-                  if (colCount >= 2) {
-                    const header = hasTh ? parsed[0] : Array.from({ length: colCount }, (_, i) => `Col ${i + 1}`);
-                    const dataRows = hasTh ? parsed.slice(1) : parsed;
-                    const headerCells = header.map(escapePipes);
-                    const sepCells = headerCells.map(() => "---");
-                    const out = [];
-                    out.push(`| ${headerCells.join(" | ")} |`);
-                    out.push(`| ${sepCells.join(" | ")} |`);
-                    for (const row of dataRows) {
-                      const padded = [...row];
-                      while (padded.length < colCount) padded.push("");
-                      out.push(`| ${padded.map(escapePipes).join(" | ")} |`);
-                    }
-                    return out.join("\n");
-                  }
-
-                  return parsed.map((r) => r.join(" ").trim()).filter(Boolean).join("\n");
-                }
-
-                const root =
-                  document.querySelector("#docHtml") ||
-                  document.querySelector("main") ||
-                  document.querySelector("article") ||
-                  document.body;
-
-                if (!root) return "";
-
-                const candidates = Array.from(root.querySelectorAll("p, table, h1, h2, h3, h4, h5, h6, ul, ol"));
-                const blocks = [];
-
-                function insideTable(node) {
-                  let cur = node && node.parentElement;
-                  while (cur) {
-                    if (cur.tagName === "TABLE") return true;
-                    cur = cur.parentElement;
-                  }
-                  return false;
-                }
-
-                for (const el of candidates) {
-                  if (el.tagName !== "TABLE" && insideTable(el)) continue;
-
-                  if (el.tagName === "TABLE") {
-                    const md = tableToMarkdown(el);
-                    if (md) blocks.push(md);
-                    continue;
-                  }
-
-                  if (el.tagName === "UL" || el.tagName === "OL") {
-                    const items = Array.from(el.querySelectorAll(":scope > li")).map((li) => normalizeBlock(li.innerText)).filter(Boolean);
-                    if (items.length) {
-                      const prefix = el.tagName === "OL" ? "1." : "-";
-                      blocks.push(items.map((t) => `${prefix} ${t}`).join("\n"));
-                    }
-                    continue;
-                  }
-
-                  const text = normalizeBlock(el.innerText);
-                  if (!text) continue;
-                  blocks.push(text);
-                }
-
-                const joined = blocks.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
-                return joined;
-                """
-            )
-        )
-    except Exception:
-        markdown = ""
-
-    if not markdown:
-        try:
-            markdown = str(
-                driver.execute_script("return document.body && document.body.innerText ? document.body.innerText : ''")
-            )
-        except Exception:
-            markdown = ""
-
-    markdown = normalize_text(markdown)
-    if len(markdown) > 200_000:
-        markdown = markdown[:200_000].rstrip() + "\n\n[TRUNCATED]"
-    return markdown
+def extract_department_from_meta(html_text: str) -> str:
+    resources = extract_meta_values(html_text, attribute="property", key="eli:passed_by")
+    labels = [CORPORATE_BODY_LABELS.get(resource.rsplit("/", 1)[-1], "") for resource in resources]
+    labels = [label for label in labels if label]
+    return "; ".join(dict.fromkeys(labels))
 
 
-def upsert_daily_journal(context: CrawlerContext, *, issue_date: date, description: str) -> int:
-    daily_journal_url = f"{context.base_url.rstrip('/')}/oj/direct-access.html?locale=en"
-    cur = context.db_conn.cursor()
+def extract_category_from_meta(html_text: str) -> str:
+    resources = extract_meta_values(html_text, attribute="property", key="eli:type_document")
+    labels = [RESOURCE_TYPE_LABELS.get(resource.rsplit("/", 1)[-1], "") for resource in resources]
+    labels = [label for label in labels if label]
+    return "; ".join(dict.fromkeys(labels))
+
+
+def extract_main_content(html_text: str) -> str:
+    fragment_patterns = [
+        r'<div[^>]+id="PP4Contents"[^>]*>(.*?)(?:<a[^>]+href="#document1"|</div>\s*</div>\s*</div>\s*</div>)',
+        r'<div[^>]+class="[^"]*eli-container[^"]*"[^>]*>(.*?)(?:<hr[^>]+class="[^"]*oj-doc-end[^"]*"|</footer>)',
+        r'<div[^>]+id="docHtml"[^>]*>(.*?)(?:</footer>|</body>)',
+    ]
+    fragment = extract_first_match(fragment_patterns, html_text)
+    if not fragment:
+        fragment = clean_html_text(html_text)
+
+    content = fragment
+    content = re.sub(r"(?im)^Top$", "", content)
+    content = re.sub(r"(?im)^ELI:\s+.*$", "", content)
+    content = re.sub(r"(?im)^ISSN\s+.*$", "", content)
+    return normalize_text(content)
+
+
+def build_html_metadata(html_text: str) -> dict[str, str]:
+    metadata: dict[str, str] = {}
+
+    wt_title = extract_first_match([r'<meta[^>]+name="WT\.z_docTitle"[^>]+content="([^"]+)"'], html_text)
+    if wt_title:
+        metadata["WT title"] = wt_title
+
+    wt_id = extract_first_match([r'<meta[^>]+name="WT\.z_docID"[^>]+content="([^"]+)"'], html_text)
+    if wt_id:
+        metadata["WT doc id"] = wt_id
+
+    canonical = extract_first_match([r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"'], html_text)
+    if canonical:
+        metadata["Canonical"] = canonical
+
+    eli = extract_first_match([r'<p[^>]*>ELI:\s*(.*?)</p>'], html_text)
+    if eli:
+        metadata["ELI"] = eli
+
+    return metadata
+
+
+def parse_notice_html(html_text: str, fetched_url: str, item: NoticeItem, triples: list[dict[str, str | None]]) -> ParsedNotice:
+    fallback_title = (item.title or "").strip()
+    title = extract_title(html_text, fallback=fallback_title)
+    category = extract_category_from_meta(html_text) or extract_act_type(title)
+    department = extract_department_from_meta(html_text) or extract_department_from_title(title)
+    content = extract_main_content(html_text)
+
+    metadata = build_html_metadata(html_text)
+    extra_info_payload = {
+        "celex": item.celex,
+        "act": item.act,
+        "c_act": item.c_act,
+        "source_pdf": item.pdf,
+        "fetched_url": fetched_url,
+        "canonical_url": canonical_notice_url(DEFAULT_OJEU_BASE_URL, item, triples),
+        "metadata": metadata,
+        "content_format": "text",
+    }
+
+    return ParsedNotice(
+        title=title,
+        category=category,
+        department=department,
+        content=content,
+        fetched_url=fetched_url,
+        extra_info=json.dumps(extra_info_payload, ensure_ascii=False),
+    )
+
+
+def fetch_notice_html(session: requests.Session, url: str, timeout_seconds: int) -> tuple[str, str]:
+    response = session.get(
+        url,
+        headers={
+            "Accept": "text/html,application/xhtml+xml",
+            "Accept-Language": "en",
+            "User-Agent": "ingesil-ojeu-crawler/1.0",
+        },
+        timeout=timeout_seconds,
+        allow_redirects=True,
+    )
+    response.raise_for_status()
+    return response.text, response.url
+
+
+def write_day_payload(run_dir: Path, issue_date: date, items: list[NoticeItem]) -> None:
+    output_path = run_dir / f"items_{issue_date.isoformat()}.json"
+    serialized = [
+        {
+            "c_act": item.c_act,
+            "act": item.act,
+            "celex": item.celex,
+            "title": item.title,
+            "pdf": item.pdf,
+        }
+        for item in items
+    ]
+    output_path.write_text(json.dumps(serialized, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def upsert_daily_journal(db_conn: object, *, source_id: int, base_url: str, issue_date: date, description: str) -> int:
+    daily_journal_url = f"{base_url.rstrip('/')}/oj/direct-access.html?locale=en"
+    cur = db_conn.cursor()
     try:
         cur.execute(
             """
@@ -799,20 +650,20 @@ def upsert_daily_journal(context: CrawlerContext, *, issue_date: date, descripti
                 updated_at = NOW()
             RETURNING id
             """,
-            (context.source_id, issue_date, daily_journal_url, description),
+            (source_id, issue_date, daily_journal_url, description),
         )
         row = cur.fetchone()
     finally:
         cur.close()
 
-    context.db_conn.commit()
+    db_conn.commit()
     if row is None:
         raise RuntimeError("Failed to upsert daily_journal and return id")
     return int(row[0])
 
 
 def upsert_notice(
-    context: CrawlerContext,
+    db_conn: object,
     *,
     daily_journal_id: int,
     title: str,
@@ -822,7 +673,7 @@ def upsert_notice(
     content: str,
     extra_info: str,
 ) -> None:
-    cur = context.db_conn.cursor()
+    cur = db_conn.cursor()
     try:
         existing_id: int | None = None
         if url:
@@ -883,72 +734,32 @@ def upsert_notice(
     finally:
         cur.close()
 
-    context.db_conn.commit()
+    db_conn.commit()
 
 
-def simulate_human_transition(context: CrawlerContext, from_state: OjeuState, to_state: OjeuState) -> None:
-    delay = random.uniform(0.3, 0.9)
-    time.sleep(delay)
-    context.logger.info("Human pacing: transition %s -> %s (pause %.2fs)", from_state.value, to_state.value, delay)
-
-
-def state_fetch_day(context: CrawlerContext) -> OjeuState:
-    if not context.pending_days:
-        return OjeuState.DONE
-
-    issue_date = context.pending_days.pop(0)
-    context.current_day = issue_date
-    context.logger.info("FSM state=%s fetching SPARQL items for day=%s", OjeuState.FETCH_DAY.value, issue_date.isoformat())
-
-    prop_used, items = fetch_items_for_date(
-        logger=context.logger,
-        endpoint=context.sparql_endpoint,
-        issue_date=issue_date,
-        limit=context.limit,
-    )
-    context.logger.info("SPARQL property used: %s items=%d", prop_used, len(items))
-
-    description = f"OJEU crawl {issue_date.isoformat()} - {len(items)} notices"
-    context.daily_journal_id = upsert_daily_journal(context, issue_date=issue_date, description=description)
-    context.pending_items = items
-    context.current_item = None
-
-    return OjeuState.PROCESS_ITEM
-
-
-def state_process_item(context: CrawlerContext) -> OjeuState:
-    if not context.pending_items:
-        return OjeuState.FETCH_DAY
-
-    context.current_item = context.pending_items.pop(0)
-    item = context.current_item
-    context.logger.info(
-        "FSM state=%s picked item: day=%s celex=%s title=%s",
-        OjeuState.PROCESS_ITEM.value,
-        (context.current_day.isoformat() if context.current_day else "<none>"),
-        (item.celex or "").strip() or "<none>",
-        (item.title or "").strip()[:180] or "<none>",
-    )
-    return OjeuState.OPEN_NOTICE
-
-
-def state_open_notice(context: CrawlerContext) -> OjeuState:
-    if context.current_day is None or context.daily_journal_id is None or context.current_item is None:
-        raise RuntimeError("Invalid crawler context: missing current day/journal/item")
-
-    item = context.current_item
+def process_notice(
+    *,
+    session: requests.Session,
+    logger: logging.Logger,
+    db_conn: object,
+    daily_journal_id: int,
+    base_url: str,
+    sparql_endpoint: str,
+    item: NoticeItem,
+    timeout_seconds: int,
+) -> None:
     triples: list[dict[str, str | None]] = []
     if item.c_act:
         try:
-            triples = fetch_notice_triples(context.sparql_endpoint, item.c_act)
+            triples = fetch_notice_triples(sparql_endpoint, item.c_act)
             if not item.celex:
                 item.celex = extract_celex_from_triples(triples)
         except Exception as exc:
-            context.logger.warning("Failed fetching notice triples for c_act=%s: %s", item.c_act, exc)
+            logger.warning("Failed fetching notice triples for c_act=%s: %s", item.c_act, exc)
 
     candidates_raw = [
-        *build_useful_urls(context.base_url, item, triples),
-        *build_detail_url_candidates(context.base_url, item),
+        *build_useful_urls(base_url, item, triples),
+        *build_detail_url_candidates(base_url, item),
     ]
     candidates: list[str] = []
     seen = set()
@@ -957,88 +768,49 @@ def state_open_notice(context: CrawlerContext) -> OjeuState:
             continue
         seen.add(url)
         candidates.append(url)
+
     if not candidates:
-        context.logger.warning("Skipping item: no URL candidates (celex=%s act=%s c_act=%s)", item.celex, item.act, item.c_act)
-        return OjeuState.PROCESS_ITEM
+        logger.warning("Skipping item: no URL candidates (celex=%s act=%s c_act=%s)", item.celex, item.act, item.c_act)
+        return
 
     last_error: str | None = None
-    for idx, url in enumerate(candidates, start=1):
+    for index, url in enumerate(candidates, start=1):
         try:
-            context.logger.info("Opening notice (%d/%d): %s", idx, len(candidates), url)
-            context.driver.get(url)
-            wait_dom_ready(context.driver, context.timeout_seconds)
-            maybe_accept_cookies(context.driver, context.logger)
-
-            if is_waf_challenge(context.driver.page_source):
+            logger.info(
+                "Fetching OJEU candidate (%d/%d) for celex=%s url=%s",
+                index,
+                len(candidates),
+                (item.celex or "").strip() or "<none>",
+                url,
+            )
+            html_text, fetched_url = fetch_notice_html(session, url, timeout_seconds)
+            if is_waf_challenge(html_text):
                 last_error = "Blocked by WAF challenge."
-                context.logger.warning("WAF challenge detected, trying next candidate: %s", url)
+                logger.warning("WAF challenge detected for candidate: %s", url)
                 continue
 
-            created = context.artifacts.capture(context.driver, state=OjeuState.OPEN_NOTICE.value, note="opened")
-            context.logger.info("Artifacts saved: %s", created)
-
-            fallback_title = (item.title or "").strip()
-            title = extract_title(context.driver, fallback=fallback_title)
-            act_header = extract_act_header(context.driver) or title
-            metadata = extract_metadata(context.driver)
-            category = extract_act_type(act_header) or extract_act_type(title)
-            if not category:
-                category = pick_metadata_value(
-                    metadata,
-                    patterns=[
-                        r"\btype of act\b",
-                        r"\bdocument type\b",
-                        r"\bform\b",
-                        r"\bclassification\b",
-                    ],
-                )
-
-            department = extract_department_from_title(act_header) or extract_department_from_title(title)
-            if not department:
-                department = pick_metadata_value(
-                    metadata,
-                    patterns=[
-                        r"\bauthor\b",
-                        r"\bcorporate author\b",
-                        r"\bresponsible\b",
-                        r"\binstitution\b",
-                    ],
-                )
-            if not department:
-                department = extract_ojeu_department(context.driver)
-            content = extract_main_content(context.driver)
-
-            stable_url = canonical_notice_url(context.base_url, item, triples) or context.driver.current_url
-            extra_info = {
-                "celex": item.celex,
-                "act": item.act,
-                "c_act": item.c_act,
-                "source_pdf": item.pdf,
-                "canonical_url": stable_url,
-                "fetched_url": context.driver.current_url,
-                "url_candidates": candidates[:6],
-                "metadata": {k: metadata[k] for k in list(metadata)[:40]},
-                "content_format": "markdown",
-            }
+            parsed = parse_notice_html(html_text, fetched_url, item, triples)
+            title = parsed.title or (item.title or "").strip() or (item.celex or "").strip() or "OJEU notice"
+            stable_url = canonical_notice_url(base_url, item, triples) or fetched_url or url
             upsert_notice(
-                context,
-                daily_journal_id=context.daily_journal_id,
+                db_conn,
+                daily_journal_id=daily_journal_id,
                 title=title,
-                category=category,
-                department=department,
+                category=parsed.category,
+                department=parsed.department,
                 url=stable_url,
-                content=content,
-                extra_info=json.dumps(extra_info, ensure_ascii=False),
+                content=parsed.content,
+                extra_info=parsed.extra_info,
             )
-            return OjeuState.PROCESS_ITEM
+            return
         except Exception as exc:
             last_error = f"{type(exc).__name__}: {exc!s}"
-            context.logger.warning("Failed to open/parse notice candidate url=%s error=%s", url, last_error)
+            logger.warning("Failed to fetch/parse OJEU candidate url=%s error=%s", url, last_error)
             continue
 
-    context.logger.warning("All URL candidates failed for celex=%s. Inserting placeholder notice.", item.celex)
+    logger.warning("All URL candidates failed for celex=%s. Inserting placeholder notice.", item.celex)
     placeholder_title = (item.title or "").strip() or (item.celex or "").strip() or "OJEU notice"
-    stable_url = canonical_notice_url(context.base_url, item, triples) or candidates[0]
+    stable_url = canonical_notice_url(base_url, item, triples) or candidates[0]
     extra_info = json.dumps(
         {
             "celex": item.celex,
@@ -1052,8 +824,8 @@ def state_open_notice(context: CrawlerContext) -> OjeuState:
         ensure_ascii=False,
     )
     upsert_notice(
-        context,
-        daily_journal_id=context.daily_journal_id,
+        db_conn,
+        daily_journal_id=daily_journal_id,
         title=placeholder_title,
         category="",
         department="",
@@ -1061,24 +833,66 @@ def state_open_notice(context: CrawlerContext) -> OjeuState:
         content="",
         extra_info=extra_info,
     )
-    return OjeuState.PROCESS_ITEM
+
+
+def process_day(
+    *,
+    session: requests.Session,
+    logger: logging.Logger,
+    db_conn: object,
+    run_dir: Path,
+    source_id: int,
+    issue_date: date,
+    base_url: str,
+    sparql_endpoint: str,
+    limit: int,
+    timeout_seconds: int,
+) -> int:
+    logger.info("Processing OJEU day %s using SPARQL + HTTP fetch.", issue_date.isoformat())
+    prop_used, items = fetch_items_for_date(logger=logger, endpoint=sparql_endpoint, issue_date=issue_date, limit=limit)
+    logger.info("SPARQL property used: %s items=%d", prop_used, len(items))
+    write_day_payload(run_dir, issue_date, items)
+
+    description = f"OJEU crawl {issue_date.isoformat()} - {len(items)} notices"
+    daily_journal_id = upsert_daily_journal(
+        db_conn,
+        source_id=source_id,
+        base_url=base_url,
+        issue_date=issue_date,
+        description=description,
+    )
+
+    processed_count = 0
+    for item in items:
+        process_notice(
+            session=session,
+            logger=logger,
+            db_conn=db_conn,
+            daily_journal_id=daily_journal_id,
+            base_url=base_url,
+            sparql_endpoint=sparql_endpoint,
+            item=item,
+            timeout_seconds=timeout_seconds,
+        )
+        processed_count += 1
+
+    return processed_count
 
 
 def main() -> int:
     load_dotenv(PROJECT_ROOT / ".env", override=False)
     args = parse_args()
-    headless = resolve_headless(args)
 
     run_dir = PROJECT_ROOT / "storage" / "crawlers" / args.slug / args.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
     logger = build_logger("crawler.ojeu", run_dir / "crawler.log")
     logger.info("Starting crawler for slug=%s", args.slug)
-    logger.info("Mode: %s", "headless" if headless else "headed")
     logger.info("Run directory: %s", run_dir)
+    if args.headless or args.headed:
+        logger.info("Browser mode flags were provided, but OJEU now uses HTTP fetches and ignores them.")
 
     db_conn = None
-    driver: WebDriver | None = None
     try:
         try:
             import psycopg
@@ -1094,7 +908,7 @@ def main() -> int:
         )
 
         source_id, source_start_at, source_base_url = read_source_data_from_db(args.slug)
-        base_url = (args.base_url or source_base_url or "https://eur-lex.europa.eu").strip()
+        base_url = (args.base_url or source_base_url or DEFAULT_OJEU_BASE_URL).strip()
 
         from_date, to_date = resolve_crawl_range(
             logger,
@@ -1110,55 +924,30 @@ def main() -> int:
             logger.info("Nothing to crawl for OJEU: from_date=%s is after today=%s", from_date.isoformat(), to_date.isoformat())
             return 0
 
-        pending_days: list[date] = []
-        cur = from_date
-        while cur <= to_date:
-            pending_days.append(cur)
-            cur += timedelta(days=1)
+        session = build_session()
+        total_processed = 0
+        current_day = from_date
+        while current_day <= to_date:
+            total_processed += process_day(
+                session=session,
+                logger=logger,
+                db_conn=db_conn,
+                run_dir=run_dir,
+                source_id=source_id,
+                issue_date=current_day,
+                base_url=base_url,
+                sparql_endpoint=(args.sparql_endpoint or DEFAULT_SPARQL_ENDPOINT).strip(),
+                limit=args.limit,
+                timeout_seconds=args.timeout,
+            )
+            current_day += timedelta(days=1)
 
-        driver = build_driver(headless=headless)
-        artifacts = ArtifactWriter(run_dir=run_dir)
-        context = CrawlerContext(
-            logger=logger,
-            driver=driver,
-            artifacts=artifacts,
-            slug=args.slug,
-            source_id=source_id,
-            base_url=base_url,
-            sparql_endpoint=(args.sparql_endpoint or DEFAULT_SPARQL_ENDPOINT).strip(),
-            timeout_seconds=args.timeout,
-            limit=args.limit,
-            from_date=from_date,
-            to_date=to_date,
-            db_conn=db_conn,
-            pending_days=pending_days,
-        )
-
-        fsm = FSMRunner(
-            initial_state=OjeuState.FETCH_DAY,
-            terminal_state=OjeuState.DONE,
-            handlers={
-                OjeuState.FETCH_DAY: state_fetch_day,
-                OjeuState.PROCESS_ITEM: state_process_item,
-                OjeuState.OPEN_NOTICE: state_open_notice,
-            },
-            on_transition=simulate_human_transition,
-            config=FSMConfig(max_steps=200000),
-        )
-        final_state = fsm.run(context)
-        logger.info("Crawler finished with final state=%s", final_state.value)
+        logger.info("OJEU crawler finished. Total processed notices=%d", total_processed)
         return 0
     except Exception as exc:  # pragma: no cover
         logger.exception("Crawler failed: %s: %r", type(exc).__name__, exc)
-        if driver is not None:
-            try:
-                ArtifactWriter(run_dir=run_dir).capture(driver, state="ERROR", note="unhandled_exception")
-            except Exception:
-                logger.exception("Failed to write error artifacts")
         return 1
     finally:
-        if driver is not None:
-            driver.quit()
         if db_conn is not None:
             db_conn.close()
 

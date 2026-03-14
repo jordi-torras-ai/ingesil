@@ -23,16 +23,21 @@ class NoticeAnalysisRunResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clock';
 
-    protected static ?int $navigationSort = 9;
+    protected static ?int $navigationSort = 1;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.regulatory_analysis');
     }
 
     public static function canViewAny(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
     }
 
     public static function canCreate(): bool
@@ -330,20 +335,13 @@ class NoticeAnalysisRunResource extends Resource
                                 ->all())
                             ->required()
                             ->native(false),
-                        Forms\Components\Select::make('locale')
-                            ->label(__('app.notice_analysis_runs.actions.locale'))
-                            ->options(User::localeOptions())
-                            ->default(fn (): ?string => auth()->user()?->locale ?? User::LOCALE_EN)
-                            ->required()
-                            ->native(false),
                     ])
                     ->action(function (array $data): void {
                         try {
                             $issueDate = (string) ($data['issue_date'] ?? '');
                             $scopeId = (int) ($data['scope_id'] ?? 0);
-                            $locale = (string) ($data['locale'] ?? User::LOCALE_EN);
                             $scope = Scope::query()->with('translations')->findOrFail($scopeId);
-                            $run = app(NoticeAnalysisRunner::class)->createRunForIssueDate($issueDate, $scope, auth()->id(), $locale);
+                            $run = app(NoticeAnalysisRunner::class)->createRunForIssueDate($issueDate, $scope, auth()->id(), User::LOCALE_EN);
 
                             Notification::make()
                                 ->success()
@@ -352,7 +350,7 @@ class NoticeAnalysisRunResource extends Resource
                                     'run' => $run->id,
                                     'date' => $issueDate,
                                     'scope' => $scope->name(app()->getLocale()),
-                                    'language' => User::localeOptions()[$locale] ?? $locale,
+                                    'language' => User::localeOptions()[User::LOCALE_EN] ?? User::LOCALE_EN,
                                 ]))
                                 ->send();
                         } catch (\Throwable $exc) {

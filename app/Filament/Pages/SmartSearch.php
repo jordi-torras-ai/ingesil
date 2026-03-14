@@ -29,7 +29,7 @@ class SmartSearch extends Page implements HasForms, HasTable
 
     protected static ?string $navigationIcon = 'heroicon-o-magnifying-glass';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 4;
 
     protected static string $view = 'filament.pages.smart-search';
 
@@ -82,6 +82,11 @@ class SmartSearch extends Page implements HasForms, HasTable
     public static function getNavigationLabel(): string
     {
         return __('app.smart_search.navigation');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.workspace');
     }
 
     public function getTitle(): string
@@ -230,7 +235,7 @@ class SmartSearch extends Page implements HasForms, HasTable
                         ->label(__('app.smart_search.actions.view_notice'))
                         ->icon('heroicon-o-eye')
                         ->url(fn (Notice $record): string => NoticeResource::getUrl('view', ['record' => $record]))
-                        ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
+                        ->visible(fn (): bool => auth()->user()?->isPlatformAdmin() ?? false),
                 ])->tooltip(__('app.common.actions')),
             ])
             ->emptyStateHeading(__('app.smart_search.messages.empty_heading'))

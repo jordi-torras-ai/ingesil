@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAdminActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Feature extends Model
 {
     use HasFactory;
+    use LogsAdminActivity;
 
     public const DATA_TYPE_BOOLEAN = 'boolean';
     public const DATA_TYPE_TEXT = 'text';
@@ -86,5 +88,16 @@ class Feature extends Model
         }
 
         return $translations->first();
+    }
+
+    protected function activityLogAttributes(): array
+    {
+        return [
+            'scope_id',
+            'code',
+            'data_type',
+            'is_active',
+            'sort_order',
+        ];
     }
 }

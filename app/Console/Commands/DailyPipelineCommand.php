@@ -8,18 +8,16 @@ use App\Models\User;
 use App\Services\NoticeAnalysisRunner;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Str;
 use Symfony\Component\Process\Process;
 
 class DailyPipelineCommand extends Command
 {
     protected $signature = 'pipeline:daily-notices
         {--date= : Target issue date (YYYY-MM-DD). Defaults to yesterday in configured timezone}
-        {--locales= : Comma-separated locales for analysis runs (defaults to all supported locales)}
         {--headless : Force crawlers to run in headless mode}
         {--continue-on-crawler-error : Continue pipeline even if one crawler fails}';
 
-    protected $description = 'Run all crawlers for one issue date, then create and dispatch notice analysis runs per scope and locale.';
+    protected $description = 'Run all crawlers for one issue date, then create and dispatch English notice analysis runs per scope.';
 
     public function handle(NoticeAnalysisRunner $runner): int
     {
@@ -82,29 +80,21 @@ class DailyPipelineCommand extends Command
             return self::FAILURE;
         }
 
-        $locales = $this->resolveLocales();
-        if ($locales === []) {
-            $this->error('No valid locales were provided.');
-            return self::FAILURE;
-        }
-
-        $this->line('Creating and dispatching analysis runs for scopes/locales.');
+        $this->line('Creating and dispatching English analysis runs for scopes.');
 
         foreach ($scopes as $scope) {
-            foreach ($locales as $locale) {
-                $run = $runner->createRunForIssueDate($targetDate->toDateString(), $scope, null, $locale);
-                $run = $runner->dispatchRun($run);
+            $run = $runner->createRunForIssueDate($targetDate->toDateString(), $scope, null, User::LOCALE_EN);
+            $run = $runner->dispatchRun($run);
 
-                $this->info(sprintf(
-                    'Run #%d scope=%s locale=%s date=%s total=%d status=%s',
-                    $run->id,
-                    $scope->code,
-                    $locale,
-                    (string) $run->issue_date?->toDateString(),
-                    (int) $run->total_notices,
-                    (string) $run->status
-                ));
-            }
+            $this->info(sprintf(
+                'Run #%d scope=%s locale=%s date=%s total=%d status=%s',
+                $run->id,
+                $scope->code,
+                User::LOCALE_EN,
+                (string) $run->issue_date?->toDateString(),
+                (int) $run->total_notices,
+                (string) $run->status
+            ));
         }
 
         $this->info('Daily pipeline finished successfully.');
@@ -125,33 +115,6 @@ class DailyPipelineCommand extends Command
 
         return Carbon::now($timezone)->subDay()->startOfDay();
     }
-
-    /**
-     * @return list<string>
-     */
-    private function resolveLocales(): array
-    {
-        $provided = trim((string) $this->option('locales'));
-        if ($provided === '') {
-            return User::supportedLocales();
-        }
-
-        $requested = collect(explode(',', $provided))
-            ->map(fn (string $value): string => Str::lower(trim($value)))
-            ->filter()
-            ->unique()
-            ->values();
-
-        $supported = collect(User::supportedLocales());
-        $invalid = $requested->diff($supported)->values()->all();
-
-        if ($invalid !== []) {
-            $this->warn('Ignoring unsupported locales: '.implode(', ', $invalid));
-        }
-
-        return $requested->intersect($supported)->values()->all();
-    }
-
     private function runCrawlerForDate(string $slug, string $issueDate, bool $headless, int $timeoutSeconds): int
     {
         $python = base_path('.venv/bin/python');

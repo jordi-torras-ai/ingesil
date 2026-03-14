@@ -14,7 +14,7 @@ class ViewCompany extends ViewRecord
     {
         return [
             Actions\EditAction::make()
-                ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
+                ->visible(fn (): bool => static::getResource()::canEdit($this->record)),
         ];
     }
 }

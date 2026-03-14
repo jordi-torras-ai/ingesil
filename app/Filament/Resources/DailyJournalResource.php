@@ -20,11 +20,16 @@ class DailyJournalResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-newspaper';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 2;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.content_library');
     }
 
     public static function canViewAny(): bool

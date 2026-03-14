@@ -4,10 +4,8 @@ namespace App\Filament\Widgets;
 
 use App\Filament\Resources\DailyJournalResource;
 use App\Filament\Resources\NoticeResource;
-use App\Filament\Resources\SourceResource;
 use App\Models\DailyJournal;
 use App\Models\Notice;
-use App\Models\Source;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -16,6 +14,16 @@ class LibraryOverviewStats extends StatsOverviewWidget
     protected static ?int $sort = 1;
 
     protected int | string | array $columnSpan = 'full';
+
+    public static function canView(): bool
+    {
+        return auth()->check();
+    }
+
+    protected function getColumns(): int
+    {
+        return 2;
+    }
 
     protected function getHeading(): ?string
     {
@@ -29,19 +37,12 @@ class LibraryOverviewStats extends StatsOverviewWidget
 
     protected function getStats(): array
     {
-        $sourcesCount = Source::query()->count();
         $journalsCount = DailyJournal::query()->count();
         $noticesCount = Notice::query()->count();
         $latestIssueDate = DailyJournal::query()->max('issue_date');
         $isAdmin = auth()->user()?->isAdmin() ?? false;
 
         return [
-            Stat::make(__('app.dashboard.library.stats.sources.label'), number_format($sourcesCount))
-                ->description(__('app.dashboard.library.stats.sources.description'))
-                ->descriptionIcon('heroicon-m-building-library')
-                ->color('primary')
-                ->chart($this->buildSparkline(Source::query()->count()))
-                ->url($isAdmin ? SourceResource::getUrl('index') : null),
             Stat::make(__('app.dashboard.library.stats.daily_journals.label'), number_format($journalsCount))
                 ->description($latestIssueDate
                     ? __('app.dashboard.library.stats.daily_journals.latest_issue', ['date' => $latestIssueDate])
@@ -81,16 +82,4 @@ class LibraryOverviewStats extends StatsOverviewWidget
         return $series;
     }
 
-    /**
-     * @return array<float>
-     */
-    private function buildSparkline(int $count): array
-    {
-        return [
-            max(1, $count - 3),
-            max(1, $count - 2),
-            max(1, $count - 1),
-            max(1, $count),
-        ];
-    }
 }

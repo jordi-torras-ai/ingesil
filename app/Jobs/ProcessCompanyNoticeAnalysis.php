@@ -85,7 +85,7 @@ class ProcessCompanyNoticeAnalysis implements ShouldQueue
             usleep($delayMs * 1000);
         }
 
-        $outputLocale = (string) ($noticeAnalysis->noticeAnalysisRun?->locale ?? 'en');
+        $outputLocale = (string) ($run->locale ?: 'en');
         $result = $analyzer->analyze(
             $noticeAnalysis,
             $company,

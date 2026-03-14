@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Company;
 use App\Models\CompanyFeatureAnswer;
+use App\Models\CompanyNoticeAnalysis;
 use App\Models\NoticeAnalysis;
 use App\Models\Scope;
 use App\Models\User;

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAdminActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -11,6 +12,7 @@ use Illuminate\Validation\ValidationException;
 class Scope extends Model
 {
     use HasFactory;
+    use LogsAdminActivity;
 
     private const LEGACY_ANALYSIS_PROMPT_SCOPE_CODE = 'environment_industrial_safety';
 
@@ -62,7 +64,14 @@ class Scope extends Model
 
     public function companies(): BelongsToMany
     {
-        return $this->belongsToMany(Company::class)->withTimestamps();
+        return $this->belongsToMany(Company::class, 'company_scope_subscriptions')
+            ->withPivot('locale')
+            ->withTimestamps();
+    }
+
+    public function companySubscriptions(): HasMany
+    {
+        return $this->hasMany(CompanyScopeSubscription::class);
     }
 
     public function name(?string $locale = null): string
@@ -167,5 +176,14 @@ class Scope extends Model
     {
         return is_file(resource_path($relativePaths['system']))
             && is_file(resource_path($relativePaths['user']));
+    }
+
+    protected function activityLogAttributes(): array
+    {
+        return [
+            'code',
+            'is_active',
+            'sort_order',
+        ];
     }
 }

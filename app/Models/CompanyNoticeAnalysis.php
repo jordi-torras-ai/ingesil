@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsAdminActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,8 @@ use Illuminate\Support\Carbon;
 
 class CompanyNoticeAnalysis extends Model
 {
+    use LogsAdminActivity;
+
     public const STATUS_QUEUED = 'queued';
     public const STATUS_PROCESSING = 'processing';
     public const STATUS_DONE = 'done';
@@ -137,5 +140,23 @@ class CompanyNoticeAnalysis extends Model
             'event_type' => $eventType,
             'changes' => $changes,
         ]);
+    }
+
+    protected function activityLogAttributes(): array
+    {
+        return [
+            'status',
+            'is_applicable',
+            'decision',
+            'reason',
+            'requirements',
+            'compliance_due_at',
+            'confirmed_relevant',
+            'compliance',
+            'compliance_evaluation',
+            'compliance_date',
+            'action_plan',
+            'error_message',
+        ];
     }
 }

@@ -21,11 +21,16 @@ class FeatureResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-adjustments-horizontal';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 2;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.catalog');
     }
 
     public static function canViewAny(): bool
@@ -137,6 +142,7 @@ class FeatureResource extends Resource
     {
         return $table
             ->defaultSort('sort_order')
+            ->persistFiltersInSession()
             ->columns([
                 Tables\Columns\TextColumn::make('scope.code')
                     ->label(__('app.feature_catalog.fields.scope'))

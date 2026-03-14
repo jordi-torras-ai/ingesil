@@ -6,9 +6,24 @@ return [
         'yes' => 'Sí',
         'no' => 'No',
     ],
+    'auth' => [
+        'confirm_sign_in' => 'Confirma l’accés',
+        'sign_out' => 'Tanca la sessió',
+        'two_factor_code_prompt' => 'Introdueix el codi de 6 dígits de l’aplicació autenticadora',
+    ],
     'roles' => [
-        'admin' => 'Administrador',
-        'regular' => 'Usuari',
+        'admin' => 'Administrador de plataforma',
+        'company_admin' => "Administrador d'empresa",
+        'regular' => 'Usuari regular',
+    ],
+    'navigation' => [
+        'groups' => [
+            'workspace' => 'Espai de treball',
+            'customer_operations' => 'Operacions de clients',
+            'regulatory_analysis' => 'Anàlisi normatiu',
+            'content_library' => 'Biblioteca documental',
+            'catalog' => 'Catàleg',
+        ],
     ],
     'locales' => [
         'en' => 'Anglès',
@@ -33,6 +48,10 @@ return [
         'navigation' => 'Usuaris',
         'model_singular' => 'usuari',
         'model_plural' => 'usuaris',
+        'sections' => [
+            'account' => 'Compte',
+            'notifications' => 'Notificacions per correu',
+        ],
         'actions' => [
             'force_reset_password' => 'Restableix la contrasenya i envia l’enllaç',
             'force_reset_password_success_title' => 'Restabliment iniciat',
@@ -49,18 +68,37 @@ return [
             'role' => 'Perfil',
             'locale' => 'Idioma',
             'companies' => 'Empreses',
+            'notice_digest_frequency' => 'Freqüència de correu',
+            'notify_if_pending_tasks' => 'Envia si hi ha tasques pendents de revisió',
+            'notify_if_new_relevant_notices' => 'Envia si arriben avisos nous rellevants',
+            'last_notice_digest_sent_at' => "Últim digest enviat el",
             'created_at' => 'Creat el',
+        ],
+    ],
+    'email_notifications' => [
+        'navigation' => 'Notificacions per correu',
+        'title' => 'Notificacions per correu',
+        'sections' => [
+            'preferences' => 'Preferències del digest',
+            'preferences_description' => 'Tria amb quina freqüència reps correus resum i quan s’han d’enviar.',
+        ],
+        'actions' => [
+            'save' => 'Desa',
+        ],
+        'messages' => [
+            'saved' => 'Configuració de notificacions actualitzada.',
         ],
     ],
     'companies' => [
         'navigation' => 'Empreses',
+        'navigation_my' => 'Les meves empreses',
         'model_singular' => 'empresa',
         'model_plural' => 'empreses',
         'sections' => [
             'general' => 'Informació general',
             'spain' => 'Dades específiques d’Espanya',
             'financials' => 'Dades financeres',
-            'regulatory_scopes' => 'Abasts regulatoris',
+            'scope_subscriptions' => 'Subscripcions d’abast',
             'assignments' => 'Assignació d’usuaris',
         ],
         'fields' => [
@@ -75,6 +113,9 @@ return [
             'total_assets' => 'Actiu total',
             'users' => 'Usuaris',
             'scopes' => 'Abasts',
+            'scope' => 'Abast',
+            'locale' => 'Idioma',
+            'scope_subscriptions' => 'Subscripcions d’abast',
         ],
     ],
     'features' => [
@@ -438,18 +479,23 @@ return [
     ],
     'company_notice_analyses' => [
         'navigation' => 'Anàlisis per empresa',
+        'navigation_customer' => 'Avisos de compliment',
         'model_singular' => 'anàlisi per empresa',
         'model_plural' => 'anàlisis per empresa',
         'sections' => [
             'analysis' => 'Avaluació IA',
             'company_review' => "Revisió de l'empresa",
         ],
+        'actions' => [
+            'pending_review' => 'Avisos pendents',
+        ],
         'filters' => [
             'company' => 'Empresa',
             'scope' => 'Àmbit',
             'source' => 'Font',
+            'locale' => 'Idioma',
             'decision' => 'Decisió',
-            'confirmed_relevant' => 'Confirmat com a rellevant',
+            'confirmed_relevant' => 'Estat de revisió',
             'compliance' => 'Compliment',
             'run' => 'Execució',
         ],
@@ -458,6 +504,7 @@ return [
             'company' => 'Empresa',
             'issue_date' => "Data d'edició",
             'scope' => 'Àmbit',
+            'locale' => 'Idioma',
             'source' => 'Font',
             'notice' => 'Avís',
             'decision' => 'Decisió',
@@ -475,6 +522,27 @@ return [
             'relevant' => 'Rellevant',
             'not_relevant' => 'No rellevant',
         ],
+        'review_statuses' => [
+            'pending_review' => 'Pendent de revisió',
+        ],
+    ],
+    'company_notice_analysis_events' => [
+        'heading' => 'Historial de canvis',
+        'fields' => [
+            'created_at' => 'Canviat el',
+            'event_type' => 'Tipus',
+            'user' => 'Usuari',
+            'changes' => 'Canvis',
+        ],
+        'types' => [
+            'ai_processed' => 'Processat per IA',
+            'user_updated' => 'Actualitzat per usuari',
+        ],
+        'values' => [
+            'empty' => 'Buit',
+        ],
+        'empty_heading' => 'Encara no hi ha canvis registrats',
+        'empty_description' => "Els canvis d'IA i d'usuari apareixeran aquí amb el temps.",
     ],
     'smart_search' => [
         'navigation' => 'Cerca intel·ligent',
@@ -514,14 +582,105 @@ return [
             'answer_error_title' => "No s'ha pogut generar la resposta",
         ],
     ],
+    'activity_log' => [
+        'navigation' => "Registre d'activitat",
+        'fields' => [
+            'created_at' => 'Creat el',
+            'causer' => 'Usuari',
+            'event' => 'Esdeveniment',
+            'subject' => 'Tipus de registre',
+            'subject_record' => 'Registre',
+            'changes' => 'Canvis',
+        ],
+        'filters' => [
+            'causer' => 'Usuari',
+            'event' => 'Esdeveniment',
+            'subject' => 'Tipus de registre',
+            'date_range' => 'Rang de dates',
+            'from' => 'Des de',
+            'to' => 'Fins a',
+        ],
+        'events' => [
+            'created' => 'Creat',
+            'updated' => 'Actualitzat',
+            'deleted' => 'Eliminat',
+        ],
+        'sections' => [
+            'details' => "Detalls de l'activitat",
+        ],
+        'actions' => [
+            'back' => 'Tornar al registre',
+        ],
+        'values' => [
+            'system' => 'Sistema',
+            'empty' => 'Buit',
+        ],
+    ],
+    'notice_digests' => [
+        'navigation_runs' => 'Execucions de digest',
+        'frequencies' => [
+            'daily' => 'Diari',
+            'weekly' => 'Setmanal',
+            'monthly' => 'Mensual',
+            'never' => 'Mai',
+        ],
+        'sections' => [
+            'run' => 'Execució del digest',
+        ],
+        'fields' => [
+            'id' => 'ID',
+            'user' => 'Usuari',
+            'frequency' => 'Freqüència',
+            'locale' => 'Idioma',
+            'status' => 'Estat',
+            'window_started_at' => 'Inici de finestra',
+            'window_ended_at' => 'Fi de finestra',
+            'pending_tasks_count' => 'Pendents',
+            'new_relevant_count' => 'Nous rellevants',
+            'completed_count' => 'Completats',
+            'sent_at' => 'Enviat el',
+            'error_message' => 'Error',
+        ],
+        'filters' => [
+            'user' => 'Usuari',
+            'frequency' => 'Freqüència',
+            'status' => 'Estat',
+        ],
+        'statuses' => [
+            'queued' => 'En cua',
+            'sent' => 'Enviat',
+            'skipped' => 'Omès',
+            'failed' => 'Fallit',
+        ],
+        'actions' => [
+            'back' => 'Torna a execucions',
+        ],
+        'email' => [
+            'subject' => 'Digest de compliment — :pending pendents, :new nous',
+            'heading' => 'Digest de compliment',
+            'intro' => 'Resum de les teves empreses subscrites: :pending pendents de revisió, :new avisos nous rellevants, :completed elements completats.',
+            'sections' => [
+                'pending' => 'Pendents de revisió',
+                'new_relevant' => 'Nous avisos rellevants',
+                'completed' => 'Completats recentment',
+            ],
+            'labels' => [
+                'scope' => 'Àmbit',
+                'issue_date' => "Data d'edició",
+                'due_date' => 'Data límit',
+                'open_notice' => 'Obre avís',
+            ],
+            'outro' => "Aquest correu només inclou empreses a les quals tens accés i s'envia en el teu idioma preferit.",
+        ],
+    ],
     'dashboard' => [
         'library' => [
             'heading' => 'Biblioteca regulatòria',
             'description' => 'Volum principal de publicació dels diaris oficials monitoritzats.',
             'stats' => [
-                'sources' => [
-                    'label' => 'Fonts',
-                    'description' => 'Diaris oficials monitoritzats',
+                'recent_notices' => [
+                    'label' => 'Avisos (30d)',
+                    'description' => 'Noves publicacions indexades durant els últims 30 dies',
                 ],
                 'daily_journals' => [
                     'label' => 'Diaris',
@@ -585,6 +744,63 @@ return [
             ],
             'empty_heading' => 'Encara no hi ha avisos',
             'empty_description' => 'Les publicacions recents apareixeran aquí quan els crawlers omplin la biblioteca.',
+        ],
+        'customer_subscriptions' => [
+            'heading' => 'Cobertura de subscripcions',
+            'description' => 'Empreses actives, subscripcions contractades, àmbits coberts i idiomes habilitats.',
+            'stats' => [
+                'companies' => [
+                    'label' => 'Les meves empreses',
+                    'description' => 'Empreses a les quals tens accés',
+                ],
+                'subscriptions' => [
+                    'label' => 'Subscripcions',
+                    'description' => 'Parelles àmbit-idioma actives',
+                ],
+                'scopes' => [
+                    'label' => 'Àmbits subscrits',
+                    'description' => 'Serveis contractats diferents',
+                ],
+                'languages' => [
+                    'label' => 'Idiomes',
+                    'description' => 'Idiomes coberts per les subscripcions',
+                ],
+            ],
+        ],
+        'customer_compliance' => [
+            'heading' => 'Càrrega de compliment',
+            'description' => 'Què és rellevant ara, què està pendent de revisió, què venç aviat i què ja compleix.',
+            'stats' => [
+                'relevant' => [
+                    'label' => 'Avisos rellevants',
+                    'description' => "Elements rellevants per a l'empresa",
+                ],
+                'pending_review' => [
+                    'label' => 'Pendents de revisió',
+                    'description' => 'Avisos rellevants encara no confirmats',
+                ],
+                'due_soon' => [
+                    'label' => 'Vencen en 30 dies',
+                    'description' => 'Propers terminis de compliment',
+                ],
+                'compliant' => [
+                    'label' => 'Ja compleixen',
+                    'description' => 'Elements marcats com a complerts',
+                ],
+            ],
+        ],
+        'customer_notices' => [
+            'heading' => 'Últims avisos rellevants',
+            'columns' => [
+                'company' => 'Empresa',
+                'issue_date' => "Data d'edició",
+                'scope' => 'Àmbit',
+                'notice' => 'Avís',
+                'compliance_due_at' => 'Data límit de compliment',
+                'compliance' => 'Compliment',
+            ],
+            'empty_heading' => 'Encara no hi ha avisos rellevants',
+            'empty_description' => "Els avisos rellevants d'empresa apareixeran aquí quan finalitzin les anàlisis.",
         ],
     ],
 ];

@@ -1,6 +1,6 @@
 # Python Crawlers
 
-This folder contains Selenium crawlers that map to `sources.slug`.
+This folder contains source crawlers that map to `sources.slug`.
 
 ## Layout
 
@@ -32,7 +32,7 @@ pip install -r python/requirements.txt
 
 ## Run
 
-Headed (default):
+Headed (default, for browser-based crawlers only):
 
 ```bash
 python python/run_crawler.py dogc
@@ -60,14 +60,17 @@ Optional env knobs (read from `.env`):
 
 - `CRAWLER_HEADLESS=1` to default to headless mode
 - `CRAWLER_TIMEOUT_SECONDS=20`
-- `CRAWLER_DOGC_BASE_URL=https://dogc.gencat.cat/ca`
+- `CRAWLER_DOGC_BASE_URL=https://dogc.gencat.cat/ca` (legacy browser URL, ignored by the API crawler)
 - `CRAWLER_DOGC_DAILY_BASE_URL=https://dogc.gencat.cat/ca/sumari-del-dogc/`
-- `CRAWLER_BOE_BASE_URL=https://www.boe.es/buscar/boe.php`
+- `CRAWLER_DOGC_SEARCH_API_URL=https://portaldogc.gencat.cat/eadop-rest/api/dogc/searchDOGC`
+- `CRAWLER_DOGC_DOCUMENT_API_URL=https://portaldogc.gencat.cat/eadop-rest/api/dogc/documentDOGC`
+- `CRAWLER_BOE_SUMMARY_API_URL_TEMPLATE=https://www.boe.es/datosabiertos/api/boe/sumario/{stamp}`
 - `CRAWLER_OJEU_BASE_URL=https://eur-lex.europa.eu`
 - `CRAWLER_OJEU_SPARQL_ENDPOINT=https://publications.europa.eu/webapi/rdf/sparql`
 - `CRAWLER_OJEU_LIMIT=500`
 - `CRAWLER_BOPB_BASE_URL=https://bop.diba.cat`
-- `CRAWLER_BOPB_LISTING_BASE_URL=https://bop.diba.cat/anteriores`
+- `CRAWLER_BOPB_SUMMARY_BASE_URL=https://bop.diba.cat/sumario-del-dia`
+- `CRAWLER_BOPB_FEED_URL=https://bop.diba.cat/datos-abiertos/boletin-del-dia/feed`
 - `CRAWLER_BOPB_MAX_NOTICES=0` (0 = unlimited, useful for debug)
 
 ## Embeddings
@@ -87,13 +90,50 @@ php artisan notices:embed --stale
 php artisan notices:embed --stale --source-slug=dogc --issue-date=2026-03-05
 ```
 
-## DOGC calendar FSM
+## Browser FSM note
 
-Current flow:
+`python/src/ingesil_crawlers/fsm.py` remains in the project for browser-based crawlers, but DOGC, BOE, OJEU, and BOPB no longer use it.
 
-1. `HOME`: open source base URL.
-2. `NAVIGATE_TO_START_MONTH`: click `<` one month at a time until visible month equals `sources.start_at`.
-3. `PROCESS_MONTH`: collect clickable day entries for visible month, upsert `daily_journals`, click `>` once.
-4. Repeat `PROCESS_MONTH` until current month equals today's month, then finish.
+## DOGC crawler
 
-No multi-click month loop inside a single state handler: month navigation progresses one FSM transition at a time.
+`python/crawlers/crawler_dogc.py` now uses the DOGC APIs instead of browser automation.
+
+- Search endpoint:
+  - `https://portaldogc.gencat.cat/eadop-rest/api/dogc/searchDOGC`
+- Document endpoint:
+  - `https://portaldogc.gencat.cat/eadop-rest/api/dogc/documentDOGC`
+- `--headless` / `--headed` are still accepted for CLI compatibility, but ignored.
+
+## BOE crawler
+
+`python/crawlers/crawler_boe.py` uses the official BOE open-data summary API instead of browser automation.
+
+- Summary endpoint template:
+  - `https://www.boe.es/datosabiertos/api/boe/sumario/{stamp}`
+- `stamp` format:
+  - `YYYYMMDD`
+- The crawler still accepts `--headless` / `--headed` for CLI compatibility, but ignores them.
+
+## OJEU crawler
+
+`python/crawlers/crawler_ojeu.py` now uses the Publications Office SPARQL endpoint plus direct HTTP fetches to EUR-Lex instead of browser automation.
+
+- SPARQL endpoint:
+  - `https://publications.europa.eu/webapi/rdf/sparql`
+- Detail fetches:
+  - `https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:...`
+- `--headless` / `--headed` are still accepted for CLI compatibility, but ignored.
+
+## BOPB crawler
+
+`python/crawlers/crawler_bopb.py` now uses dated BOPB summary PDFs plus direct HTTP fetches instead of browser automation.
+
+- Dated summary PDFs:
+  - `https://bop.diba.cat/sumario-del-dia/YYYY-MM-DD`
+- Current-day feed fallback:
+  - `https://bop.diba.cat/datos-abiertos/boletin-del-dia/feed`
+- Notice pages:
+  - `https://bop.diba.cat/anunci/{id}`
+- Notice PDFs:
+  - `https://bop.diba.cat/anunci/descarrega-pdf/{id}`
+- `--headless` / `--headed` are still accepted for CLI compatibility, but ignored.

@@ -2,16 +2,17 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CompanyResource\RelationManagers\FeatureAnswersRelationManager;
 use App\Filament\Resources\CompanyResource\Pages;
+use App\Filament\Resources\CompanyResource\RelationManagers\FeatureAnswersRelationManager;
 use App\Models\CnaeCode;
 use App\Models\Company;
 use App\Models\Scope;
 use App\Models\SpanishLegalForm;
+use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,17 +24,20 @@ class CompanyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
 
     public static function shouldRegisterNavigation(): bool
     {
         $user = auth()->user();
 
-        if (! $user) {
-            return false;
-        }
+        return (bool) ($user && ($user->isPlatformAdmin() || $user->companies()->exists()));
+    }
 
-        return $user->isAdmin() || $user->companies()->exists();
+    public static function getNavigationGroup(): ?string
+    {
+        return auth()->user()?->isPlatformAdmin()
+            ? __('app.navigation.groups.customer_operations')
+            : __('app.navigation.groups.workspace');
     }
 
     public static function canViewAny(): bool
@@ -43,33 +47,29 @@ class CompanyResource extends Resource
 
     public static function canCreate(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
     }
 
     public static function canEdit(Model $record): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return $record instanceof Company && (auth()->user()?->canManageCompany($record) ?? false);
     }
 
     public static function canView(Model $record): bool
     {
-        $user = auth()->user();
-
-        if (! $user) {
-            return false;
-        }
-
-        return $user->isAdmin() || $record->users()->whereKey($user->id)->exists();
+        return $record instanceof Company && (auth()->user()?->canAccessCompany($record) ?? false);
     }
 
     public static function canDelete(Model $record): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('app.companies.navigation');
+        return auth()->user()?->isPlatformAdmin()
+            ? __('app.companies.navigation')
+            : __('app.companies.navigation_my');
     }
 
     public static function getModelLabel(): string
@@ -147,17 +147,40 @@ class CompanyResource extends Resource
                             ->prefix(fn (Forms\Get $get): string => (string) ($get('currency') ?: Company::DEFAULT_CURRENCY)),
                     ])
                     ->columns(2),
-                Forms\Components\Section::make(__('app.companies.sections.regulatory_scopes'))
+                Forms\Components\Section::make(__('app.companies.sections.scope_subscriptions'))
                     ->schema([
-                        Forms\Components\Select::make('scopes')
-                            ->label(__('app.companies.fields.scopes'))
-                            ->relationship('scopes', 'code', fn (Builder $query): Builder => $query->with('translations')->orderBy('sort_order'))
-                            ->getOptionLabelFromRecordUsing(fn (Scope $record): string => $record->name())
-                            ->multiple()
-                            ->searchable()
-                            ->preload()
+                        Forms\Components\Repeater::make('scopeSubscriptions')
+                            ->label(__('app.companies.fields.scope_subscriptions'))
+                            ->relationship()
+                            ->schema([
+                                Forms\Components\Select::make('scope_id')
+                                    ->label(__('app.companies.fields.scope'))
+                                    ->options(fn (): array => Scope::query()
+                                        ->with('translations')
+                                        ->where('is_active', true)
+                                        ->orderBy('sort_order')
+                                        ->orderBy('id')
+                                        ->get()
+                                        ->mapWithKeys(fn (Scope $scope): array => [
+                                            (string) $scope->id => $scope->name(),
+                                        ])
+                                        ->all())
+                                    ->searchable()
+                                    ->required()
+                                    ->native(false),
+                                Forms\Components\Select::make('locale')
+                                    ->label(__('app.companies.fields.locale'))
+                                    ->options(User::localeOptions())
+                                    ->default(User::LOCALE_EN)
+                                    ->required()
+                                    ->native(false),
+                            ])
+                            ->columns(2)
+                            ->defaultItems(0)
+                            ->reorderable(false)
                             ->columnSpanFull(),
-                    ]),
+                    ])
+                    ->visible(fn (): bool => auth()->user()?->canManageSubscriptions() ?? false),
                 Forms\Components\Section::make(__('app.companies.sections.assignments'))
                     ->schema([
                         Forms\Components\Select::make('users')
@@ -167,7 +190,7 @@ class CompanyResource extends Resource
                             ->searchable()
                             ->preload(),
                     ])
-                    ->visible(fn (): bool => auth()->user()?->isAdmin() ?? false),
+                    ->visible(fn (): bool => auth()->user()?->isPlatformAdmin() ?? false),
             ]);
     }
 
@@ -222,11 +245,12 @@ class CompanyResource extends Resource
                     ->badge()
                     ->color('primary')
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('scopes_count')
-                    ->label(__('app.companies.fields.scopes'))
+                Tables\Columns\TextColumn::make('scope_subscriptions_count')
+                    ->label(__('app.companies.fields.scope_subscriptions'))
                     ->badge()
                     ->color('info')
-                    ->toggleable(),
+                    ->toggleable()
+                    ->visible(fn (): bool => auth()->user()?->canManageSubscriptions() ?? false),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('country')
@@ -253,9 +277,9 @@ class CompanyResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $query = parent::getEloquentQuery()->withCount(['users', 'scopes']);
+        $query = parent::getEloquentQuery()->withCount(['users', 'scopeSubscriptions']);
 
-        if (auth()->user()?->isAdmin() ?? false) {
+        if (auth()->user()?->isPlatformAdmin() ?? false) {
             return $query;
         }
 

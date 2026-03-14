@@ -12,12 +12,18 @@ class EditUser extends EditRecord
 {
     protected static string $resource = UserResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        return UserResource::sanitizeManagedUserData($data);
+    }
+
     protected function getHeaderActions(): array
     {
         return [
             Actions\Action::make('force_reset_password')
                 ->label(__('app.users.actions.force_reset_password'))
                 ->icon('heroicon-o-key')
+                ->visible(fn (): bool => static::getResource()::canEdit($this->record))
                 ->requiresConfirmation()
                 ->action(function (PasswordResetLinkSender $sender): void {
                     $sender->invalidateAndSend($this->record);
@@ -30,7 +36,8 @@ class EditUser extends EditRecord
                         ]))
                         ->send();
                 }),
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->visible(fn (): bool => static::getResource()::canDelete($this->record)),
         ];
     }
 }

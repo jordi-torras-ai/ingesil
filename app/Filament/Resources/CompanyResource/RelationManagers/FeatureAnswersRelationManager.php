@@ -31,7 +31,7 @@ class FeatureAnswersRelationManager extends RelationManager
             return false;
         }
 
-        return $user->isAdmin() || $ownerRecord->users()->whereKey($user->id)->exists();
+        return $user->isPlatformAdmin() || $ownerRecord->users()->whereKey($user->id)->exists();
     }
 
     public function isReadOnly(): bool
@@ -193,6 +193,7 @@ class FeatureAnswersRelationManager extends RelationManager
             return false;
         }
 
-        return $user->isAdmin() || $this->getOwnerRecord()->users()->whereKey($user->id)->exists();
+        return $user->isPlatformAdmin()
+            || ($user->isCompanyAdmin() && $this->getOwnerRecord()->users()->whereKey($user->id)->exists());
     }
 }

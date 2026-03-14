@@ -19,11 +19,16 @@ class CrawlerRunResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 4;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.content_library');
     }
 
     public static function canViewAny(): bool
@@ -80,6 +85,7 @@ class CrawlerRunResource extends Resource
                             ->disabled(),
                         Forms\Components\DatePicker::make('issue_date')
                             ->label(__('app.crawler_runs.fields.issue_date'))
+                            ->native(false)
                             ->disabled(),
                         Forms\Components\TextInput::make('status')
                             ->label(__('app.crawler_runs.fields.status'))
@@ -95,9 +101,11 @@ class CrawlerRunResource extends Resource
                             ->disabled(),
                         Forms\Components\DateTimePicker::make('started_at')
                             ->label(__('app.crawler_runs.fields.started_at'))
+                            ->native(false)
                             ->disabled(),
                         Forms\Components\DateTimePicker::make('finished_at')
                             ->label(__('app.crawler_runs.fields.finished_at'))
+                            ->native(false)
                             ->disabled(),
                         Forms\Components\Placeholder::make('duration')
                             ->label(__('app.crawler_runs.fields.duration'))

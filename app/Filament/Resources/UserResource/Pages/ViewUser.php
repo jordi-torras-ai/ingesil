@@ -18,6 +18,7 @@ class ViewUser extends ViewRecord
             Actions\Action::make('force_reset_password')
                 ->label(__('app.users.actions.force_reset_password'))
                 ->icon('heroicon-o-key')
+                ->visible(fn (): bool => static::getResource()::canEdit($this->record))
                 ->requiresConfirmation()
                 ->action(function (PasswordResetLinkSender $sender): void {
                     $sender->invalidateAndSend($this->record);
@@ -30,7 +31,8 @@ class ViewUser extends ViewRecord
                         ]))
                         ->send();
                 }),
-            Actions\EditAction::make(),
+            Actions\EditAction::make()
+                ->visible(fn (): bool => static::getResource()::canEdit($this->record)),
         ];
     }
 }

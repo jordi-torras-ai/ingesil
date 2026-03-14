@@ -22,11 +22,16 @@ class ScopeResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 1;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->user()?->isAdmin() ?? false;
+        return auth()->user()?->isPlatformAdmin() ?? false;
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('app.navigation.groups.catalog');
     }
 
     public static function canViewAny(): bool
@@ -158,6 +163,7 @@ class ScopeResource extends Resource
     {
         return $table
             ->defaultSort('sort_order')
+            ->persistFiltersInSession()
             ->columns([
                 Tables\Columns\TextColumn::make('code')
                     ->label(__('app.scope_catalog.fields.code'))

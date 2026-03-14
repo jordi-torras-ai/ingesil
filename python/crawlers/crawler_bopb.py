@@ -5,25 +5,18 @@ import argparse
 import json
 import logging
 import os
-import random
 import re
 import subprocess
 import sys
-import time
+import tempfile
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta, timezone
-from enum import Enum
 from pathlib import Path
-from urllib.error import HTTPError, URLError
+from typing import Iterable
 from urllib.parse import urljoin, urlparse
-from urllib.request import Request, urlopen
 
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options as ChromeOptions
-from selenium.webdriver.common.by import By
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.remote.webdriver import WebDriver
-from selenium.webdriver.support.ui import WebDriverWait
+import requests
+from bs4 import BeautifulSoup
 
 try:
     from dotenv import load_dotenv
@@ -37,44 +30,44 @@ PYTHON_SRC = PROJECT_ROOT / "python" / "src"
 if str(PYTHON_SRC) not in sys.path:
     sys.path.insert(0, str(PYTHON_SRC))
 
-from ingesil_crawlers.artifacts import ArtifactWriter  # noqa: E402
-from ingesil_crawlers.fsm import FSMConfig, FSMRunner  # noqa: E402
 from ingesil_crawlers.logging_utils import build_logger  # noqa: E402
 
 
 DEFAULT_BASE_URL = "https://bop.diba.cat"
+DEFAULT_SUMMARY_BASE_URL = f"{DEFAULT_BASE_URL}/sumario-del-dia"
+DEFAULT_FEED_URL = f"{DEFAULT_BASE_URL}/datos-abiertos/boletin-del-dia/feed"
+REQUEST_HEADERS = {
+    "User-Agent": "ingesil-bopb-crawler/2.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+}
+PDF_HEADERS = {
+    "User-Agent": "ingesil-bopb-crawler/2.0",
+    "Accept": "application/pdf,*/*;q=0.8",
+}
 
 
-class BopbState(Enum):
-    PICK_DAY = "PICK_DAY"
-    OPEN_LISTING = "OPEN_LISTING"
-    PARSE_LISTING_PAGE = "PARSE_LISTING_PAGE"
-    PICK_NOTICE = "PICK_NOTICE"
-    OPEN_NOTICE = "OPEN_NOTICE"
-    OPEN_NEXT_PAGE = "OPEN_NEXT_PAGE"
-    DONE = "DONE"
+@dataclass(slots=True)
+class NoticeRef:
+    notice_id: str
+    label: str
+    notice_url: str
+    pdf_url: str
 
 
 @dataclass
 class CrawlerContext:
     logger: logging.Logger
-    driver: WebDriver
-    artifacts: ArtifactWriter
     slug: str
     source_id: int
     base_url: str
-    listing_base_url: str
+    summary_base_url: str
+    feed_url: str
     timeout_seconds: int
     max_notices: int
     from_date: date
     to_date: date
     db_conn: object
-    pending_days: list[date]
-    current_day: date | None = None
-    daily_journal_id: int | None = None
-    pending_notice_urls: list[str] | None = None
-    next_page_url: str | None = None
-    current_notice_url: str | None = None
+    no_pdf_text: bool
     processed_notices: int = 0
 
 
@@ -83,64 +76,20 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--slug", default="bopb")
     parser.add_argument("--run-id", default=datetime.now().strftime("%Y%m%d_%H%M%S"))
     parser.add_argument("--base-url", default=os.getenv("CRAWLER_BOPB_BASE_URL", DEFAULT_BASE_URL))
-    parser.add_argument("--listing-base-url", default=os.getenv("CRAWLER_BOPB_LISTING_BASE_URL", f"{DEFAULT_BASE_URL}/anteriores"))
+    parser.add_argument(
+        "--summary-base-url",
+        default=os.getenv("CRAWLER_BOPB_SUMMARY_BASE_URL", DEFAULT_SUMMARY_BASE_URL),
+    )
+    parser.add_argument("--feed-url", default=os.getenv("CRAWLER_BOPB_FEED_URL", DEFAULT_FEED_URL))
     parser.add_argument("--timeout", type=int, default=int(os.getenv("CRAWLER_TIMEOUT_SECONDS", "20")))
     parser.add_argument("--max-notices", type=int, default=int(os.getenv("CRAWLER_BOPB_MAX_NOTICES", "0")))
     parser.add_argument("--no-pdf-text", action="store_true", help="Do not download PDFs and extract text content.")
     parser.add_argument("--day", default=None, help="Crawl only one day (YYYY-MM-DD).")
     parser.add_argument("--from-date", default=None, help="Crawl window start date (YYYY-MM-DD).")
     parser.add_argument("--to-date", default=None, help="Crawl window end date (YYYY-MM-DD).")
-    parser.add_argument("--headless", action="store_true", help="Run Chrome headless")
-    parser.add_argument("--headed", action="store_true", help="Force headed mode")
+    parser.add_argument("--headless", action="store_true", help="Accepted for CLI compatibility, ignored.")
+    parser.add_argument("--headed", action="store_true", help="Accepted for CLI compatibility, ignored.")
     return parser.parse_args()
-
-
-def resolve_headless(args: argparse.Namespace) -> bool:
-    env_default = os.getenv("CRAWLER_HEADLESS", "0").strip().lower() in {"1", "true", "yes", "on"}
-    if args.headed:
-        return False
-    if args.headless:
-        return True
-    return env_default
-
-
-def build_driver(headless: bool) -> WebDriver:
-    options = ChromeOptions()
-    options.page_load_strategy = "eager"
-    options.add_argument("--window-size=1600,1200")
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--disable-extensions")
-    options.add_argument("--remote-debugging-port=0")
-    chrome_binary = os.getenv("CRAWLER_CHROME_BINARY", "/usr/bin/google-chrome")
-    if os.path.isfile(chrome_binary):
-        options.binary_location = chrome_binary
-    user_data_dir = Path(os.getenv("CRAWLER_CHROME_USER_DATA_DIR", "/tmp/ingesil-chrome"))
-    user_data_dir.mkdir(parents=True, exist_ok=True)
-    options.add_argument(f"--user-data-dir={user_data_dir}")
-    options.add_experimental_option(
-        "prefs",
-        {
-            "profile.managed_default_content_settings.images": 2,
-            "profile.default_content_setting_values.notifications": 2,
-        },
-    )
-    if headless:
-        options.add_argument("--headless=new")
-    return webdriver.Chrome(options=options)
-
-
-def configure_driver(driver: WebDriver, *, timeout_seconds: int) -> None:
-    budget = max(30, int(timeout_seconds) * 3)
-    driver.set_page_load_timeout(budget)
-    driver.set_script_timeout(budget)
-
-
-def wait_dom_ready(driver: WebDriver, timeout_seconds: int) -> None:
-    WebDriverWait(driver, timeout_seconds).until(
-        lambda d: d.execute_script("return document.readyState") in {"interactive", "complete"}
-    )
 
 
 def parse_iso_date(value: str, *, flag: str) -> date:
@@ -241,16 +190,13 @@ def resolve_crawl_range(
     return from_date, to_date
 
 
-def build_listing_url(listing_base_url: str, issue_date: date, page: int | None = None) -> str:
-    base = listing_base_url.rstrip("/")
-    if page and page > 1:
-        return f"{base}/{issue_date:%Y-%m-%d}/{page}"
-    return f"{base}/{issue_date:%Y-%m-%d}"
+def build_summary_url(summary_base_url: str, issue_date: date) -> str:
+    return f"{summary_base_url.rstrip('/')}/{issue_date:%Y-%m-%d}"
 
 
-def upsert_daily_journal(context: CrawlerContext, *, issue_date: date) -> int:
-    daily_journal_url = build_listing_url(context.listing_base_url, issue_date)
-    description = f"BOPB {issue_date.isoformat()}"
+def upsert_daily_journal(context: CrawlerContext, *, issue_date: date, notice_count: int) -> int:
+    daily_journal_url = build_summary_url(context.summary_base_url, issue_date)
+    description = f"BOPB {issue_date.isoformat()} - {notice_count} notices"
 
     cur = context.db_conn.cursor()
     try:
@@ -352,70 +298,17 @@ def upsert_notice(
     context.db_conn.commit()
 
 
-def simulate_human_transition(context: CrawlerContext, from_state: BopbState, to_state: BopbState) -> None:
-    delay = random.uniform(0.25, 0.8)
-    time.sleep(delay)
-    context.logger.info("Human pacing: transition %s -> %s (pause %.2fs)", from_state.value, to_state.value, delay)
+def request_bytes(url: str, *, timeout_seconds: int, headers: dict[str, str] | None = None) -> bytes:
+    response = requests.get(url, timeout=max(30, timeout_seconds * 3), headers=headers or REQUEST_HEADERS)
+    response.raise_for_status()
+    return response.content
 
 
-def extract_notice_urls_from_listing(driver: WebDriver, base_url: str) -> list[str]:
-    urls: list[str] = []
-    anchors = driver.find_elements(By.XPATH, "//a[contains(@href, '/anuncio/')]")
-    for a in anchors:
-        href = (a.get_attribute("href") or "").strip()
-        if not href:
-            continue
-        if "/anuncio/" not in href:
-            continue
-        if href.startswith("/"):
-            href = urljoin(base_url.rstrip("/") + "/", href)
-        urls.append(href)
-
-    # Some pages include hidden links in data attributes.
-    try:
-        data_urls = driver.execute_script(
-            r"""
-            const out = [];
-            document.querySelectorAll('[data-href]').forEach((el) => {
-              const v = (el.getAttribute('data-href') || '').trim();
-              if (v && v.includes('/anuncio/')) out.push(v);
-            });
-            return out;
-            """
-        )
-        if isinstance(data_urls, list):
-            for u in data_urls:
-                if isinstance(u, str) and "/anuncio/" in u:
-                    urls.append(u.strip())
-    except Exception:
-        pass
-
-    deduped: list[str] = []
-    seen = set()
-    for url in urls:
-        if url in seen:
-            continue
-        seen.add(url)
-        deduped.append(url)
-    return deduped
-
-
-def extract_next_page_url(driver: WebDriver, base_url: str) -> str | None:
-    candidates = []
-    # Common Drupal pager classnames.
-    candidates.extend(driver.find_elements(By.CSS_SELECTOR, "li.pager__item--next a"))
-    candidates.extend(driver.find_elements(By.CSS_SELECTOR, "a[rel='next']"))
-    if not candidates:
-        candidates = driver.find_elements(By.XPATH, "//a[contains(., 'Siguiente') or contains(., 'Següent') or contains(., 'Next') or contains(., '›')]")
-
-    for node in candidates[:5]:
-        href = (node.get_attribute("href") or "").strip()
-        if not href:
-            continue
-        if href.startswith("/"):
-            href = urljoin(base_url.rstrip("/") + "/", href)
-        return href
-    return None
+def request_text(url: str, *, timeout_seconds: int) -> str:
+    response = requests.get(url, timeout=max(30, timeout_seconds * 3), headers=REQUEST_HEADERS)
+    response.raise_for_status()
+    response.encoding = response.encoding or "utf-8"
+    return response.text
 
 
 def normalize_text(text: str) -> str:
@@ -432,18 +325,6 @@ def normalize_text(text: str) -> str:
         out.append(line)
         last_blank = False
     return "\n".join(out).strip()
-
-
-def download_pdf(url: str) -> bytes:
-    req = Request(
-        url,
-        headers={
-            "User-Agent": "ingesil-bopb-crawler/1.0",
-            "Accept": "application/pdf,*/*;q=0.8",
-        },
-    )
-    with urlopen(req, timeout=60) as response:
-        return response.read()
 
 
 def extract_pdf_text_markdown(pdf_bytes: bytes, *, timeout_seconds: int = 30) -> str:
@@ -471,20 +352,13 @@ def extract_pdf_text_markdown(pdf_bytes: bytes, *, timeout_seconds: int = 30) ->
         )
         raw = txt_path.read_text(encoding="utf-8", errors="replace")
     finally:
-        try:
-            pdf_path.unlink(missing_ok=True)
-        except Exception:
-            pass
-        try:
-            txt_path.unlink(missing_ok=True)
-        except Exception:
-            pass
+        pdf_path.unlink(missing_ok=True)
+        txt_path.unlink(missing_ok=True)
 
     raw = raw.replace("\r\n", "\n").replace("\r", "\n")
     raw = re.sub(r"[ \t]+\n", "\n", raw)
     raw = re.sub(r"\n{4,}", "\n\n\n", raw).strip()
 
-    # Wrap table-ish blocks in code fences to preserve alignment.
     blocks = re.split(r"\n\s*\n", raw)
     rendered: list[str] = []
     for block in blocks:
@@ -503,186 +377,118 @@ def extract_pdf_text_markdown(pdf_bytes: bytes, *, timeout_seconds: int = 30) ->
     return text
 
 
-def extract_markdown_content(driver: WebDriver) -> str:
-    try:
-        markdown = str(
-            driver.execute_script(
-                r"""
-                function normalizeBlock(text) {
-                  if (!text) return "";
-                  return text.replace(/\r\n/g, "\n").replace(/\u00A0/g, " ").replace(/[ \t]+\n/g, "\n").trim();
-                }
+def parse_summary_pdf_notice_refs(pdf_bytes: bytes, *, base_url: str, timeout_seconds: int) -> list[NoticeRef]:
+    with tempfile.TemporaryDirectory(prefix="ingesil_bopb_summary_") as temp_dir:
+        temp_path = Path(temp_dir)
+        pdf_path = temp_path / "summary.pdf"
+        xml_path = temp_path / "summary.xml"
+        pdf_path.write_bytes(pdf_bytes)
+        subprocess.run(
+            ["pdftohtml", "-xml", str(pdf_path), str(xml_path)],
+            check=True,
+            timeout=max(30, timeout_seconds * 3),
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        xml_text = xml_path.read_text(encoding="utf-8", errors="ignore")
 
-                function escapePipes(text) {
-                  return (text || "").replace(/\|/g, "\\|").trim();
-                }
+    candidates: dict[str, NoticeRef] = {}
+    for notice_id, raw_label in re.findall(r'https://bop\.diba\.cat/anunci/(\d+)">([^<]+)', xml_text):
+        label = normalize_text(raw_label)
+        if not label or label.startswith("CVE-Núm."):
+            continue
+        if notice_id in candidates:
+            continue
+        candidates[notice_id] = NoticeRef(
+            notice_id=notice_id,
+            label=label,
+            notice_url=f"{base_url.rstrip('/')}/anunci/{notice_id}",
+            pdf_url=f"{base_url.rstrip('/')}/anunci/descarrega-pdf/{notice_id}",
+        )
 
-                function isLayoutTable(table) {
-                  if (!table) return true;
-                  if (table.querySelector("img")) return true;
-                  const rows = Array.from(table.querySelectorAll("tr"));
-                  if (rows.length <= 1) return true;
-                  const cells = Array.from(table.querySelectorAll("td,th"));
-                  if (cells.length === 0) return true;
-                  const text = normalizeBlock(table.innerText);
-                  if ((text || "").length < 30 && cells.length >= 6) return true;
-                  return false;
-                }
+    return list(candidates.values())
 
-                function tableToMarkdown(table) {
-                  if (isLayoutTable(table)) return "";
-                  const rows = Array.from(table.querySelectorAll("tr"));
-                  const parsed = rows
-                    .map((tr) => Array.from(tr.children).filter((c) => ["TD", "TH"].includes(c.tagName)).map((c) => normalizeBlock(c.innerText)))
-                    .filter((cells) => cells.some((c) => c && c.trim()));
-                  if (parsed.length === 0) return "";
 
-                  const colCount = Math.max(...parsed.map((r) => r.length));
-                  const hasTh = table.querySelector("th") !== null;
-
-                  if (!hasTh && colCount === 2) {
-                    let numberish = 0;
-                    for (const row of parsed) {
-                      const a = (row[0] || "").trim();
-                      const looksLikeNumber = /^\(?\d+[.)]?\)?$/.test(a) || /^\([a-z]\)$/.test(a.toLowerCase());
-                      if (looksLikeNumber) numberish += 1;
-                    }
-                    const numberRatio = parsed.length ? (numberish / parsed.length) : 0;
-
-                    if (numberRatio >= 0.6) {
-                      const lines = [];
-                      for (const row of parsed) {
-                        const a = (row[0] || "").trim();
-                        const b = (row[1] || "").trim();
-                        if (!a && !b) continue;
-                        lines.push(`${a} ${b}`.trim());
-                      }
-                      return lines.join("\n");
-                    }
-
-                    const out = [];
-                    out.push("| Col 1 | Col 2 |");
-                    out.push("| --- | --- |");
-                    for (const row of parsed) {
-                      const a = escapePipes((row[0] || "").trim());
-                      const b = escapePipes((row[1] || "").trim());
-                      out.push(`| ${a} | ${b} |`);
-                    }
-                    return out.join("\n");
-                  }
-
-                  if (colCount >= 2) {
-                    const header = hasTh ? parsed[0] : Array.from({ length: colCount }, (_, i) => `Col ${i + 1}`);
-                    const dataRows = hasTh ? parsed.slice(1) : parsed;
-                    const headerCells = header.map(escapePipes);
-                    const sepCells = headerCells.map(() => "---");
-                    const out = [];
-                    out.push(`| ${headerCells.join(" | ")} |`);
-                    out.push(`| ${sepCells.join(" | ")} |`);
-                    for (const row of dataRows) {
-                      const padded = [...row];
-                      while (padded.length < colCount) padded.push("");
-                      out.push(`| ${padded.map(escapePipes).join(" | ")} |`);
-                    }
-                    return out.join("\n");
-                  }
-
-                  return parsed.map((r) => r.join(" ").trim()).filter(Boolean).join("\n");
-                }
-
-                const root =
-                  document.querySelector("main") ||
-                  document.querySelector("article") ||
-                  document.querySelector("#content") ||
-                  document.body;
-                if (!root) return "";
-
-                const candidates = Array.from(root.querySelectorAll("h1, h2, h3, h4, h5, h6, p, table, ul, ol"));
-                const blocks = [];
-
-                function insideTable(node) {
-                  let cur = node && node.parentElement;
-                  while (cur) {
-                    if (cur.tagName === "TABLE") return true;
-                    cur = cur.parentElement;
-                  }
-                  return false;
-                }
-
-                for (const el of candidates) {
-                  if (el.tagName !== "TABLE" && insideTable(el)) continue;
-
-                  if (el.tagName === "TABLE") {
-                    const md = tableToMarkdown(el);
-                    if (md) blocks.push(md);
-                    continue;
-                  }
-
-                  if (el.tagName === "UL" || el.tagName === "OL") {
-                    const items = Array.from(el.querySelectorAll(":scope > li")).map((li) => normalizeBlock(li.innerText)).filter(Boolean);
-                    if (items.length) {
-                      const prefix = el.tagName === "OL" ? "1." : "-";
-                      blocks.push(items.map((t) => `${prefix} ${t}`).join("\n"));
-                    }
-                    continue;
-                  }
-
-                  const text = normalizeBlock(el.innerText);
-                  if (!text) continue;
-                  blocks.push(text);
-                }
-
-                return blocks.join("\n\n").replace(/\n{3,}/g, "\n\n").trim();
-                """
+def extract_notice_refs_from_feed(feed_xml: bytes, *, base_url: str) -> list[NoticeRef]:
+    soup = BeautifulSoup(feed_xml, "xml")
+    refs: list[NoticeRef] = []
+    seen_ids: set[str] = set()
+    for item in soup.find_all("item"):
+        link_node = item.find("link")
+        if link_node is None or not link_node.text.strip():
+            continue
+        href = link_node.text.strip()
+        match = re.search(r"/anunci[o]?/(\d+)", href)
+        if not match:
+            continue
+        notice_id = match.group(1)
+        if notice_id in seen_ids:
+            continue
+        title_node = item.find("title")
+        label = normalize_text(title_node.text) if title_node and title_node.text else ""
+        refs.append(
+            NoticeRef(
+                notice_id=notice_id,
+                label=label,
+                notice_url=f"{base_url.rstrip('/')}/anunci/{notice_id}",
+                pdf_url=f"{base_url.rstrip('/')}/anunci/descarrega-pdf/{notice_id}",
             )
         )
-    except Exception:
-        markdown = ""
-
-    markdown = normalize_text(markdown)
-    if len(markdown) > 200_000:
-        markdown = markdown[:200_000].rstrip() + "\n\n[TRUNCATED]"
-    return markdown
+        seen_ids.add(notice_id)
+    return refs
 
 
-def extract_notice_title(driver: WebDriver) -> str:
-    for selector in ["h1", "h1.page-title", "header h1"]:
-        nodes = driver.find_elements(By.CSS_SELECTOR, selector)
-        if nodes:
-            text = (nodes[0].text or "").strip()
+def extract_notice_refs_for_day(context: CrawlerContext, issue_date: date) -> list[NoticeRef]:
+    summary_url = build_summary_url(context.summary_base_url, issue_date)
+    context.logger.info("Fetching BOPB dated summary PDF: %s", summary_url)
+    summary_pdf = request_bytes(summary_url, timeout_seconds=context.timeout_seconds, headers=PDF_HEADERS)
+    refs = parse_summary_pdf_notice_refs(summary_pdf, base_url=context.base_url, timeout_seconds=context.timeout_seconds)
+    if refs:
+        return refs
+
+    if issue_date == date.today():
+        context.logger.warning("Summary PDF yielded no notice refs for %s, trying current-day feed fallback.", issue_date)
+        feed_xml = request_bytes(context.feed_url, timeout_seconds=context.timeout_seconds)
+        refs = extract_notice_refs_from_feed(feed_xml, base_url=context.base_url)
+        if refs:
+            return refs
+
+    raise RuntimeError(f"Could not extract BOPB notice references for {issue_date.isoformat()}.")
+
+
+def extract_notice_title(soup: BeautifulSoup) -> str:
+    for selector in ("h1", "h1.page-title", "header h1"):
+        node = soup.select_one(selector)
+        if node:
+            text = normalize_text(node.get_text(" ", strip=True))
             if text:
                 return text
-    return (driver.title or "").strip()
+    title_node = soup.find("title")
+    return normalize_text(title_node.get_text(" ", strip=True) if title_node else "")
 
 
-def extract_notice_metadata(driver: WebDriver) -> dict[str, str]:
+def extract_notice_metadata(soup: BeautifulSoup) -> dict[str, str]:
     metadata: dict[str, str] = {}
 
-    # Try dl/dt pairs.
-    dt_elements = driver.find_elements(By.XPATH, "//dl//dt[normalize-space()]")
-    for dt in dt_elements:
-        label = (dt.text or "").strip().rstrip(":")
+    for dt in soup.select("dl dt"):
+        label = normalize_text(dt.get_text(" ", strip=True)).rstrip(":")
         if not label:
             continue
-        dd_candidates = dt.find_elements(By.XPATH, "following-sibling::dd[1]")
-        if not dd_candidates:
+        dd = dt.find_next_sibling("dd")
+        if dd is None:
             continue
-        value = (dd_candidates[0].text or "").strip()
+        value = normalize_text(dd.get_text(" ", strip=True))
         if value:
             metadata[label] = value
 
-    # Try list items like "Registro: 2025..."
-    li_nodes = driver.find_elements(By.XPATH, "//li[normalize-space()]")
-    for li in li_nodes[:300]:
-        text = (li.text or "").strip()
-        if ":" not in text:
+    for node in soup.select("li, p, div"):
+        text = normalize_text(node.get_text(" ", strip=True))
+        if ":" not in text or len(text) > 300:
             continue
         left, right = text.split(":", 1)
         left = left.strip()
         right = right.strip()
-        if not left or not right:
-            continue
-        if left not in metadata:
+        if left and right and left not in metadata:
             metadata[left] = right
 
     return metadata
@@ -697,177 +503,77 @@ def pick_metadata(metadata: dict[str, str], *keys: str) -> str:
     return ""
 
 
-def extract_pdf_url(driver: WebDriver, base_url: str) -> str:
-    anchors = driver.find_elements(By.XPATH, "//a[contains(@href, '/anuncio/descargar-pdf/')]")
-    for a in anchors[:10]:
-        href = (a.get_attribute("href") or "").strip()
+def extract_pdf_url_from_soup(soup: BeautifulSoup, *, base_url: str, notice_id: str) -> str:
+    for anchor in soup.select("a[href]"):
+        href = (anchor.get("href") or "").strip()
         if not href:
             continue
-        if href.startswith("/"):
-            href = urljoin(base_url.rstrip("/") + "/", href)
-        return href
+        if "/anunci/descarrega-pdf/" in href or "/anuncio/descargar-pdf/" in href:
+            return urljoin(base_url.rstrip("/") + "/", href.lstrip("/"))
 
-    anchors = driver.find_elements(By.XPATH, "//a[contains(translate(@href,'PDF','pdf'), '.pdf')]")
-    for a in anchors[:10]:
-        href = (a.get_attribute("href") or "").strip()
-        if not href:
+    return f"{base_url.rstrip('/')}/anunci/descarrega-pdf/{notice_id}"
+
+
+def iter_content_blocks(container: BeautifulSoup) -> Iterable[str]:
+    for node in container.select("h1, h2, h3, h4, h5, h6, p, ul, ol"):
+        if node.find_parent(["aside", "nav", "footer", "header"]):
             continue
-        if href.startswith("/"):
-            href = urljoin(base_url.rstrip("/") + "/", href)
-        return href
-    return ""
+        if node.name in {"ul", "ol"}:
+            items = [normalize_text(item.get_text(" ", strip=True)) for item in node.find_all("li", recursive=False)]
+            items = [item for item in items if item]
+            if not items:
+                continue
+            prefix = "1." if node.name == "ol" else "-"
+            yield "\n".join(f"{prefix} {item}" for item in items)
+            continue
+        text = normalize_text(node.get_text(" ", strip=True))
+        if text:
+            yield text
 
 
-def extract_pdf_iframe_url(driver: WebDriver, base_url: str) -> str:
-    nodes = driver.find_elements(By.CSS_SELECTOR, "iframe[src*='/anuncio/ver-pdf/']")
-    if not nodes:
+def extract_markdown_content_from_html(soup: BeautifulSoup) -> str:
+    root = soup.select_one("main") or soup.select_one("article") or soup.select_one("#content") or soup.body
+    if root is None:
         return ""
-    src = (nodes[0].get_attribute("src") or "").strip()
-    if not src:
-        return ""
-    if src.startswith("/"):
-        src = urljoin(base_url.rstrip("/") + "/", src)
-    return src
+    blocks = list(iter_content_blocks(root))
+    markdown = "\n\n".join(blocks).strip()
+    if len(markdown) > 200_000:
+        markdown = markdown[:200_000].rstrip() + "\n\n[TRUNCATED]"
+    return markdown
 
 
-def state_pick_day(context: CrawlerContext) -> BopbState:
-    if not context.pending_days:
-        return BopbState.DONE
+def fetch_notice_payload(context: CrawlerContext, notice_ref: NoticeRef) -> tuple[str, str, str, str, dict[str, object]]:
+    html = request_text(notice_ref.notice_url, timeout_seconds=context.timeout_seconds)
+    soup = BeautifulSoup(html, "html.parser")
 
-    issue_date = context.pending_days.pop(0)
-    context.current_day = issue_date
-    context.logger.info("FSM state=%s picked day=%s", BopbState.PICK_DAY.value, issue_date.isoformat())
-    context.daily_journal_id = upsert_daily_journal(context, issue_date=issue_date)
-    context.pending_notice_urls = []
-    context.next_page_url = None
-    context.current_notice_url = None
-    return BopbState.OPEN_LISTING
-
-
-def state_open_listing(context: CrawlerContext) -> BopbState:
-    if context.current_day is None:
-        raise RuntimeError("Missing current_day")
-    url = build_listing_url(context.listing_base_url, context.current_day, page=1)
-    context.logger.info("FSM state=%s opening listing URL=%s", BopbState.OPEN_LISTING.value, url)
-    try:
-        context.driver.get(url)
-        wait_dom_ready(context.driver, context.timeout_seconds)
-    except TimeoutException:
-        context.logger.warning("Timeout loading listing URL=%s; continuing with partial DOM.", url)
-        try:
-            context.driver.execute_script("window.stop();")
-        except Exception:
-            pass
-    created = context.artifacts.capture(context.driver, state=BopbState.OPEN_LISTING.value, note="listing_opened")
-    context.logger.info("Artifacts saved: %s", created)
-    return BopbState.PARSE_LISTING_PAGE
-
-
-def state_parse_listing_page(context: CrawlerContext) -> BopbState:
-    context.logger.info(
-        "FSM state=%s parsing listing URL=%s",
-        BopbState.PARSE_LISTING_PAGE.value,
-        context.driver.current_url,
-    )
-    found = extract_notice_urls_from_listing(context.driver, context.base_url)
-    context.logger.info("Notice URLs found on page: %d", len(found))
-    if context.pending_notice_urls is None:
-        context.pending_notice_urls = []
-    context.pending_notice_urls.extend(found)
-    context.next_page_url = extract_next_page_url(context.driver, context.base_url)
-    created = context.artifacts.capture(context.driver, state=BopbState.PARSE_LISTING_PAGE.value, note="listing_parsed")
-    context.logger.info("Artifacts saved: %s", created)
-    return BopbState.PICK_NOTICE
-
-
-def state_pick_notice(context: CrawlerContext) -> BopbState:
-    if context.pending_notice_urls and len(context.pending_notice_urls) > 0:
-        context.current_notice_url = context.pending_notice_urls.pop(0)
-        context.logger.info("FSM state=%s picked notice URL=%s", BopbState.PICK_NOTICE.value, context.current_notice_url)
-        return BopbState.OPEN_NOTICE
-
-    if context.next_page_url:
-        context.logger.info("FSM state=%s moving to next listing page=%s", BopbState.PICK_NOTICE.value, context.next_page_url)
-        return BopbState.OPEN_NEXT_PAGE
-
-    context.logger.info("FSM state=%s finished day=%s", BopbState.PICK_NOTICE.value, context.current_day.isoformat() if context.current_day else "<none>")
-    return BopbState.PICK_DAY
-
-
-def state_open_next_page(context: CrawlerContext) -> BopbState:
-    if not context.next_page_url:
-        return BopbState.PICK_DAY
-    url = context.next_page_url
-    context.next_page_url = None
-    context.logger.info("FSM state=%s opening next listing page URL=%s", BopbState.OPEN_NEXT_PAGE.value, url)
-    try:
-        context.driver.get(url)
-        wait_dom_ready(context.driver, context.timeout_seconds)
-    except TimeoutException:
-        context.logger.warning("Timeout loading next listing URL=%s; continuing with partial DOM.", url)
-        try:
-            context.driver.execute_script("window.stop();")
-        except Exception:
-            pass
-    created = context.artifacts.capture(context.driver, state=BopbState.OPEN_NEXT_PAGE.value, note="listing_next_opened")
-    context.logger.info("Artifacts saved: %s", created)
-    return BopbState.PARSE_LISTING_PAGE
-
-
-def state_open_notice(context: CrawlerContext) -> BopbState:
-    if context.daily_journal_id is None or context.current_notice_url is None:
-        raise RuntimeError("Missing daily_journal_id/current_notice_url")
-
-    url = context.current_notice_url
-    context.logger.info("FSM state=%s opening notice URL=%s", BopbState.OPEN_NOTICE.value, url)
-    try:
-        context.driver.get(url)
-        wait_dom_ready(context.driver, context.timeout_seconds)
-    except TimeoutException:
-        context.logger.warning("Timeout loading notice URL=%s; continuing with partial DOM.", url)
-        try:
-            context.driver.execute_script("window.stop();")
-        except Exception:
-            pass
-    created = context.artifacts.capture(context.driver, state=BopbState.OPEN_NOTICE.value, note="notice_opened")
-    context.logger.info("Artifacts saved: %s", created)
-
-    title = extract_notice_title(context.driver)
-    metadata = extract_notice_metadata(context.driver)
+    title = extract_notice_title(soup) or notice_ref.label or notice_ref.notice_url
+    metadata = extract_notice_metadata(soup)
     department = pick_metadata(metadata, "Anunciante", "Anunciant")
     category = pick_metadata(metadata, "Tipo de anuncio", "Tipus d'anunci")
     publish_date_raw = pick_metadata(metadata, "Fecha de publicación", "Data de publicació")
     registration = pick_metadata(metadata, "Registro", "Registre")
     eli = pick_metadata(metadata, "Enlace ELI", "Enllaç ELI")
-    pdf_url = extract_pdf_url(context.driver, context.base_url)
-    pdf_iframe_url = extract_pdf_iframe_url(context.driver, context.base_url)
+    pdf_url = extract_pdf_url_from_soup(soup, base_url=context.base_url, notice_id=notice_ref.notice_id)
 
-    issue_date: date | None = None
+    issue_date_parsed: str | None = None
     if publish_date_raw:
         try:
-            issue_date = parse_es_date(publish_date_raw)
+            issue_date_parsed = parse_es_date(publish_date_raw).isoformat()
         except Exception:
-            issue_date = None
+            issue_date_parsed = None
 
-    pdf_text_error: str | None = None
     pdf_text_markdown = ""
-
-    # Many BOPB notices are PDF-only (embedded iframe). Prefer extracting the PDF text.
-    if (pdf_url or pdf_iframe_url) and not getattr(context, "no_pdf_text", False):
+    pdf_text_error: str | None = None
+    if pdf_url and not context.no_pdf_text:
         try:
-            pdf_source_url = pdf_url or pdf_iframe_url
-            if pdf_source_url:
-                pdf_bytes = download_pdf(pdf_source_url)
-                pdf_text_markdown = extract_pdf_text_markdown(pdf_bytes, timeout_seconds=30)
-        except (HTTPError, URLError, subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError) as exc:
+            pdf_bytes = request_bytes(pdf_url, timeout_seconds=context.timeout_seconds, headers=PDF_HEADERS)
+            pdf_text_markdown = extract_pdf_text_markdown(pdf_bytes, timeout_seconds=30)
+        except (requests.RequestException, subprocess.TimeoutExpired, subprocess.CalledProcessError, OSError) as exc:
             pdf_text_error = f"{type(exc).__name__}: {exc!s}"
 
     if pdf_text_markdown:
         parts: list[str] = []
-        if pdf_url:
-            parts.append(f"- PDF: {pdf_url}")
-        if pdf_iframe_url:
-            parts.append(f"- PDF viewer: {pdf_iframe_url}")
+        parts.append(f"- PDF: {pdf_url}")
         if eli:
             parts.append(f"- ELI: {eli}")
         if registration:
@@ -875,74 +581,77 @@ def state_open_notice(context: CrawlerContext) -> BopbState:
         parts.append("")
         parts.append(pdf_text_markdown)
         content = "\n".join(parts).strip()
-    elif pdf_iframe_url or pdf_url:
-        parts = []
-        if pdf_url:
-            parts.append(f"- PDF: {pdf_url}")
-        if pdf_iframe_url:
-            parts.append(f"- PDF viewer: {pdf_iframe_url}")
-        if eli:
-            parts.append(f"- ELI: {eli}")
-        if registration:
-            parts.append(f"- Registro: {registration}")
-        if pdf_text_error:
-            parts.append(f"\n[PDF text extraction failed: {pdf_text_error}]")
-        content = "\n".join(parts).strip()
+        content_format = "pdf_markdown"
     else:
-        content = extract_markdown_content(context.driver)
-    parsed = urlparse(context.driver.current_url)
-    stable_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}".rstrip("/") or context.driver.current_url
+        content = extract_markdown_content_from_html(soup)
+        if pdf_url:
+            content = (f"- PDF: {pdf_url}\n\n{content}" if content else f"- PDF: {pdf_url}").strip()
+        if pdf_text_error:
+            content = (content + f"\n\n[PDF text extraction failed: {pdf_text_error}]").strip()
+        content_format = "html_markdown"
 
+    parsed = urlparse(notice_ref.notice_url)
+    stable_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path}".rstrip("/") or notice_ref.notice_url
     extra_info = {
         "registration": registration,
         "eli": eli,
         "publication_date": publish_date_raw,
-        "publication_date_parsed": issue_date.isoformat() if issue_date else None,
+        "publication_date_parsed": issue_date_parsed,
         "pdf_url": pdf_url,
-        "pdf_iframe_url": pdf_iframe_url,
         "pdf_text_extracted": bool(pdf_text_markdown),
         "pdf_text_error": pdf_text_error,
+        "notice_id": notice_ref.notice_id,
         "metadata": {k: metadata[k] for k in list(metadata)[:60]},
-        "content_format": "markdown",
+        "content_format": content_format,
     }
+    return title, category, department, stable_url, content, extra_info
 
-    upsert_notice(
-        context,
-        daily_journal_id=context.daily_journal_id,
-        title=title,
-        category=category,
-        department=department,
-        url=stable_url,
-        content=content,
-        extra_info=json.dumps(extra_info, ensure_ascii=False),
-    )
 
-    context.processed_notices += 1
-    if context.max_notices > 0 and context.processed_notices >= context.max_notices:
-        context.logger.info("Reached --max-notices=%d, stopping crawl.", context.max_notices)
-        context.pending_notice_urls = []
-        context.next_page_url = None
-        context.pending_days = []
-        return BopbState.PICK_DAY
+def process_day(context: CrawlerContext, issue_date: date) -> None:
+    notice_refs = extract_notice_refs_for_day(context, issue_date)
+    context.logger.info("Processing BOPB day %s with %d notice refs.", issue_date.isoformat(), len(notice_refs))
+    daily_journal_id = upsert_daily_journal(context, issue_date=issue_date, notice_count=len(notice_refs))
 
-    return BopbState.PICK_NOTICE
+    for index, notice_ref in enumerate(notice_refs, start=1):
+        if context.max_notices > 0 and context.processed_notices >= context.max_notices:
+            context.logger.info("Reached --max-notices=%d, stopping crawl.", context.max_notices)
+            return
+
+        context.logger.info(
+            "Fetching BOPB notice (%d/%d): id=%s url=%s",
+            index,
+            len(notice_refs),
+            notice_ref.notice_id,
+            notice_ref.notice_url,
+        )
+        title, category, department, url, content, extra_info = fetch_notice_payload(context, notice_ref)
+        upsert_notice(
+            context,
+            daily_journal_id=daily_journal_id,
+            title=title,
+            category=category,
+            department=department,
+            url=url,
+            content=content,
+            extra_info=json.dumps(extra_info, ensure_ascii=False),
+        )
+        context.processed_notices += 1
 
 
 def main() -> int:
     load_dotenv(PROJECT_ROOT / ".env", override=False)
     args = parse_args()
-    headless = resolve_headless(args)
 
     run_dir = PROJECT_ROOT / "storage" / "crawlers" / args.slug / args.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
     logger = build_logger("crawler.bopb", run_dir / "crawler.log")
-    logger.info("Starting crawler for slug=%s", args.slug)
-    logger.info("Mode: %s", "headless" if headless else "headed")
+    logger.info("Starting BOPB crawler for slug=%s", args.slug)
     logger.info("Run directory: %s", run_dir)
+    if args.headless or args.headed:
+        logger.info("Ignoring --headless/--headed: BOPB crawler is now browserless.")
 
     db_conn = None
-    driver: WebDriver | None = None
     try:
         try:
             import psycopg
@@ -959,7 +668,8 @@ def main() -> int:
 
         source_id, source_start_at, source_base_url = read_source_data_from_db(args.slug)
         base_url = (args.base_url or source_base_url or DEFAULT_BASE_URL).strip()
-        listing_base_url = (args.listing_base_url or f"{base_url.rstrip('/')}/anteriores").strip()
+        summary_base_url = (args.summary_base_url or f"{base_url.rstrip('/')}/sumario-del-dia").strip()
+        feed_url = (args.feed_url or DEFAULT_FEED_URL).strip()
 
         from_date, to_date = resolve_crawl_range(
             logger,
@@ -972,64 +682,41 @@ def main() -> int:
         )
 
         if from_date > to_date:
-            logger.info("Nothing to crawl for BOPB: from_date=%s is after today=%s", from_date.isoformat(), to_date.isoformat())
+            logger.info(
+                "Nothing to crawl for BOPB: from_date=%s is after today=%s",
+                from_date.isoformat(),
+                to_date.isoformat(),
+            )
             return 0
 
-        pending_days: list[date] = []
-        cur = from_date
-        while cur <= to_date:
-            pending_days.append(cur)
-            cur += timedelta(days=1)
-
-        driver = build_driver(headless=headless)
-        configure_driver(driver, timeout_seconds=args.timeout)
-        artifacts = ArtifactWriter(run_dir=run_dir)
         context = CrawlerContext(
             logger=logger,
-            driver=driver,
-            artifacts=artifacts,
             slug=args.slug,
             source_id=source_id,
             base_url=base_url,
-            listing_base_url=listing_base_url,
+            summary_base_url=summary_base_url,
+            feed_url=feed_url,
             timeout_seconds=args.timeout,
             max_notices=max(0, int(args.max_notices)),
             from_date=from_date,
             to_date=to_date,
             db_conn=db_conn,
-            pending_days=pending_days,
+            no_pdf_text=bool(args.no_pdf_text),
         )
-        # Keep as a plain attribute: avoids changing the dataclass signature everywhere.
-        context.no_pdf_text = bool(args.no_pdf_text)  # type: ignore[attr-defined]
 
-        fsm = FSMRunner(
-            initial_state=BopbState.PICK_DAY,
-            terminal_state=BopbState.DONE,
-            handlers={
-                BopbState.PICK_DAY: state_pick_day,
-                BopbState.OPEN_LISTING: state_open_listing,
-                BopbState.PARSE_LISTING_PAGE: state_parse_listing_page,
-                BopbState.PICK_NOTICE: state_pick_notice,
-                BopbState.OPEN_NOTICE: state_open_notice,
-                BopbState.OPEN_NEXT_PAGE: state_open_next_page,
-            },
-            on_transition=simulate_human_transition,
-            config=FSMConfig(max_steps=300000),
-        )
-        final_state = fsm.run(context)
-        logger.info("Crawler finished with final state=%s", final_state.value)
+        current_day = from_date
+        while current_day <= to_date:
+            process_day(context, current_day)
+            if context.max_notices > 0 and context.processed_notices >= context.max_notices:
+                break
+            current_day += timedelta(days=1)
+
+        logger.info("BOPB crawler finished. Total processed notices=%d", context.processed_notices)
         return 0
     except Exception as exc:  # pragma: no cover
         logger.exception("Crawler failed: %s: %r", type(exc).__name__, exc)
-        if driver is not None:
-            try:
-                ArtifactWriter(run_dir=run_dir).capture(driver, state="ERROR", note="unhandled_exception")
-            except Exception:
-                logger.exception("Failed to write error artifacts")
         return 1
     finally:
-        if driver is not None:
-            driver.quit()
         if db_conn is not None:
             db_conn.close()
 

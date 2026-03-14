@@ -134,4 +134,9 @@ return [
         'crawler_command_timeout_seconds' => (int) env('CRAWLER_COMMAND_TIMEOUT_SECONDS', 7200),
     ],
 
+    'notifications' => [
+        'digest_time' => env('NOTICE_DIGEST_TIME', '08:00'),
+        'timezone' => env('NOTICE_DIGEST_TIMEZONE', env('PIPELINE_TIMEZONE', 'Europe/Madrid')),
+    ],
+
 ];
