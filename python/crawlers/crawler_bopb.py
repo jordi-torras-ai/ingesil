@@ -54,6 +54,10 @@ class NoticeRef:
     pdf_url: str
 
 
+class NoIssuePublished(RuntimeError):
+    pass
+
+
 @dataclass
 class CrawlerContext:
     logger: logging.Logger
@@ -441,7 +445,16 @@ def extract_notice_refs_from_feed(feed_xml: bytes, *, base_url: str) -> list[Not
 def extract_notice_refs_for_day(context: CrawlerContext, issue_date: date) -> list[NoticeRef]:
     summary_url = build_summary_url(context.summary_base_url, issue_date)
     context.logger.info("Fetching BOPB dated summary PDF: %s", summary_url)
-    summary_pdf = request_bytes(summary_url, timeout_seconds=context.timeout_seconds, headers=PDF_HEADERS)
+    try:
+        summary_pdf = request_bytes(summary_url, timeout_seconds=context.timeout_seconds, headers=PDF_HEADERS)
+    except requests.HTTPError as exc:
+        status_code = exc.response.status_code if exc.response is not None else None
+        if issue_date.weekday() >= 5 and status_code in {404, 500}:
+            raise NoIssuePublished(
+                f"BOPB returned HTTP {status_code} for weekend date {issue_date.isoformat()}, treating as no publication day."
+            ) from exc
+        raise
+
     refs = parse_summary_pdf_notice_refs(summary_pdf, base_url=context.base_url, timeout_seconds=context.timeout_seconds)
     if refs:
         return refs
@@ -608,7 +621,12 @@ def fetch_notice_payload(context: CrawlerContext, notice_ref: NoticeRef) -> tupl
 
 
 def process_day(context: CrawlerContext, issue_date: date) -> None:
-    notice_refs = extract_notice_refs_for_day(context, issue_date)
+    try:
+        notice_refs = extract_notice_refs_for_day(context, issue_date)
+    except NoIssuePublished as exc:
+        context.logger.info("%s", exc)
+        return
+
     context.logger.info("Processing BOPB day %s with %d notice refs.", issue_date.isoformat(), len(notice_refs))
     daily_journal_id = upsert_daily_journal(context, issue_date=issue_date, notice_count=len(notice_refs))
 
